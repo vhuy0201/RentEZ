@@ -40,183 +40,11 @@
       crossorigin=""
       href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"
     />
-  </head>
-  <body class="">
+  </head>  <body class="">
     <div id="root">
       <main class="body-bg">
-        <header class="header">
-          <div class="container container-two">
-            <nav class="header-inner flx-between">
-              <div class="logo">
-                <a class="link" href="https://cityscape.wowtheme7.com/"
-                  ><img
-                    src="${pageContext.request.contextPath}/view/guest/asset/img/logo-DHG6Mbuc.png"
-                    alt="Logo"
-                /></a>
-              </div>
-              <div class="header-menu d-lg-block d-none">
-                <ul class="nav-menu flx-align">
-                  <li class="nav-menu__item has-submenu activePage">
-                    <a
-                      aria-current="page"
-                      class="nav-menu__link active"
-                      href="https://cityscape.wowtheme7.com/"
-                      >Home</a
-                    >
-                    <ul class="nav-submenu">
-                      <li class="nav-submenu__item activePage">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/"
-                          >Home One</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/home-two"
-                          >Home Two</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/home-three"
-                          >Home Three</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/home-four"
-                          >Home Four</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/home-five"
-                          >Home Five</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-menu__item has-submenu">
-                    <a
-                      aria-current="page"
-                      class="nav-menu__link active"
-                      href="https://cityscape.wowtheme7.com/"
-                      >Pages</a
-                    >
-                    <ul class="nav-submenu">
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/property"
-                          >Property</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/property-sidebar"
-                          >Property Sidebar</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/add-new-listing"
-                          >Add New Listing</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/map-location"
-                          >Map Location</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/about-us"
-                          >About Us</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/faq"
-                          >Faq</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/cart"
-                          >Cart</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/checkout"
-                          >Checkout</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/login"
-                          >Login</a
-                        >
-                      </li>
-                      <li class="nav-submenu__item">
-                        <a
-                          class="nav-submenu__link"
-                          href="https://cityscape.wowtheme7.com/account"
-                          >Account</a
-                        >
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-menu__item">
-                    <a
-                      class="nav-menu__link"
-                      href="https://cityscape.wowtheme7.com/project"
-                      >Project</a
-                    >
-                  </li>
-                  <li class="nav-menu__item">
-                    <a
-                      class="nav-menu__link"
-                      href="https://cityscape.wowtheme7.com/blog"
-                      >Blog</a
-                    >
-                  </li>
-                  <li class="nav-menu__item">
-                    <a
-                      class="nav-menu__link"
-                      href="https://cityscape.wowtheme7.com/contact"
-                      >Contact</a
-                    >
-                  </li>
-                </ul>
-              </div>
-              <div class="header-right flx-align">
-                  <a
-                  class="btn btn btn-outline-light d-lg-block d-none"
-                  href="https://cityscape.wowtheme7.com/property"
-                  >Sell Property<span class="icon icon-right text-gradient">
-                    <i class="fas fa-arrow-right"></i> </span></a
-                ><button type="button" class="toggle-mobileMenu d-lg-none ms-3">
-                  <i class="las la-bars"></i>
-                </button>
-              </div>
-            </nav>
-          </div>
-        </header>
+        <jsp:include page="/view/common/header.jsp" />
+        
         <section class="banner">
           <div class="container container-two">
             <div class="position-relative">
@@ -227,7 +55,7 @@
                       <span
                         class="banner-content__subtitle text-uppercase font-14"
                       >
-                        FinTech Fusion
+                        Flex Tech
                       </span>
                       <h1 class="banner-content__title">
                         Invest today in You
@@ -264,40 +92,6 @@
                 <div class="col-lg-12">
                   <div class="react-tabs" data-rttabs="true">
                     <ul class="common-tab nav nav-pills" role="tablist">
-                      <li
-                        class="nav-link react-tabs__tab--selected"
-                        role="tab"
-                        id="tab:r7:0"
-                        aria-selected="true"
-                        aria-disabled="false"
-                        aria-controls="panel:r7:0"
-                        tabindex="0"
-                        data-rttab="true"
-                      >
-                        Rent
-                      </li>
-                      <li
-                        class="nav-link"
-                        role="tab"
-                        id="tab:r7:1"
-                        aria-selected="false"
-                        aria-disabled="false"
-                        aria-controls="panel:r7:1"
-                        data-rttab="true"
-                      >
-                        Buy
-                      </li>
-                      <li
-                        class="nav-link"
-                        role="tab"
-                        id="tab:r7:2"
-                        aria-selected="false"
-                        aria-disabled="false"
-                        aria-controls="panel:r7:2"
-                        data-rttab="true"
-                      >
-                        Sell
-                      </li>
                     </ul>
                     <div
                       class="react-tabs__tab-panel react-tabs__tab-panel--selected"
