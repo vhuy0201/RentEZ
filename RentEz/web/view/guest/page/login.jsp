@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RentEz - Login</title>
+    <title>RentEz - Đăng nhập</title>
 
     <link
       rel="shortcut icon"
@@ -32,6 +32,12 @@
       rel="stylesheet"
       crossorigin=""
       href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"
+    />
+    
+    <!-- Vietnamese Fonts -->
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css"
     />
     
     <style>
@@ -173,8 +179,7 @@
           <div class="container">
             <div class="row justify-content-center">
               <div class="col-md-6">
-                <div class="login-box">
-                  <h2 class="login-box__title">Login to <span class="text-gradient">RentEz</span></h2>
+                <div class="login-box">                  <h2 class="login-box__title">Đăng nhập vào <span class="text-gradient">RentEz</span></h2>
                   
                   <c:if test="${not empty error}">
                     <div class="alert alert-danger" role="alert">
@@ -188,20 +193,20 @@
                     </div>
                     
                     <div class="form-group">
-                      <input type="password" class="form-control" name="password" placeholder="Password" required>
+                      <input type="password" class="form-control" name="password" placeholder="Mật khẩu" required>
                     </div>
                       <div class="form-group d-flex justify-content-between align-items-center">
                       <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Remember me</label>
+                        <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
                       </div>
-                      <a href="${pageContext.request.contextPath}/forgot-password" class="text-link">Forgot password?</a>
+                      <a href="${pageContext.request.contextPath}/forgot-password" class="text-link">Quên mật khẩu?</a>
                     </div>
                     
-                    <button type="submit" class="btn btn-login">Login</button>
+                    <button type="submit" class="btn btn-login">Đăng nhập</button>
                     
                     <div class="separator">
-                      <span>OR</span>
+                      <span>HOẶC</span>
                     </div>
                     
                     <a href="${pageContext.request.contextPath}/login-google" class="btn btn-google">
@@ -211,11 +216,11 @@
                         <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"></path>
                         <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"></path>
                       </svg>
-                      Login with Google
+                      Đăng nhập với Google
                     </a>
                     
                     <div class="footer-text">
-                      <p>Don't have an account? <a href="${pageContext.request.contextPath}/view/guest/page/register.jsp" class="text-link">Register</a></p>
+                      <p>Chưa có tài khoản? <a href="${pageContext.request.contextPath}/view/guest/page/register.jsp" class="text-link">Đăng ký</a></p>
                     </div>
                   </form>
                 </div>
@@ -228,7 +233,7 @@
           <div class="container">
             <div class="row">
               <div class="col-12 text-center">
-                <p>&copy; 2025 RentEz. All rights reserved.</p>
+                <p>&copy; 2025 RentEz. Đã đăng ký bản quyền.</p>
               </div>
             </div>
           </div>

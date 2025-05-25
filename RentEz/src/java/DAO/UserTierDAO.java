@@ -83,4 +83,28 @@ public class UserTierDAO {
             return false;
         }
     }
+
+    public UserTier getByUserId(int userId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM UserTier WHERE UserID = ? AND Status = 'Active'";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                UserTier userTier = new UserTier();
+                userTier.setUserTierId(rs.getInt("UserTierID"));
+                userTier.setUserId(rs.getInt("UserID"));
+                userTier.setTierId(rs.getInt("TierID"));
+                userTier.setStartDate(rs.getDate("StartDate"));
+                userTier.setEndDate(rs.getDate("EndDate"));
+                userTier.setStatus(rs.getString("Status"));
+                conn.close();
+                return userTier;
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return null;
+    }
 }

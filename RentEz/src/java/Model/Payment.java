@@ -5,14 +5,14 @@ import java.util.Date;
 public class Payment {
     private int paymentId;
     private int payerId;
-    private Integer payeeId; // Nullable
+    private int payeeId; // Nullable
     private double amount;
     private Date paymentDate;
     private String paymentMethod;
     private String status; // 'Paid', 'Pending', 'Failed'
     private int referenceId;
     private String referenceType; // 'Booking', 'Bill', 'Tier'
-    private Integer walletTransferId; // Nullable
+    private int walletTransferId; // Nullable
     private String transCode;
     private String timeCode;
     private boolean isRefunded;
@@ -20,7 +20,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int paymentId, int payerId, Integer payeeId, double amount, Date paymentDate, String paymentMethod, String status, int referenceId, String referenceType, Integer walletTransferId, String transCode, String timeCode, boolean isRefunded) {
+    public Payment(int paymentId, int payerId, int payeeId, double amount, Date paymentDate, String paymentMethod, String status, int referenceId, String referenceType, int walletTransferId, String transCode, String timeCode, boolean isRefunded) {
         this.paymentId = paymentId;
         this.payerId = payerId;
         this.payeeId = payeeId;
@@ -52,11 +52,11 @@ public class Payment {
         this.payerId = payerId;
     }
 
-    public Integer getPayeeId() {
+    public int getPayeeId() {
         return payeeId;
     }
 
-    public void setPayeeId(Integer payeeId) {
+    public void setPayeeId(int payeeId) {
         this.payeeId = payeeId;
     }
 
@@ -108,11 +108,11 @@ public class Payment {
         this.referenceType = referenceType;
     }
 
-    public Integer getWalletTransferId() {
+    public int getWalletTransferId() {
         return walletTransferId;
     }
 
-    public void setWalletTransferId(Integer walletTransferId) {
+    public void setWalletTransferId(int walletTransferId) {
         this.walletTransferId = walletTransferId;
     }
 
