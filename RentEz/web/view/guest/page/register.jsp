@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"
+pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
 prefix="c" %>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RentEz - Đăng ký</title>
+    <title>RentEz - Register</title>
 
     <link
       rel="shortcut icon"
@@ -34,12 +33,6 @@ prefix="c" %>
       rel="stylesheet"
       crossorigin=""
       href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"
-    />
-    
-    <!-- Vietnamese Fonts -->
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css"
     />
 
     <style>
@@ -228,9 +221,10 @@ prefix="c" %>
         <section class="register-section">
           <div class="container">
             <div class="row justify-content-center">
-              <div class="col-md-8">                <div class="register-box">
+              <div class="col-md-8">
+                <div class="register-box">
                   <h2 class="register-box__title">
-                    Tạo tài khoản trên
+                    Create an Account on
                     <span class="text-gradient">RentEz</span>
                   </h2>
                   <c:if test="${not empty error}">
@@ -255,22 +249,24 @@ prefix="c" %>
                   >
                     <div class="row">
                       <div class="col-md-6">
-                        <div class="form-group">                          <input
+                        <div class="form-group">
+                          <input
                             type="text"
                             class="form-control"
                             name="name"
-                            placeholder="Họ và tên"
+                            placeholder="Full Name"
                             required
                             value="${param.name != null ? param.name : ''}"
                           />
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="form-group">                          <input
+                        <div class="form-group">
+                          <input
                             type="email"
                             class="form-control"
                             name="email"
-                            placeholder="Địa chỉ email"
+                            placeholder="Email Address"
                             required
                             value="${param.email != null ? param.email : ''}"
                           />
@@ -280,12 +276,13 @@ prefix="c" %>
 
                     <div class="row">
                       <div class="col-md-6">
-                        <div class="form-group">                          <input
+                        <div class="form-group">
+                          <input
                             type="password"
                             class="form-control"
                             id="password"
                             name="password"
-                            placeholder="Mật khẩu"
+                            placeholder="Password"
                             required
                           />
                           <div
@@ -303,7 +300,7 @@ prefix="c" %>
                               ></div>
                             </div>
                             <small class="text-muted" id="passwordHint"
-                              >Mật khẩu phải có ít nhất 8 ký tự</small
+                              >Password must be at least 8 characters</small
                             >
                           </div>
                         </div>
@@ -329,28 +326,32 @@ prefix="c" %>
 
                     <div class="row">
                       <div class="col-md-6">
-                        <div class="form-group">                          <input
+                        <div class="form-group">
+                          <input
                             type="tel"
                             class="form-control"
                             name="phone"
-                            placeholder="Số điện thoại"
+                            placeholder="Phone Number"
                             required
                             value="${param.phone != null ? param.phone : ''}"
                           />
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="form-group">                          <input
+                        <div class="form-group">
+                          <input
                             type="text"
                             class="form-control"
                             name="address"
-                            placeholder="Địa chỉ"
+                            placeholder="Address"
                             value="${param.address != null ? param.address : ''}"
                           />
                         </div>
                       </div>
-                    </div>                    <div class="role-select">
-                      <h6>Tôi muốn:</h6>
+                    </div>
+
+                    <div class="role-select">
+                      <h6>I want to:</h6>
                       <div class="role-options">
                         <div class="role-option">
                           <input
@@ -362,7 +363,7 @@ prefix="c" %>
                           />
                           <label for="renter">
                             <i class="fas fa-home"></i>
-                            Thuê bất động sản
+                            Rent a Property
                           </label>
                         </div>
                         <div class="role-option">
@@ -374,7 +375,7 @@ prefix="c" %>
                           />
                           <label for="landlord">
                             <i class="fas fa-building"></i>
-                            Đăng bất động sản
+                            List a Property
                           </label>
                         </div>
                       </div>
@@ -387,20 +388,23 @@ prefix="c" %>
                           class="form-check-input"
                           id="terms"
                           required
-                        />                        <label class="form-check-label" for="terms"
-                          >Tôi đồng ý với
-                          <a href="#" class="text-link">Điều khoản dịch vụ</a> và
+                        />
+                        <label class="form-check-label" for="terms"
+                          >I agree to the
+                          <a href="#" class="text-link">Terms of Service</a> and
                           <a href="#" class="text-link"
-                            >Chính sách bảo mật</a
+                            >Privacy Policy</a
                           ></label
                         >
                       </div>
-                    </div>                    <button type="submit" class="btn btn-register">
-                      Tạo tài khoản
+                    </div>
+
+                    <button type="submit" class="btn btn-register">
+                      Create Account
                     </button>
 
                     <div class="separator">
-                      <span>HOẶC</span>
+                      <span>OR</span>
                     </div>
 
                     <a
@@ -428,17 +432,19 @@ prefix="c" %>
                         ></path>
                         <path
                           fill="#EA4335"
-                          d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"                        ></path>
-                      </svg>                      Đăng ký với Google
+                          d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"
+                        ></path>
+                      </svg>
+                      Sign Up with Google
                     </a>
 
                     <div class="footer-text">
                       <p>
-                        Đã có tài khoản?
+                        Already have an account?
                         <a
                           href="${pageContext.request.contextPath}/login"
                           class="text-link"
-                          >Đăng nhập</a
+                          >Login</a
                         >
                       </p>
                     </div>
@@ -453,7 +459,7 @@ prefix="c" %>
           <div class="container">
             <div class="row">
               <div class="col-12 text-center">
-                <p>&copy; 2025 RentEz. Đã đăng ký bản quyền.</p>
+                <p>&copy; 2025 RentEz. All rights reserved.</p>
               </div>
             </div>
           </div>

@@ -14,16 +14,16 @@ import java.util.Random;
 public class UserDao {
     public boolean insert(User user) {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO [User] (Name, Email, Phone, Address, Role, Password, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [User] ( Name, Email, Phone, Address, Role, Password) VALUES ( ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
+
             pstmt.setString(1, user.getName());
             pstmt.setString(2, user.getEmail());
             pstmt.setString(3, user.getPhone());
             pstmt.setString(4, user.getAddress());
             pstmt.setString(5, user.getRole());
             pstmt.setString(6, user.getPassword());
-            pstmt.setString(7, user.getAvatar());
             int rows = pstmt.executeUpdate();
             conn.close();
             return rows > 0;
@@ -49,7 +49,6 @@ public class UserDao {
                 user.setAddress(rs.getString("Address"));
                 user.setRole(rs.getString("Role"));
                 user.setPassword(rs.getString("Password"));
-                user.setAvatar(rs.getString("Avatar"));
                 conn.close();
                 return user;
             }
@@ -61,7 +60,7 @@ public class UserDao {
 
     public boolean update(User user) {
         Connection conn = DBConnection.getConnection();
-        String sql = "UPDATE [User] SET Name = ?, Email = ?, Phone = ?, Address = ?, Role = ?, Password = ?, Avatar = ? WHERE UserID = ?";
+        String sql = "UPDATE [User] SET Name = ?, Email = ?, Phone = ?, Address = ?, Role = ?, Password = ? WHERE UserID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user.getName());
@@ -70,8 +69,7 @@ public class UserDao {
             pstmt.setString(4, user.getAddress());
             pstmt.setString(5, user.getRole());
             pstmt.setString(6, user.getPassword());
-            pstmt.setString(7, user.getAvatar());
-            pstmt.setInt(8, user.getUserId());
+            pstmt.setInt(7, user.getUserId());
             int rows = pstmt.executeUpdate();
             conn.close();
             return rows > 0;
@@ -95,7 +93,6 @@ public class UserDao {
             return false;
         }
     }
-
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -112,7 +109,6 @@ public class UserDao {
                 user.setAddress(rs.getString("Address"));
                 user.setRole(rs.getString("Role"));
                 user.setPassword(rs.getString("Password"));
-                user.setAvatar(rs.getString("Avatar"));
                 users.add(user);
             }
             conn.close();
@@ -121,7 +117,6 @@ public class UserDao {
         }
         return users;
     }
-
 
     public User getByEmail(String email) {
         Connection conn = DBConnection.getConnection();
