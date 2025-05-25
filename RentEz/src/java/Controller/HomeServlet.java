@@ -4,7 +4,13 @@
  */
 package Controller;
 
+import DAO.PropertyDAO;
+import DAO.PropertyTypeDAO;
+import DAO.LocationDAO;
 import DAO.UserDao;
+import Model.Property;
+import Model.PropertyType;
+import Model.Location;
 import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -12,7 +18,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 
 public class HomeServlet extends HttpServlet {
@@ -51,20 +59,71 @@ public class HomeServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     */
-    @Override
+     */    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         UserDao userDAO = new UserDao();
+        PropertyDAO propertyDAO = new PropertyDAO();
+        PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
+        LocationDAO locationDAO = new LocationDAO();
 
-         // Lấy danh sách tất cả người dùng
-         List<User> users = userDAO.getAll();
+        // Get all users
+        List<User> users = userDAO.getAll();
+        request.setAttribute("users", users);
 
-         // Đặt danh sách người dùng vào thuộc tính của request
-         request.setAttribute("users", users);
+        // Get all properties
+        List<Property> allProperties = propertyDAO.getAll();
+        
+        // Get featured properties (limit to 6)
+        List<Property> featuredProperties = new ArrayList<>();
+        int count = 0;
+        for (Property property : allProperties) {
+            if ("Available".equals(property.getAvailabilityStatus()) && count < 6) {
+                featuredProperties.add(property);
+                count++;
+            }
+        }
+        
+        // Create a map to store property types by ID
+        HashMap<Integer, String> propertyTypes = new HashMap<>();
+        // Create a map to store locations by ID
+        HashMap<Integer, Location> locations = new HashMap<>();
+        
+        // Retrieve property types and locations for each featured property
+        for (Property property : featuredProperties) {
+            // Get property type
+            if (!propertyTypes.containsKey(property.getTypeId())) {
+                PropertyType type = propertyTypeDAO.getById(property.getTypeId());
+                if (type != null) {
+                    propertyTypes.put(property.getTypeId(), type.getTypeName());
+                } else {
+                    propertyTypes.put(property.getTypeId(), "Unknown");
+                }
+            }
+            
+            // Get location
+            if (!locations.containsKey(property.getLocationId())) {
+                Location location = locationDAO.getById(property.getLocationId());
+                if (location != null) {
+                    locations.put(property.getLocationId(), location);
+                }
+            }
+        }
+          // Pass data to JSP
+        request.setAttribute("featuredProperties", featuredProperties);
+        request.setAttribute("propertyTypes", propertyTypes);
+        request.setAttribute("locations", locations);
+        
+        // Get all property types for search form
+        List<PropertyType> allPropertyTypes = propertyTypeDAO.getAll();
+        request.setAttribute("allPropertyTypes", allPropertyTypes);
+        
+        // Get all cities for search form
+        List<String> allCities = locationDAO.getAllCities();
+        request.setAttribute("allCities", allCities);
 
-         // Chuyển hướng đến trang JSP để hiển thị
-         request.getRequestDispatcher("view/guest/page/homepage.jsp").forward(request, response);
+        // Forward to JSP
+        request.getRequestDispatcher("view/guest/page/homepage.jsp").forward(request, response);
     }
 
     /**
