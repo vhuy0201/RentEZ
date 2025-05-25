@@ -180,8 +180,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </c:if>
-                              <form action="${pageContext.request.contextPath}/profile" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="action" value="updateProfile">
+                <form action="${pageContext.request.contextPath}/profile" method="post" enctype="multipart/form-data">
                                   <div class="row mb-4">
                                     <div class="col-12 text-center">
                                         <div class="form-group">
@@ -203,7 +202,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <input type="hidden" name="action" value="updateProfile">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">                                            <label for="name" class="form-label label-with-icon">
@@ -244,7 +243,7 @@
                                     </button>
                                 </div>
                                 
-                                <input type="hidden" name="action" value="updateProfile">
+                                
                             </form>
                         </div>
                         
@@ -266,7 +265,7 @@
                                             <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
                                         </div>
                                     </div>
-                                    
+                                    <input type="hidden" name="action" value="changePassword">
                                     <div class="col-md-6">
                                         <div class="form-group">                                            <label for="newPassword" class="form-label label-with-icon">
                                                 <i class="fas fa-key"></i>Mật khẩu mới
@@ -299,7 +298,7 @@
                                     </button>
                                 </div>
                                 
-                                <input type="hidden" name="action" value="changePassword">
+                                
                             </form>
                         </div>
                     </div>
