@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             // User already logged in, redirect to appropriate dashboard based on role
             User user = (User) session.getAttribute("user");
-            response.sendRedirect("HomeServlet");
+            redirectBasedOnRole(response, user);
         } else {
             // No active session, show login page
             request.getRequestDispatcher("view/guest/page/login.jsp").forward(request, response);
@@ -74,7 +74,9 @@ public class LoginServlet extends HttpServlet {
             if (remember != null) {
                 session.setMaxInactiveInterval(7 * 24 * 60 * 60); // 7 days in seconds
             }
-            response.sendRedirect("HomeServlet");
+            
+            // Redirect based on user role
+            redirectBasedOnRole(response, authenticatedUser);
         } else {
             // Authentication failed
             request.setAttribute("error", "Invalid email or password");
@@ -111,6 +113,25 @@ public class LoginServlet extends HttpServlet {
      * @param user The authenticated User object
      * @throws IOException if an I/O error occurs
      */
+    private void redirectBasedOnRole(HttpServletResponse response, User user) throws IOException {
+        String role = user.getRole();
+        
+        switch (role.toLowerCase()) {
+            case "landlord":
+                response.sendRedirect("view/landlord/dashboard.jsp");
+                break;
+            case "renter":
+                response.sendRedirect("view/guest/page/homepage.jsp");
+                break;
+            case "admin":
+                response.sendRedirect("view/admin/dashboard.jsp");
+                break;
+            default:
+                // Default to home page if role is not recognized
+                response.sendRedirect("HomeServlet");
+                break;
+        }
+    }
 
     /**
      * Returns a short description of the servlet.

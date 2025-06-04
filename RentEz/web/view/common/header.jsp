@@ -31,16 +31,16 @@
             <div class="header-menu d-lg-block d-none">
                 <ul class="nav-menu flx-align">
                     <li class="nav-menu__item">
-                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/">Trang chủ</a>
+                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/">Home</a>
                     </li>
                     <li class="nav-menu__item">
-                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/search">Bất động sản</a>
+                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/property">Property</a>
                     </li>
                     <li class="nav-menu__item">
-                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/about">Giới thiệu</a>
+                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/about">About</a>
                     </li>
                     <li class="nav-menu__item">
-                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/contact">Liên hệ</a>
+                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/contact">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -48,40 +48,36 @@
                 <c:choose>
                     <c:when test="${empty sessionScope.user}">
                         <!-- Show login button if user is not logged in -->
-                        <a class="btn btn-main d-lg-block d-none" href="${pageContext.request.contextPath}/login">Đăng nhập</a>
+                        <a class="btn btn-main d-lg-block d-none" href="${pageContext.request.contextPath}/login">Login</a>
                     </c:when>
                     <c:otherwise>
                         <!-- Show user avatar and dropdown if user is logged in -->
                         <div class="user-dropdown">
-                            <div class="user-dropdown__toggle">                                <span class="user-avatar">
-                                    <c:choose>
-                                        <c:when test="${empty sessionScope.user.avatar}">
-                                            <img src="${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png" 
-                                                alt="${sessionScope.user.name}" />
-                                        </c:when>
-                                        <c:otherwise>
-                                            <img src="${pageContext.request.contextPath}/${sessionScope.user.avatar}" 
-                                                onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
-                                                alt="${sessionScope.user.name}" />
-                                        </c:otherwise>
-                                    </c:choose>
+                            <div class="user-dropdown__toggle">
+                                <span class="user-avatar">
+                                    <!-- You can replace with actual user avatar if available -->
+                                     <img src="${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png" 
+                                         onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
+                                         alt="${sessionScope.user.name}" /> 
                                 </span>
                                 <span class="user-name">${sessionScope.user.name}</span>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
-                            <div class="user-dropdown__menu">                                <!-- Membership package info box -->                                <div class="membership-box">
-                                    <h4>Gói thành viên</h4>
-                                    <p>Tiết kiệm đến 39% so với đăng tin riêng lẻ</p>
-                                    <a href="${pageContext.request.contextPath}/membership" class="text-link">Tìm hiểu thêm</a>
+                            <div class="user-dropdown__menu">                                <!-- Membership package info box -->
+                                <div class="membership-box">
+                                    <h4>Membership Package</h4>
+                                    <p>Save up to 39% compared to individual listings</p>
+                                    <a href="${pageContext.request.contextPath}/membership" class="text-link">Learn More</a>
                                 </div>
-                                  <!-- User menu items -->                                <ul class="user-menu">
-                                    <li><a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-columns"></i> Bảng điều khiển</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>
+                                
+                                <!-- User menu items -->
+                                <ul class="user-menu">
+                                    <li><a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Membership Package</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Change Password</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                                 </ul>
                             </div>
                         </div>

@@ -1,21 +1,20 @@
 package Model;
 
 public class User {
-
     private int userId;
     private String name;
     private String email;
     private String phone;
     private String address;
-    private String role;
+    private String role; // 'Landlord', 'Renter', 'Both'
     private String password;
-    private String avatar;
+    private String CardIdFront;
+    private String CardIdBack;
 
-    // Constructors
     public User() {
     }
 
-    public User(int userId, String name, String email, String phone, String address, String role, String password, String avatar) {
+    public User(int userId, String name, String email, String phone, String address, String role, String password, String CardIdFront, String CardIdBack) {
         this.userId = userId;
         this.name = name;
         this.email = email;
@@ -23,10 +22,26 @@ public class User {
         this.address = address;
         this.role = role;
         this.password = password;
-        this.avatar = avatar;
+        this.CardIdFront = CardIdFront;
+        this.CardIdBack = CardIdBack;
     }
 
-    // Getters and Setters
+    public String getCardIdFront() {
+        return CardIdFront;
+    }
+
+    public void setCardIdFront(String CardIdFront) {
+        this.CardIdFront = CardIdFront;
+    }
+
+    public String getCardIdBack() {
+        return CardIdBack;
+    }
+
+    public void setCardIdBack(String CardIdBack) {
+        this.CardIdBack = CardIdBack;
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -82,13 +97,5 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
+    
 }

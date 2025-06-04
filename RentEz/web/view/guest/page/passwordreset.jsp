@@ -1,17 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt lại mật khẩu - RentEz</title>
+    <title>Reset Password - RentEz</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Vietnamese Fonts -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -54,9 +52,10 @@
         }
     </style>
 </head>
-<body>    <div class="container">
+<body>
+    <div class="container">
         <div class="reset-password-container">
-            <h2 class="form-title">Đặt lại mật khẩu</h2>
+            <h2 class="form-title">Reset Your Password</h2>
             
             <c:if test="${not empty message}">
                 <div class="alert alert-${messageType}" role="alert">
@@ -66,30 +65,32 @@
             
             <form action="${pageContext.request.contextPath}/reset-password" method="post" id="resetPasswordForm">
                 <input type="hidden" name="email" value="${param.email}">
-                  <div class="form-group">
-                    <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                
+                <div class="form-group">
+                    <label for="newPassword" class="form-label">New Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="newPassword" name="newPassword" required
-                               placeholder="Nhập mật khẩu mới của bạn">
+                               placeholder="Enter your new password">
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
                     <div class="password-requirements">
-                        Mật khẩu phải có:
+                        Password must contain:
                         <ul class="requirements-list">
-                            <li>Ít nhất 8 ký tự</li>
-                            <li>Ít nhất một chữ hoa</li>
-                            <li>Ít nhất một chữ thường</li>
-                            <li>Ít nhất một chữ số</li>
+                            <li>At least 8 characters</li>
+                            <li>At least one uppercase letter</li>
+                            <li>At least one lowercase letter</li>
+                            <li>At least one number</li>
                         </ul>
                     </div>
                 </div>
-                  <div class="form-group">
-                    <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required
-                               placeholder="Xác nhận mật khẩu mới của bạn">
+                               placeholder="Confirm your new password">
                         <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -97,7 +98,7 @@
                 </div>
                 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-key me-2"></i>Đặt lại mật khẩu
+                    <i class="fas fa-key me-2"></i>Reset Password
                 </button>
             </form>
         </div>
@@ -142,17 +143,18 @@
         document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
             const password = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-              // Password validation
+            
+            // Password validation
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
             if (!passwordRegex.test(password)) {
-                alert('Mật khẩu phải có ít nhất 8 ký tự và bao gồm ít nhất một chữ hoa, một chữ thường và một chữ số.');
+                alert('Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.');
                 event.preventDefault();
                 return;
             }
             
             // Password match validation
             if (password !== confirmPassword) {
-                alert('Mật khẩu không khớp!');
+                alert('Passwords do not match!');
                 event.preventDefault();
                 return;
             }
