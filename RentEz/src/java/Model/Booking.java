@@ -11,14 +11,22 @@ public class Booking {
     private Date endDate;
     private double totalPrice;
     private String status; // 'Pending', 'Confirmed', 'Cancelled', 'Completed'
-    private String contractDocuments;
+    private double depositAmount;
+    private double monthlyRent;
+    private String penaltyClause;
+    private String termsAndConditions;
+    private Date createdAt;
+    private Date signedAt;
+    private boolean signedByRenter;
+    private boolean signedByLandlord;
 
     // Constructors
     public Booking() {
     }
 
     public Booking(int bookingId, int renterId, int propertyId, Date startDate, Date endDate, double totalPrice,
-            String status, String contractDocuments) {
+            String status, double depositAmount, double monthlyRent, String penaltyClause, String termsAndConditions,
+            Date createdAt, Date signedAt, boolean signedByRenter, boolean signedByLandlord) {
         this.bookingId = bookingId;
         this.renterId = renterId;
         this.propertyId = propertyId;
@@ -26,7 +34,14 @@ public class Booking {
         this.endDate = endDate;
         this.totalPrice = totalPrice;
         this.status = status;
-        this.contractDocuments = contractDocuments;
+        this.depositAmount = depositAmount;
+        this.monthlyRent = monthlyRent;
+        this.penaltyClause = penaltyClause;
+        this.termsAndConditions = termsAndConditions;
+        this.createdAt = createdAt;
+        this.signedAt = signedAt;
+        this.signedByRenter = signedByRenter;
+        this.signedByLandlord = signedByLandlord;
     }
 
     // Getters and Setters
@@ -76,9 +91,7 @@ public class Booking {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public String getStatus() {
+    }    public String getStatus() {
         return status;
     }
 
@@ -86,11 +99,67 @@ public class Booking {
         this.status = status;
     }
 
-    public String getContractDocuments() {
-        return contractDocuments;
+    public double getDepositAmount() {
+        return depositAmount;
     }
 
-    public void setContractDocuments(String contractDocuments) {
-        this.contractDocuments = contractDocuments;
+    public void setDepositAmount(double depositAmount) {
+        this.depositAmount = depositAmount;
+    }
+
+    public double getMonthlyRent() {
+        return monthlyRent;
+    }
+
+    public void setMonthlyRent(double monthlyRent) {
+        this.monthlyRent = monthlyRent;
+    }
+
+    public String getPenaltyClause() {
+        return penaltyClause;
+    }
+
+    public void setPenaltyClause(String penaltyClause) {
+        this.penaltyClause = penaltyClause;
+    }
+
+    public String getTermsAndConditions() {
+        return termsAndConditions;
+    }
+
+    public void setTermsAndConditions(String termsAndConditions) {
+        this.termsAndConditions = termsAndConditions;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getSignedAt() {
+        return signedAt;
+    }
+
+    public void setSignedAt(Date signedAt) {
+        this.signedAt = signedAt;
+    }
+
+    public boolean isSignedByRenter() {
+        return signedByRenter;
+    }
+
+    public void setSignedByRenter(boolean signedByRenter) {
+        this.signedByRenter = signedByRenter;
+    }
+
+    public boolean isSignedByLandlord() {
+        return signedByLandlord;
+    }
+
+    public void setSignedByLandlord(boolean signedByLandlord) {
+        this.signedByLandlord = signedByLandlord;
     }
 }

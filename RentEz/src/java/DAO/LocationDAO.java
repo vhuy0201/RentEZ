@@ -3,6 +3,8 @@ package DAO;
 import Connection.DBConnection;
 import Model.Location;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocationDAO {
     public boolean insert(Location location) {
@@ -82,5 +84,25 @@ public class LocationDAO {
             System.out.println("Error: " + e);
             return false;
         }
+    }
+
+    public List<String> getAllCities() {
+        List<String> cities = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT DISTINCT City FROM Location ORDER BY City";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                String city = rs.getString("City");
+                if (city != null && !city.isEmpty()) {
+                    cities.add(city);
+                }
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getAllCities: " + e);
+        }
+        return cities;
     }
 }

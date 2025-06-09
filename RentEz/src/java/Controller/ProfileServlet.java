@@ -10,12 +10,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 /**
  * Servlet responsible for handling user profile operations
  * including profile updates and password changes
  */
 @WebServlet(name = "ProfileServlet", urlPatterns = {"/profile"})
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024, // 1 MB
+    maxFileSize = 1024 * 1024 * 10,  // 10 MB
+    maxRequestSize = 1024 * 1024 * 30 // 30 MB
+)
 public class ProfileServlet extends HttpServlet {
 
     /**
@@ -105,6 +115,44 @@ public class ProfileServlet extends HttpServlet {
         user.setName(name);
         user.setPhone(phone);
         user.setAddress(address);
+        
+        // Handle avatar upload
+        Part filePart = request.getPart("avatar");
+        if (filePart != null && filePart.getSize() > 0) {
+            // Get the real path to the upload directory
+            String uploadPath = getServletContext().getRealPath("/") + "view/guest/asset/img";
+            
+            // Create the directory if it doesn't exist
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+            
+            // Generate a unique filename to prevent overwriting
+            String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
+            
+            // Save the file
+            filePart.write(uploadPath + File.separator + uniqueFileName);
+            
+            // Delete old avatar if exists and is not the default
+            if (user.getAvatar() != null && !user.getAvatar().isEmpty() && !user.getAvatar().contains("default-avatar")) {
+                // Extract filename from the path
+                String oldFileName = user.getAvatar();
+                if (oldFileName.contains("/")) {
+                    oldFileName = oldFileName.substring(oldFileName.lastIndexOf("/") + 1);
+                }
+                
+                File oldAvatar = new File(uploadPath + File.separator + oldFileName);
+                if (oldAvatar.exists()) {
+                    oldAvatar.delete();
+                }
+            }
+            
+            // Update user avatar in the user object with the relative path
+            user.setAvatar("view/guest/asset/img/" + uniqueFileName);
+        }
         
         // Save updates to database
         boolean updated = userDao.update(user);
