@@ -1,6 +1,7 @@
 package Model;
 
 public class Property {
+
     private int propertyId;
     private String title;
     private String description;
@@ -11,13 +12,17 @@ public class Property {
     private double size;
     private int numberOfBedrooms;
     private int numberOfBathrooms;
-    private String availabilityStatus; // 'Available', 'Rented'
+    private String availabilityStatus;
     private int priorityLevel;
+    private String avatar;
 
+    // Constructors
     public Property() {
     }
 
-    public Property(int propertyId, String title, String description, int typeId, int locationId, int landlordId, double price, double size, int numberOfBedrooms, int numberOfBathrooms, String availabilityStatus, int priorityLevel) {
+    public Property(int propertyId, String title, String description, int typeId, int locationId, int landlordId,
+            double price, double size, int numberOfBedrooms, int numberOfBathrooms, String availabilityStatus,
+            int priorityLevel, String avatar) {
         this.propertyId = propertyId;
         this.title = title;
         this.description = description;
@@ -30,8 +35,10 @@ public class Property {
         this.numberOfBathrooms = numberOfBathrooms;
         this.availabilityStatus = availabilityStatus;
         this.priorityLevel = priorityLevel;
+        this.avatar = avatar;
     }
 
+    // Getters and Setters
     public int getPropertyId() {
         return propertyId;
     }
@@ -127,5 +134,12 @@ public class Property {
     public void setPriorityLevel(int priorityLevel) {
         this.priorityLevel = priorityLevel;
     }
-    
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }

@@ -6,17 +6,18 @@ public class Message {
 
     private int messageId;
     private int senderId;
-    private int receiverId;
-    private int propertyId;
+    private int receiverId;    private int propertyId;
     private String content;
     private Date sendDate;
     private boolean readStatus;
+    private boolean isNegotiation;
 
     // Constructors
     public Message() {
     }
 
-    public Message(int messageId, int senderId, int receiverId, int propertyId, String content, Date sendDate, boolean readStatus) {
+    public Message(int messageId, int senderId, int receiverId, int propertyId, String content, Date sendDate, 
+                  boolean readStatus, boolean isNegotiation) {
         this.messageId = messageId;
         this.senderId = senderId;
         this.receiverId = receiverId;
@@ -24,6 +25,7 @@ public class Message {
         this.content = content;
         this.sendDate = sendDate;
         this.readStatus = readStatus;
+        this.isNegotiation = isNegotiation;
     }
 
     // Getters and Setters
@@ -73,13 +75,19 @@ public class Message {
 
     public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
-    }
-
-    public boolean isReadStatus() {
+    }    public boolean isReadStatus() {
         return readStatus;
     }
 
     public void setReadStatus(boolean readStatus) {
         this.readStatus = readStatus;
+    }
+    
+    public boolean isNegotiation() {
+        return isNegotiation;
+    }
+
+    public void setNegotiation(boolean isNegotiation) {
+        this.isNegotiation = isNegotiation;
     }
 }

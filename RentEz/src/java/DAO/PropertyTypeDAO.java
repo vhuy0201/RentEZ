@@ -3,8 +3,11 @@ package DAO;
 import Connection.DBConnection;
 import Model.PropertyType;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PropertyTypeDAO {
+
     public boolean insert(PropertyType propertyType) {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO PropertyType (TypeID, TypeName) VALUES (?, ?)";
@@ -70,5 +73,25 @@ public class PropertyTypeDAO {
             System.out.println("Error: " + e);
             return false;
         }
+    }
+
+    public List<PropertyType> getAll() {
+        List<PropertyType> propertyTypes = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM PropertyType";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                PropertyType propertyType = new PropertyType();
+                propertyType.setTypeId(rs.getInt("TypeID"));
+                propertyType.setTypeName(rs.getString("TypeName"));
+                propertyTypes.add(propertyType);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getAll PropertyType: " + e);
+        }
+        return propertyTypes;
     }
 }

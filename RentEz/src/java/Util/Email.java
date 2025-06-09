@@ -13,8 +13,8 @@ import javax.activation.DataHandler;
 
 public class Email {    //Email: rentez.support@gmail.com
     //Password information here
-    static final String from = "flexfoodfpt@gmail.com";
-    static final String password = "nlij tdad yqnv dsxy"; // Replace with actual password
+    static final String from = "huybabytong.vn@gmail.com";
+    static final String password = "ubva lode ucpi pkcx"; // Replace with actual password
 
     public static boolean sendEmail(String to, String tieuDe, String noiDung) {
         Properties props = new Properties();

@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile - RentEz</title>
+    <title>Hồ sơ người dùng - RentEz</title>
      <link
       rel="shortcut icon"
       href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png"
@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css" />
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css" />
+    
+    <!-- Vietnamese Fonts -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css" />
     
     <style>
         .profile-container {
@@ -137,23 +140,33 @@
             
             <div class="container profile-container">
                 <div class="profile-card">
-                    <div class="profile-header">
+                    <div class="profile-header">              
                         <div class="profile-avatar">
-                            <img src="${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png" alt="${sessionScope.user.name}" />
+                            <c:choose>
+                                <c:when test="${empty sessionScope.user.avatar}">
+                                    <img src="${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png" 
+                                         alt="${sessionScope.user.name}" />
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/${sessionScope.user.avatar}" 
+                                         onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
+                                         alt="${sessionScope.user.name}" />
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         <h3>${sessionScope.user.name}</h3>
                         <p>${sessionScope.user.email}</p>
+                        <p><span class="badge bg-secondary">${sessionScope.user.role}</span></p>
                     </div>
-                    
-                    <ul class="nav nav-tabs profile-tabs" id="profileTabs" role="tablist">
+                      <ul class="nav nav-tabs profile-tabs" id="profileTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="edit-profile-tab" data-bs-toggle="tab" data-bs-target="#edit-profile" type="button" role="tab">
-                                <i class="fas fa-user-edit me-2"></i>Edit Profile
+                                <i class="fas fa-user-edit me-2"></i>Chỉnh sửa hồ sơ
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#change-password" type="button" role="tab">
-                                <i class="fas fa-key me-2"></i>Change Password
+                                <i class="fas fa-key me-2"></i>Đổi mật khẩu
                             </button>
                         </li>
                     </ul>
@@ -167,60 +180,67 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </c:if>
-                            
-                            <form action="${pageContext.request.contextPath}/profile" method="post">
+                              <form action="${pageContext.request.contextPath}/profile" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="action" value="updateProfile">
+                                  <div class="row mb-4">
+                                    <div class="col-12 text-center">
+                                        <div class="form-group">
+                                            <label for="avatar" class="form-label d-block mb-2">Ảnh đại diện</label>
+                                            <div class="avatar-preview mb-3 mx-auto" style="width: 150px; height: 150px; border-radius: 50%; overflow: hidden; border: 3px solid #f8f9fa;">
+                                                <c:choose>
+                                                    <c:when test="${empty sessionScope.user.avatar}">
+                                                        <img src="${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png" 
+                                                            alt="${sessionScope.user.name}" id="avatar-preview-img" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/${sessionScope.user.avatar}" 
+                                                            onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
+                                                            alt="${sessionScope.user.name}" id="avatar-preview-img" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>                                            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" style="max-width: 300px; margin: 0 auto;">
+                                            <small class="form-text text-muted">Tải lên ảnh đại diện mới (JPG, PNG, hoặc GIF, tối đa 10MB)</small>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="name" class="form-label label-with-icon">
-                                                <i class="fas fa-user"></i>Full Name
+                                        <div class="form-group">                                            <label for="name" class="form-label label-with-icon">
+                                                <i class="fas fa-user"></i>Họ và tên
                                             </label>
                                             <input type="text" class="form-control" id="name" name="name" value="${sessionScope.user.name}" required>
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="email" class="form-label label-with-icon">
-                                                <i class="fas fa-envelope"></i>Email Address
+                                        <div class="form-group">                                            <label for="email" class="form-label label-with-icon">
+                                                <i class="fas fa-envelope"></i>Địa chỉ email
                                             </label>
                                             <input type="email" class="form-control" id="email" name="email" value="${sessionScope.user.email}" readonly>
-                                            <small class="form-text text-muted">Email cannot be changed for security reasons.</small>
+                                            <small class="form-text text-muted">Email không thể thay đổi vì lý do bảo mật.</small>
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="phone" class="form-label label-with-icon">
-                                                <i class="fas fa-phone"></i>Phone Number
+                                        <div class="form-group">                                            <label for="phone" class="form-label label-with-icon">
+                                                <i class="fas fa-phone"></i>Số điện thoại
                                             </label>
                                             <input type="tel" class="form-control" id="phone" name="phone" value="${sessionScope.user.phone}" required>
                                         </div>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="role" class="form-label label-with-icon">
-                                                <i class="fas fa-user-tag"></i>Role
-                                            </label>
-                                            <input type="text" class="form-control" id="role" value="${sessionScope.user.role}" readonly>
-                                            <small class="form-text text-muted">Contact support to change your role.</small>
-                                        </div>
-                                    </div>
-                                    
                                     <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="address" class="form-label label-with-icon">
-                                                <i class="fas fa-map-marker-alt"></i>Address
+                                        <div class="form-group">                                            <label for="address" class="form-label label-with-icon">
+                                                <i class="fas fa-map-marker-alt"></i>Địa chỉ
                                             </label>
                                             <textarea class="form-control" id="address" name="address" rows="3" required>${sessionScope.user.address}</textarea>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="text-end mt-3">
+                                  <div class="text-end mt-3">
                                     <button type="submit" class="btn btn-primary btn-action">
-                                        <i class="fas fa-save me-2"></i>Save Changes
+                                        <i class="fas fa-save me-2"></i>Lưu thay đổi
                                     </button>
                                 </div>
                                 
@@ -240,46 +260,42 @@
                             <form action="${pageContext.request.contextPath}/profile" method="post" id="changePasswordForm">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="currentPassword" class="form-label label-with-icon">
-                                                <i class="fas fa-lock"></i>Current Password
+                                        <div class="form-group">                                            <label for="currentPassword" class="form-label label-with-icon">
+                                                <i class="fas fa-lock"></i>Mật khẩu hiện tại
                                             </label>
                                             <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="newPassword" class="form-label label-with-icon">
-                                                <i class="fas fa-key"></i>New Password
+                                        <div class="form-group">                                            <label for="newPassword" class="form-label label-with-icon">
+                                                <i class="fas fa-key"></i>Mật khẩu mới
                                             </label>
                                             <input type="password" class="form-control" id="newPassword" name="newPassword" required>
                                             <div class="password-requirements">
-                                                Password must contain:
+                                                Mật khẩu phải có:
                                                 <ul class="requirements-list">
-                                                    <li id="length">At least 8 characters</li>
-                                                    <li id="uppercase">At least one uppercase letter</li>
-                                                    <li id="lowercase">At least one lowercase letter</li>
-                                                    <li id="number">At least one number</li>
+                                                    <li id="length">Ít nhất 8 ký tự</li>
+                                                    <li id="uppercase">Ít nhất một chữ hoa</li>
+                                                    <li id="lowercase">Ít nhất một chữ thường</li>
+                                                    <li id="number">Ít nhất một chữ số</li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="confirmPassword" class="form-label label-with-icon">
-                                                <i class="fas fa-check-double"></i>Confirm New Password
+                                        <div class="form-group">                                            <label for="confirmPassword" class="form-label label-with-icon">
+                                                <i class="fas fa-check-double"></i>Xác nhận mật khẩu mới
                                             </label>
                                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                                             <div id="passwordMatch" class="form-text"></div>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <div class="text-end mt-3">
+                                  <div class="text-end mt-3">
                                     <button type="submit" class="btn btn-primary btn-action">
-                                        <i class="fas fa-key me-2"></i>Change Password
+                                        <i class="fas fa-key me-2"></i>Đổi mật khẩu
                                     </button>
                                 </div>
                                 
@@ -347,13 +363,12 @@
                     numberReq.classList.remove('text-success');
                 }
             }
-            
-            function checkPasswordMatch() {
+              function checkPasswordMatch() {
                 if (confirmPassword.value === newPassword.value) {
-                    passwordMatch.textContent = "Passwords match";
+                    passwordMatch.textContent = "Mật khẩu khớp";
                     passwordMatch.className = "form-text text-success";
                 } else {
-                    passwordMatch.textContent = "Passwords do not match";
+                    passwordMatch.textContent = "Mật khẩu không khớp";
                     passwordMatch.className = "form-text text-danger";
                 }
             }
@@ -373,19 +388,36 @@
                 changePasswordForm.addEventListener('submit', function(event) {
                     const password = newPassword.value;
                     const confirmPwd = confirmPassword.value;
-                    
-                    // Validate password criteria
+                      // Validate password criteria
                     if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/\d/.test(password)) {
-                        alert('Please ensure your password meets all the requirements');
+                        alert('Vui lòng đảm bảo mật khẩu của bạn đáp ứng tất cả các yêu cầu');
                         event.preventDefault();
                         return;
                     }
                     
                     // Check passwords match
                     if (password !== confirmPwd) {
-                        alert('Passwords do not match');
+                        alert('Mật khẩu không khớp');
                         event.preventDefault();
                         return;
+                    }
+                });
+            }
+            
+            // Avatar preview functionality
+            const avatarInput = document.getElementById('avatar');
+            const avatarPreview = document.getElementById('avatar-preview-img');
+            
+            if (avatarInput && avatarPreview) {
+                avatarInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            avatarPreview.src = e.target.result;
+                        }
+                        
+                        reader.readAsDataURL(this.files[0]);
                     }
                 });
             }
