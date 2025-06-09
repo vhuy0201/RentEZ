@@ -70,6 +70,13 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", authenticatedUser);
             
+            // Lưu thêm thông tin landlord nếu vai trò là "landlord"
+            if ("landlord".equalsIgnoreCase(authenticatedUser.getRole())) {
+                session.setAttribute("landlordId", authenticatedUser.getUserId());
+                session.setAttribute("landlordName", authenticatedUser.getName()!= null 
+                    ? authenticatedUser.getName(): "Người dùng");
+            }
+            
             // If remember me is checked, extend session timeout (e.g., to 7 days)
             if (remember != null) {
                 session.setMaxInactiveInterval(7 * 24 * 60 * 60); // 7 days in seconds
@@ -111,6 +118,26 @@ public class LoginServlet extends HttpServlet {
      * @param user The authenticated User object
      * @throws IOException if an I/O error occurs
      */
+    private void redirectBasedOnRole(HttpServletResponse response, User user) throws IOException {
+        String role = user.getRole();
+        
+        switch (role.toLowerCase()) {
+            case "landlord":
+                response.sendRedirect("landLordHomeServlet");
+                break;
+            case "renter":
+                response.sendRedirect("view/guest/page/homepage.jsp");
+                break;
+            case "admin":
+                response.sendRedirect("view/admin/dashboard.jsp");
+                break;
+            default:
+                // Default to home page if role is not recognized
+                response.sendRedirect("HomeServlet");
+                break;
+        }
+    }
+
 
     /**
      * Returns a short description of the servlet.

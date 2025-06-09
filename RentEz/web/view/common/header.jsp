@@ -65,6 +65,7 @@
                                                 alt="${sessionScope.user.name}" />
                                         </c:otherwise>
                                     </c:choose>
+
                                 </span>
                                 <span class="user-name">${sessionScope.user.name}</span>
                                 <i class="fas fa-chevron-down"></i>
@@ -75,8 +76,28 @@
                                     <a href="${pageContext.request.contextPath}/membership" class="text-link">Tìm hiểu thêm</a>
                                 </div>
                                   <!-- User menu items -->                                <ul class="user-menu">
+                                  <li>
+                                        <c:choose>
+                                            <c:when test="${sessionScope.user.role == 'landlord'}">
+                                                <a href="/view/landlord/account-dashboard.jsp">
+                                                    <i class="fas fa-columns"></i> Bảng điều khiển
+                                                </a>
+                                            </c:when>
+                                            <c:when test="${sessionScope.user.role == 'renter'}">
+                                                <a href="${pageContext.request.contextPath}/renter/account-dashboard.jsp">
+                                                    <i class="fas fa-columns"></i> Bảng điều khiển
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="${pageContext.request.contextPath}/account-dashboard.jsp">
+                                                    <i class="fas fa-columns"></i> Bảng điều khiển
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </li>
                                     <li><a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-columns"></i> Bảng điều khiển</a></li>
                                     <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
                                     <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a></li>
                                     <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ</a></li>
                                     <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>
@@ -87,7 +108,7 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
-                
+
                 <button type="button" class="toggle-mobileMenu d-lg-none ms-3">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -101,12 +122,12 @@
     :root {
         --gradient-one: linear-gradient(135deg, #ffaa00 0%, #ffcb66 100%);
     }
-    
+
     /* User dropdown styles */
     .user-dropdown {
         position: relative;
     }
-    
+
     .user-dropdown__toggle {
         display: flex;
         align-items: center;
@@ -116,11 +137,11 @@
         background-color: rgba(255, 255, 255, 0.1);
         transition: background-color 0.3s;
     }
-    
+
     .user-dropdown__toggle:hover {
         background-color: rgba(255, 255, 255, 0.2);
     }
-    
+
     .user-avatar {
         width: 36px;
         height: 36px;
@@ -128,18 +149,18 @@
         overflow: hidden;
         margin-right: 8px;
     }
-    
+
     .user-avatar img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .user-name {
         margin-right: 5px;
         font-weight: 500;
     }
-      .user-dropdown__menu {
+    .user-dropdown__menu {
         position: absolute;
         top: 100%;
         right: 0;
@@ -155,7 +176,7 @@
         visibility: hidden;
         transition: opacity 0.2s ease, visibility 0.2s ease;
     }
-    
+
     /* Create an invisible bridge between toggle and menu */
     .user-dropdown__menu::before {
         content: '';
@@ -166,13 +187,13 @@
         height: 10px;
         background-color: transparent;
     }
-    
+
     .user-dropdown:hover .user-dropdown__menu {
         display: block;
         opacity: 1;
         visibility: visible;
     }
-      
+
     /* Membership box styles */
     .membership-box {
         background: var(--gradient-one, linear-gradient(135deg, #ffaa00 0%, #ffcb66 100%));
@@ -181,37 +202,37 @@
         margin-bottom: 15px;
         border: 2px solid #fff;
     }
-    
+
     .membership-box h4 {
         font-size: 16px;
         margin-bottom: 8px;
         color: #000000;
         font-weight: 600;
     }
-    
+
     .membership-box p {
         font-size: 14px;
         margin-bottom: 8px;
         color: #000000;
     }
-    
+
     .membership-box .text-link {
         color: #000000;
         font-weight: 600;
         text-decoration: underline;
     }
-    
+
     /* User menu styles */
     .user-menu {
         list-style: none;
         padding: 0;
         margin: 0;
     }
-    
+
     .user-menu li {
         margin-bottom: 5px;
     }
-    
+
     .user-menu li a {
         display: flex;
         align-items: center;
@@ -221,17 +242,17 @@
         border-radius: 5px;
         transition: background-color 0.3s;
     }
-    
+
     .user-menu li a:hover {
         background-color: #f8f9fa;
     }
-    
+
     .user-menu li a i {
         margin-right: 10px;
         width: 20px;
         text-align: center;
     }
-    
+
     .user-menu li.divider {
         height: 1px;
         background-color: #e9ecef;
@@ -248,15 +269,15 @@
         fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
         document.head.appendChild(fontAwesome);
     }    // Enhanced dropdown behavior 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var userDropdown = document.querySelector('.user-dropdown');
         var dropdownMenu = document.querySelector('.user-dropdown__menu');
         var dropdownToggle = document.querySelector('.user-dropdown__toggle');
-        
+
         if (userDropdown && dropdownMenu) {
             // For touchscreen devices - support tap
             if (dropdownToggle) {
-                dropdownToggle.addEventListener('click', function(e) {
+                dropdownToggle.addEventListener('click', function (e) {
                     if ('ontouchstart' in window || window.innerWidth < 992) {
                         if (dropdownMenu.style.visibility === 'visible') {
                             dropdownMenu.style.visibility = 'hidden';
@@ -270,9 +291,9 @@
                     }
                 });
             }
-            
+
             // Close the dropdown when clicking outside
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 if (!e.target.closest('.user-dropdown')) {
                     dropdownMenu.style.visibility = 'hidden';
                     dropdownMenu.style.opacity = '0';

@@ -273,9 +273,8 @@
                         <div class="row gy-4 property-item-wrapper">
                             <c:forEach var="property" items="${featuredProperties}">
                                 <div class="col-lg-4 col-sm-6">
-                                    <div class="property-item">
-                                        <div class="property-item__thumb">
-                                            <a class="link" href="${pageContext.request.contextPath}/property/${property.propertyId}">
+                                    <div class="property-item">                                        <div class="property-item__thumb">
+                                            <a class="link" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
                                                 <c:choose>
                                                     <c:when test="${not empty property.avatar}">
                                                         <img src="${pageContext.request.contextPath}/${property.avatar}" 
@@ -294,9 +293,8 @@
                                         <div class="property-item__content">
                                             <h6 class="property-item__price">
                                                 <fmt:formatNumber value="${property.price}" type="currency" currencySymbol="₫" maxFractionDigits="0" groupingUsed="true"/><span class="day">/tháng</span>
-                                            </h6>
-                                            <h6 class="property-item__title">
-                                                <a class="link" href="${pageContext.request.contextPath}/property/${property.propertyId}">
+                                            </h6>                                            <h6 class="property-item__title">
+                                                <a class="link" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
                                                     ${property.title}
                                                 </a>
                                             </h6>
@@ -321,8 +319,7 @@
                                                         <span class="icon"><i class="fas fa-bath"></i></span>
                                                         <span class="text">${property.numberOfBathrooms} Phòng tắm</span>
                                                     </li>
-                                                </ul>
-                                                <a class="simple-btn" href="${pageContext.request.contextPath}/property/${property.propertyId}">
+                                                </ul>                                                <a class="simple-btn" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
                                                     Xem chi tiết<span class="icon-right"><i class="fas fa-arrow-right"></i></span>
                                                 </a>
                                             </div>
