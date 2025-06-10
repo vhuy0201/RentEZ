@@ -5,11 +5,13 @@ import DAO.PropertyDAO;
 import DAO.PropertyImageDAO;
 import DAO.PropertyTypeDAO;
 import DAO.UserDao;
+import DAO.BookingDAO;
 import Model.Location;
 import Model.Property;
 import Model.PropertyImage;
 import Model.PropertyType;
 import Model.User;
+import Model.Booking;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -36,13 +38,13 @@ public class PropertyDetailServlet extends HttpServlet {
         
         try {
             int propertyId = Integer.parseInt(propertyIdStr);
-            
-            // Khởi tạo các DAO
+              // Khởi tạo các DAO
             PropertyDAO propertyDAO = new PropertyDAO();
             LocationDAO locationDAO = new LocationDAO();
             PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
             PropertyImageDAO propertyImageDAO = new PropertyImageDAO();
             UserDao userDAO = new UserDao();
+            BookingDAO bookingDAO = new BookingDAO();
             
             // Lấy thông tin chi tiết bất động sản
             Property property = propertyDAO.getById(propertyId);
@@ -66,12 +68,30 @@ public class PropertyDetailServlet extends HttpServlet {
             // Lấy thông tin của chủ nhà
             User landlord = userDAO.getById(property.getLandlordId());
             
-            // Lưu thông tin vào request
+            // Lấy booking template của property (booking đã được landlord tạo sẵn)
+            Booking propertyBookingTemplate = null;
+            List<Booking> propertyBookings = bookingDAO.getBookingsByPropertyId(propertyId);
+            
+            // Tìm booking template (booking mà landlord đã signed và có status là "Template" hoặc booking đầu tiên)
+            for (Booking booking : propertyBookings) {
+                if ("Template".equals(booking.getStatus()) || 
+                    (booking.isSignedByLandlord() && !booking.isSignedByRenter())) {
+                    propertyBookingTemplate = booking;
+                    break;
+                }
+            }
+            
+            // Nếu không có template, lấy booking đầu tiên làm template
+            if (propertyBookingTemplate == null && !propertyBookings.isEmpty()) {
+                propertyBookingTemplate = propertyBookings.get(0);
+            }
+              // Lưu thông tin vào request
             request.setAttribute("property", property);
             request.setAttribute("location", location);
             request.setAttribute("propertyType", propertyType);
             request.setAttribute("propertyImages", propertyImages);
             request.setAttribute("landlord", landlord);
+            request.setAttribute("propertyBookingTemplate", propertyBookingTemplate);
             
             // Chuyển hướng đến trang chi tiết bất động sản
             request.getRequestDispatcher("/view/guest/page/property-detail.jsp").forward(request, response);
@@ -81,12 +101,11 @@ public class PropertyDetailServlet extends HttpServlet {
             request.setAttribute("errorMessage", "ID bất động sản không hợp lệ");
             request.getRequestDispatcher("/view/guest/page/error.jsp").forward(request, response);
         }
-    }
-
-    @Override
+    }    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Xử lý các hành động POST (nếu có), ví dụ như gửi tin nhắn cho chủ nhà
+        
+        // For POST requests, redirect to GET
         doGet(request, response);
     }
 }
