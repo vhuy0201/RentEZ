@@ -65,7 +65,10 @@
                                                 alt="${sessionScope.user.name}" />
                                         </c:otherwise>
                                     </c:choose>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/UC-11-viewdetail
                                 </span>
                                 <span class="user-name">${sessionScope.user.name}</span>
                                 <i class="fas fa-chevron-down"></i>
@@ -76,6 +79,7 @@
                                     <a href="${pageContext.request.contextPath}/membership" class="text-link">Tìm hiểu thêm</a>
                                 </div>
                                   <!-- User menu items -->                                <ul class="user-menu">
+<<<<<<< HEAD
                                   <li>
                                         <c:choose>
                                             <c:when test="${sessionScope.user.role == 'landlord'}">
@@ -98,6 +102,10 @@
                                     <li><a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-columns"></i> Bảng điều khiển</a></li>
                                     <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
                                     <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
+=======
+                                    <li><a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-columns"></i> Bảng điều khiển</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
+>>>>>>> origin/UC-11-viewdetail
                                     <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a></li>
                                     <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ</a></li>
                                     <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>
