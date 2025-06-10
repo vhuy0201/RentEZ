@@ -85,7 +85,6 @@ public class LocationDAO {
             return false;
         }
     }
-<<<<<<< HEAD
     
     public int insertLocation(Location location) {
     Connection conn = DBConnection.getConnection();
@@ -116,8 +115,6 @@ public class LocationDAO {
         return -1;
     }
 }
-=======
->>>>>>> origin/UC-11-viewdetail
 
     public List<String> getAllCities() {
         List<String> cities = new ArrayList<>();

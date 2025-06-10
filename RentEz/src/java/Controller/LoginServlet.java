@@ -118,7 +118,6 @@ public class LoginServlet extends HttpServlet {
      * @param user The authenticated User object
      * @throws IOException if an I/O error occurs
      */
-<<<<<<< HEAD
     private void redirectBasedOnRole(HttpServletResponse response, User user) throws IOException {
         String role = user.getRole();
         
@@ -138,8 +137,6 @@ public class LoginServlet extends HttpServlet {
                 break;
         }
     }
-=======
->>>>>>> origin/UC-11-viewdetail
 
 
     /**
