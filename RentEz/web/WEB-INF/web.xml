@@ -42,7 +42,8 @@
     <servlet>
         <servlet-name>SearchServlet</servlet-name>
         <servlet-class>Controller.SearchServlet</servlet-class>
-    </servlet>    <!-- User Profile and Communication Servlets -->
+    </servlet>
+    <!-- User Profile and Communication Servlets -->
     <servlet>
         <servlet-name>ProfileServlet</servlet-name>
         <servlet-class>Controller.ProfileServlet</servlet-class>
@@ -58,6 +59,18 @@
     <servlet>
         <servlet-name>UpdateScheduleServlet</servlet-name>
         <servlet-class>Controller.UpdateScheduleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RentalBookingServlet</servlet-name>
+        <servlet-class>Controller.RentalBookingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewContractsServlet</servlet-name>
+        <servlet-class>Controller.ViewContractsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PaymentServlet</servlet-name>
+        <servlet-class>Controller.PaymentServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -102,7 +115,8 @@
     <servlet-mapping>
         <servlet-name>SearchServlet</servlet-name>
         <url-pattern>/search</url-pattern>
-    </servlet-mapping>    <!-- User Profile and Communication Servlet Mappings -->
+    </servlet-mapping>
+    <!-- User Profile and Communication Servlet Mappings -->
     <servlet-mapping>
         <servlet-name>ProfileServlet</servlet-name>
         <url-pattern>/profile</url-pattern>
@@ -118,6 +132,19 @@
     <servlet-mapping>
         <servlet-name>UpdateScheduleServlet</servlet-name>
         <url-pattern>/updateSchedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RentalBookingServlet</servlet-name>
+        <url-pattern>/rental-booking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewContractsServlet</servlet-name>
+        <url-pattern>/view-contracts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentServlet</servlet-name>
+        <url-pattern>/payments</url-pattern>
+        <url-pattern>/payment-action</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

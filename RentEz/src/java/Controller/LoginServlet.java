@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             // User already logged in, redirect to appropriate dashboard based on role
             User user = (User) session.getAttribute("user");
-            response.sendRedirect("HomeServlet");
+            redirectBasedOnRole(response, user);
         } else {
             // No active session, show login page
             request.getRequestDispatcher("view/guest/page/login.jsp").forward(request, response);
@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
             if (remember != null) {
                 session.setMaxInactiveInterval(7 * 24 * 60 * 60); // 7 days in seconds
             }
-            response.sendRedirect("HomeServlet");
+            redirectBasedOnRole(response, authenticatedUser);
         } else {
             // Authentication failed
             request.setAttribute("error", "Invalid email or password");
