@@ -113,7 +113,7 @@ public class AddPropertyServlet extends HttpServlet {
             // Set response message
             if (propertySuccess) {
                 session.setAttribute("successMessage", "Property added successfully!");
-                response.sendRedirect("landLordHomeServlet"); // Redirect to a page listing properties
+                response.sendRedirect(request.getContextPath() + "/viewProperties"); // Redirect to a page listing properties
             } else {
                 request.setAttribute("error", "Failed to add property. Please try again.");
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
