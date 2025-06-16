@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyDAO {
+
     public boolean insert(Property property) {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO Property (Title, Description, TypeID, LocationID, LandlordID, Price, Size, NumberOfBedrooms, NumberOfBathrooms, AvailabilityStatus, PriorityLevel, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -137,6 +138,22 @@ public class PropertyDAO {
         return properties;
     }
 
+
+    public List<Property> getPropertiesByLandlordId(int landlordId) {
+        List<Property> properties = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM Property WHERE LandlordID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+          conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+      return properties;
+    }
+      
     public List<Property> searchProperties(String keyword, String location, String roomType) {
         List<Property> properties = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -190,7 +207,6 @@ public class PropertyDAO {
             }
             
             ResultSet rs = pstmt.executeQuery();
-            
             while (rs.next()) {
                 Property property = new Property();
                 property.setPropertyId(rs.getInt("PropertyID"));
@@ -207,13 +223,12 @@ public class PropertyDAO {
                 property.setPriorityLevel(rs.getInt("PriorityLevel"));
                 property.setAvatar(rs.getString("Avatar"));
                 properties.add(property);
-            }
-            
+            }            
             conn.close();
         } catch (Exception e) {
             System.out.println("Error in searchProperties: " + e);
         }
-        
+
         return properties;
     }
 }
