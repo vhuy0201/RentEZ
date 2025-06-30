@@ -1,7 +1,9 @@
 package Controller;
 
+import DAO.BookingDAO;
 import DAO.LocationDAO;
 import DAO.PropertyDAO;
+import Model.Booking;
 import Model.Location;
 import Model.Property;
 import jakarta.servlet.ServletException;
@@ -15,6 +17,8 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.sql.Timestamp;
 
 @WebServlet(name = "AddPropertiesServlet", urlPatterns = {"/addProperty"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -108,16 +112,51 @@ public class AddPropertyServlet extends HttpServlet {
 
             // Insert the property using PropertyDAO
             PropertyDAO propertyDAO = new PropertyDAO();
-            boolean propertySuccess = propertyDAO.insert(property);
+            int propertyId = propertyDAO.addProperty(property);
 
             // Set response message
-            if (propertySuccess) {
-                session.setAttribute("successMessage", "Property added successfully!");
-                response.sendRedirect(request.getContextPath() + "/viewProperties"); // Redirect to a page listing properties
-            } else {
+            if (propertyId == -1) {
                 request.setAttribute("error", "Failed to add property. Please try again.");
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
+                return;
             }
+
+            // Handle Booking creation if booking parameters are present
+            String startDateStr = request.getParameter("startDate");
+            String endDateStr = request.getParameter("endDate");
+            String totalPriceStr = request.getParameter("totalPrice");
+            String depositAmountStr = request.getParameter("depositAmount");
+            String monthlyRentStr = request.getParameter("monthlyRent");
+            String penaltyClause = request.getParameter("penaltyClause");
+            String termsAndConditions = request.getParameter("termsAndConditions");
+
+            if (startDateStr != null && !startDateStr.isEmpty()) {
+                Booking booking = new Booking();
+                booking.setRenterId(0); // Null equivalent for int, indicating no renter yet
+                booking.setPropertyId(propertyId); // Link to newly created property
+                booking.setStartDate(Timestamp.valueOf(startDateStr + " 00:00:00"));
+                booking.setEndDate(Timestamp.valueOf(endDateStr + " 00:00:00"));
+                booking.setTotalPrice(Double.parseDouble(totalPriceStr));
+                booking.setStatus("Pending"); // Default status
+                booking.setDepositAmount(Double.parseDouble(depositAmountStr));
+                booking.setMonthlyRent(Double.parseDouble(monthlyRentStr));
+                booking.setPenaltyClause(penaltyClause);
+                booking.setTermsAndConditions(termsAndConditions);
+                booking.setCreatedAt(new Date()); // Current timestamp
+                booking.setSignedAt(null); // Null as specified
+                booking.setSignedByRenter(false); // 0 equivalent, as specified
+                booking.setSignedByLandlord(false); // Default, landlord hasn't signed yet
+
+                BookingDAO bookingDAO = new BookingDAO();
+                boolean bookingSuccess = bookingDAO.insert(booking);
+                if (!bookingSuccess) {
+                    request.setAttribute("error", "Property added, but failed to create associated booking. Please try again.");
+                    request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
+                    return;
+                }
+            }
+            session.setAttribute("successMessage", "Property added successfully!");
+            response.sendRedirect(request.getContextPath() + "/viewProperties");
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid input format. Please check your inputs.");
             request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
@@ -126,7 +165,7 @@ public class AddPropertyServlet extends HttpServlet {
             request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
         }
     }
-    
+
 //    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
 //        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
 //        File uploadDir = new File(uploadPath);
@@ -145,7 +184,6 @@ public class AddPropertyServlet extends HttpServlet {
 //        }
 //        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
 //    }
-
     @Override
     public String getServletInfo() {
         return "Add Property Servlet handles property creation with type, location, and landlord details.";

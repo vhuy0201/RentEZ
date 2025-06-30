@@ -19,24 +19,6 @@
         }
     }
 %>
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ sơ người dùng - RentEz</title>
-     <link
-      rel="shortcut icon"
-      href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png"
-    />
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/bootstrap.min.css" />
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css" />
-    <!-- Line awesome -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css" />
-    <!-- Main stylesheet -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css" />
-    
-    <!-- Vietnamese Fonts -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css" />
 
 <header class="header">
     <div class="container container-two">
@@ -112,10 +94,9 @@
                                                 </a>
                                             </c:otherwise>
                                         </c:choose>
-                                    </li>                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
+                                    </li>
+                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
                                     <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/view-contracts"><i class="fas fa-file-contract"></i> Hợp đồng thuê</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/payments"><i class="fas fa-credit-card"></i> Thanh toán</a></li>
                                     <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a></li>
                                     <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ</a></li>
                                     <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>

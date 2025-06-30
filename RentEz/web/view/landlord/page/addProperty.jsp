@@ -222,7 +222,6 @@
                 font-size: 1.1rem;
             }
 
-            /* User info styling */
             .user-info {
                 background: rgba(255, 255, 255, 0.1);
                 border-radius: 1rem;
@@ -243,7 +242,6 @@
                 margin-top: 0.5rem;
             }
 
-            /* Logout button styling */
             .logout-section {
                 margin-top: auto;
                 padding-top: 2rem;
@@ -262,7 +260,6 @@
                 transform: translateX(5px);
             }
 
-            /* Form styling */
             .form-card {
                 border-radius: 1.5rem;
                 border: none;
@@ -393,7 +390,6 @@
                 gap: 0.5rem;
             }
 
-            /* Progress bar */
             .progress-container {
                 margin: 2rem;
             }
@@ -465,7 +461,6 @@
                 color: #4caf50;
             }
 
-            /* Responsive */
             @media (max-width: 768px) {
                 .sidebar {
                     border-radius: 0;
@@ -480,7 +475,6 @@
                 }
             }
 
-            /* Image upload */
             .image-upload {
                 border: 2px dashed #ffe0b2;
                 border-radius: 1rem;
@@ -502,7 +496,6 @@
                 margin-bottom: 1rem;
             }
 
-            /* Amenities */
             .amenities-container {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -519,6 +512,56 @@
                 width: 20px;
                 height: 20px;
                 accent-color: #ff6d00;
+            }
+
+            /* Modal styles for booking form */
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 2000;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .modal-content {
+                background: #fff;
+                border-radius: 1rem;
+                padding: 2rem;
+                width: 90%;
+                max-width: 600px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+                position: relative;
+            }
+
+            .modal-header {
+                background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+                padding: 1rem 1.5rem;
+                border-bottom: 2px solid #ffe0b2;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                color: #e65100;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .modal-close:hover {
+                color: #bf360c;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
             }
         </style>
     </head>
@@ -793,55 +836,7 @@
                                             <label for="numberOfBathrooms" class="form-label">Số phòng tắm <span class="text-danger">*</span></label>
                                             <input type="number" id="numberOfBathrooms" name="numberOfBathrooms" min="0" class="form-control" required>
                                         </div>
-
-                                        <!--                                        <div class="col-md-3 mb-3">
-                                                                                    <label for="floors" class="form-label">Số tầng</label>
-                                                                                    <input type="number" id="floors" name="floors" min="1" class="form-control">
-                                                                                </div>
-                                                                                
-                                                                                <div class="col-md-3 mb-3">
-                                                                                    <label for="yearBuilt" class="form-label">Năm xây dựng</label>
-                                                                                    <input type="number" id="yearBuilt" name="yearBuilt" min="1900" max="2030" class="form-control">
-                                                                                </div>-->
                                     </div>
-
-                                    <!--                                    <div class="mb-4">
-                                                                            <label class="form-label">Tiện ích</label>
-                                                                            <div class="amenities-container">
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity1" name="amenities" value="parking" class="amenity-checkbox">
-                                                                                    <label for="amenity1">Bãi đỗ xe</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity2" name="amenities" value="pool" class="amenity-checkbox">
-                                                                                    <label for="amenity2">Hồ bơi</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity3" name="amenities" value="gym" class="amenity-checkbox">
-                                                                                    <label for="amenity3">Phòng tập gym</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity4" name="amenities" value="security" class="amenity-checkbox">
-                                                                                    <label for="amenity4">An ninh 24/7</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity5" name="amenities" value="elevator" class="amenity-checkbox">
-                                                                                    <label for="amenity5">Thang máy</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity6" name="amenities" value="aircon" class="amenity-checkbox">
-                                                                                    <label for="amenity6">Điều hòa</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity7" name="amenities" value="furnished" class="amenity-checkbox">
-                                                                                    <label for="amenity7">Nội thất đầy đủ</label>
-                                                                                </div>
-                                                                                <div class="amenity-item">
-                                                                                    <input type="checkbox" id="amenity8" name="amenities" value="balcony" class="amenity-checkbox">
-                                                                                    <label for="amenity8">Ban công</label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>-->
 
                                     <div class="mb-3">
                                         <label for="priorityLevel" class="form-label">Mức độ ưu tiên</label>
@@ -854,50 +849,86 @@
                                     </div>
                                 </div>
 
-                                <!-- Images Section -->
-                                <!--                                <div class="form-section">
-                                                                    <div class="form-section-title">
-                                                                        <div class="form-section-icon">
-                                                                            <i class="fas fa-images"></i>
-                                                                        </div>
-                                                                        Hình ảnh bất động sản
-                                                                    </div>
-                                                                    
-                                                                    <div class="mb-4">
-                                                                        <label class="form-label">Hình ảnh chính <span class="text-danger">*</span></label>
-                                                                        <div class="image-upload" onclick="document.getElementById('mainImage').click()">
-                                                                            <input type="file" id="mainImage" name="mainImage" style="display: none;" accept="image/*">
-                                                                            <div class="image-upload-icon">
-                                                                                <i class="fas fa-cloud-upload-alt"></i>
-                                                                            </div>
-                                                                            <h5>Tải lên hình ảnh chính</h5>
-                                                                            <p class="text-muted mb-0">Kéo thả hoặc nhấp để tải lên (JPG, PNG)</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label">Hình ảnh bổ sung</label>
-                                                                        <div class="image-upload" onclick="document.getElementById('additionalImages').click()">
-                                                                            <input type="file" id="additionalImages" name="additionalImages" style="display: none;" accept="image/*" multiple>
-                                                                            <div class="image-upload-icon">
-                                                                                <i class="fas fa-images"></i>
-                                                                            </div>
-                                                                            <h5>Tải lên hình ảnh bổ sung</h5>
-                                                                            <p class="text-muted mb-0">Tối đa 10 hình ảnh (JPG, PNG)</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>-->
-
                                 <!-- Form Footer -->
                                 <div class="form-footer">
-                                    <!--                                    <button type="button" class="btn btn-outline">
-                                                                            <i class="fas fa-save me-2"></i>Lưu nháp
-                                                                        </button>-->
+                                    <button type="button" class="btn btn-outline" onclick="openBookingModal()">
+                                        <i class="fas fa-calendar-plus me-2"></i>Tạo chính sách thuê nhà
+                                    </button>
                                     <button type="submit" class="btn btn-main">
                                         <i class="fas fa-check me-2"></i>Đăng tin
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+
+                    <!-- Booking Modal -->
+                    <div class="modal" id="bookingModal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="mb-0 d-flex align-items-center">
+                                    <i class="fas fa-calendar-plus me-3" style="color: #e65100;"></i>
+                                    Chính sách thuê nhà
+                                </h4>
+                                <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-section">
+                                    <div class="form-section-title">
+                                        <div class="form-section-icon">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        Thông tin chính sách
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="startDate" class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
+                                            <input type="date" id="startDate" name="startDate" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="endDate" class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
+                                            <input type="date" id="endDate" name="endDate" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="totalPrice" class="form-label">Tổng giá (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Nhập tổng giá" required>
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="depositAmount" class="form-label">Số tiền đặt cọc (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="depositAmount" name="depositAmount" step="1000" class="form-control" placeholder="Nhập số tiền cọc" required>
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="monthlyRent" class="form-label">Tiền thuê hàng tháng (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="monthlyRent" name="monthlyRent" step="1000" class="form-control" placeholder="Nhập tiền thuê" required>
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="penaltyClause" class="form-label">Điều khoản phạt</label>
+                                            <textarea id="penaltyClause" name="penaltyClause" rows="3" class="form-control" placeholder="Mô tả điều khoản phạt (nếu có)"></textarea>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="termsAndConditions" class="form-label">Điều khoản và điều kiện</label>
+                                            <textarea id="termsAndConditions" name="termsAndConditions" rows="3" class="form-control" placeholder="Mô tả điều khoản và điều kiện (nếu có)"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <button type="button" class="btn btn-outline me-2" onclick="closeBookingModal()">
+                                            <i class="fas fa-times me-2"></i>Hủy
+                                        </button>
+                                        <button type="button" class="btn btn-main" onclick="submitWithBooking()">
+                                            <i class="fas fa-check me-2"></i>Xác nhận
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -907,48 +938,38 @@
         <jsp:include page="/view/common/footer.jsp" />
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
         <script>
-                                        // Function to show and hide success message
-//            document.addEventListener('DOMContentLoaded', function () {
-//                // Image upload preview
-//                const mainImage = document.getElementById('mainImage');
-//                const additionalImages = document.getElementById('additionalImages');
-//                
-//                if (mainImage) {
-//                    mainImage.addEventListener('change', function(e) {
-//                        if (e.target.files.length > 0) {
-//                            const parent = mainImage.closest('.image-upload');
-//                            const icon = parent.querySelector('.image-upload-icon');
-//                            const h5 = parent.querySelector('h5');
-//                            
-//                            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-//                            h5.textContent = `Đã chọn: ${e.target.files[0].name}`;
-//                            parent.style.borderColor = '#4caf50';
-//                        }
-//                    });
-//                }
-//                
-//                if (additionalImages) {
-//                    additionalImages.addEventListener('change', function(e) {
-//                        if (e.target.files.length > 0) {
-//                            const parent = additionalImages.closest('.image-upload');
-//                            const icon = parent.querySelector('.image-upload-icon');
-//                            const h5 = parent.querySelector('h5');
-//                            
-//                            icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-//                            h5.textContent = `Đã chọn: ${e.target.files.length} hình ảnh`;
-//                            parent.style.borderColor = '#4caf50';
-//                        }
-//                    });
-//                }
-//            });
+            // Modal control functions
+            function openBookingModal() {
+                document.getElementById('bookingModal').style.display = 'flex';
+            }
 
-                                        // Confirm logout function
-                                        function confirmLogout() {
-                                            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                                                // Add your logout logic here
-                                                window.location.href = '${pageContext.request.contextPath}/logout';
-                                            }
-                                        }
+            function closeBookingModal() {
+                document.getElementById('bookingModal').style.display = 'none';
+            }
+
+            // Submit property form with booking data
+            function submitWithBooking() {
+                const propertyForm = document.getElementById('propertyForm');
+                const bookingFields = ['startDate', 'endDate', 'totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
+                
+                bookingFields.forEach(field => {
+                    const input = document.getElementById(field);
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = field;
+                    hiddenInput.value = input.value;
+                    propertyForm.appendChild(hiddenInput);
+                });
+                
+                propertyForm.submit();
+            }
+
+            // Confirm logout function
+            function confirmLogout() {
+                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    window.location.href = '${pageContext.request.contextPath}/logout';
+                }
+            }
         </script>
     </body>
 </html>
