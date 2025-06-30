@@ -10,162 +10,672 @@
 
         <link rel="shortcut icon" href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png" />
 
-        <!-- Tailwind CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/bootstrap.min.css" />
+        
+        <!-- Font awesome -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css" />
+        
+        <!-- Line awesome -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css" />
         
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
         
-        <!-- Google Fonts for Vietnamese suppo                     function s                // Create toast HTML with Tailwind CSS
-                const isSuccess = message.toLowerCase().includes('thành công') || 
-                                 message.toLowerCase().includes('thÃ nh cÃ´ng') || 
-                                 (!message.toLowerCase().includes('thất bại') && 
-                                  !message.toLowerCase().includes('tháº¥t báº¡i') && 
-                                  !message.toLowerCase().includes('lỗi') && 
-                                  !message.toLowerCase().includes('lá»i') && 
-                                  !message.toLowerCase().includes('không') &&
-                                  !message.toLowerCase().includes('khÃ´ng'));
-                
-                const bgColor = isSuccess ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-                const textColor = isSuccess ? 'text-green-800' : 'text-red-800';
-                const iconColor = isSuccess ? 'text-green-600' : 'text-red-600';
-                const iconType = isSuccess ? 'check-circle-fill' : 'exclamation-triangle-fill';(message) {
-                // Create toast container
-                const toastContainer = document.createElement('div');
-                toastContainer.className = 'fixed bottom-4 right-4 z-50 p-3';
-                
-                // Create toast HTML with Tailwind CSS
-                const isSuccess = message.toLowerCase().includes('thành công') || 
-                                 message.toLowerCase().includes('thÃ nh cÃ´ng') || 
-                                 (!message.toLowerCase().includes('thất bại') && 
-                                  !message.toLowerCase().includes('tháº¥t báº¡i') && 
-                                  !message.toLowerCase().includes('lỗi') && 
-                                  !message.toLowerCase().includes('lá»i') && 
-                                  !message.toLowerCase().includes('không') &&
-                                  !message.toLowerCase().includes('khÃ´ng'));
-                
-                const bgColor = isSuccess ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-                const textColor = isSuccess ? 'text-green-800' : 'text-red-800';
-                const iconColor = isSuccess ? 'text-green-600' : 'text-red-600';
-                const iconType = isSuccess ? 'check-circle-fill' : 'exclamation-triangle-fill';            // Create toast HTML with Tailwind CSS
-                const isSuccess = message.toLowerCase().includes('thành công') || 
-                                 message.toLowerCase().includes('thÃ nh cÃ´ng') || 
-                                 (!message.toLowerCase().includes('thất bại') && 
-                                  !message.toLowerCase().includes('tháº¥t báº¡i') && 
-                                  !message.toLowerCase().includes('lỗi') && 
-                                  !message.toLowerCase().includes('lá»i') && 
-                                  !message.toLowerCase().includes('không') &&
-                                  !message.toLowerCase().includes('khÃ´ng'));
-                
-                const bgColor = isSuccess ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
-                const textColor = isSuccess ? 'text-green-800' : 'text-red-800';
-                const iconColor = isSuccess ? 'text-green-600' : 'text-red-600';
-                const iconType = isSuccess ? 'check-circle-fill' : 'exclamation-triangle-fill';       <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" crossorigin="" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css" />
+
+        <!-- Vietnamese Fonts -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-enhancement.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/responsive-vietnamese.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-effects.css" />
         
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            'orange': {
-                                50: '#fff7ed',
-                                100: '#ffedd5',
-                                200: '#fed7aa',
-                                300: '#fdba74',
-                                400: '#fb923c',
-                                500: '#f97316',
-                                600: '#ea580c',
-                                700: '#c2410c',
-                                800: '#9a3412',
-                                900: '#7c2d12',
-                            }
-                        },
-                        fontFamily: {
-                            'sans': ['Inter', 'Roboto', 'system-ui', 'sans-serif'],
-                        }
-                    }
+        <!-- Google Fonts for Vietnamese support -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+          
+        <style>
+            :root {
+                --primary-color: #007bff;
+                --primary-dark: #0056b3;
+                --primary-light: #e6f0ff;
+                --success-color: #28a745;
+                --success-dark: #1e7e34;
+                --success-light: #e9f5ee;
+                --warning-color: #f29900;
+                --warning-dark: #d38800;
+                --warning-light: #fff8e6;
+                --danger-color: #ea4335;
+                --danger-dark: #d93025;
+                --danger-light: #fde8e6;
+                --gray-dark: #343a40;
+                --gray-medium: #5f6368;
+                --gray-light: #e9ecef;
+                --body-bg: #f8f9fa;
+                --card-shadow: 0 5px 15px rgba(0,0,0,0.05);
+                --hover-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                --border-radius-lg: 10px;
+                --border-radius: 8px;
+                --border-radius-sm: 4px;
+                --transition: all 0.3s ease;
+            }
+
+            body {
+                font-family: 'Roboto', 'Nunito', sans-serif;
+                background-color: var(--body-bg);
+                color: #333;
+            }
+            
+            /* Header styling */
+            .breadcrumb__title {
+                font-size: 3rem;
+                font-weight: 700;
+                background: linear-gradient(to right, #8556f0, #6bedd1);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                letter-spacing: -0.5px;
+                margin-bottom: 1.5rem;
+            }
+            
+            /* Tab styling */
+            .tab-container {
+                margin-bottom: 2rem;
+            }
+            
+            .nav-tabs {
+                border-bottom: 1px solid var(--gray-light);
+                margin-bottom: 1.5rem;
+            }
+            
+            .nav-tabs .nav-link {
+                color: var(--gray-medium);
+                font-weight: 500;
+                border: none;
+                border-bottom: 3px solid transparent;
+                padding: 0.75rem 1.5rem;
+                transition: var(--transition);
+                position: relative;
+                margin-right: 0.5rem;
+                border-top-left-radius: var(--border-radius-sm);
+                border-top-right-radius: var(--border-radius-sm);
+            }
+            
+            .nav-tabs .nav-link:hover {
+                color: var(--primary-color);
+                background-color: rgba(0, 123, 255, 0.05);
+            }
+            
+            .nav-tabs .nav-link.active {
+                color: var(--primary-color);
+                border-color: var(--primary-color);
+                font-weight: 600;
+                background-color: rgba(0, 123, 255, 0.08);
+            }
+            
+            /* Custom appearance for tab badges */
+            .nav-tabs .nav-link .badge {
+                font-size: 0.75rem;
+                font-weight: 500;
+                padding: 0.25em 0.6em;
+                vertical-align: text-top;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            }
+            
+            /* Table styling */
+            .schedule-table {
+                border-collapse: separate;
+                border-spacing: 0;
+                width: 100%;
+                border-radius: var(--border-radius-lg);
+                overflow: hidden;
+                box-shadow: var(--card-shadow);
+                background-color: white;
+            }
+            
+            .schedule-table thead {
+                background: linear-gradient(to right, #007bff, #0056b3);
+                color: white;
+            }
+            
+            .schedule-table th {
+                padding: 1rem 1.25rem;
+                font-weight: 600;
+                text-align: left;
+                letter-spacing: 0.3px;
+            }
+            
+            .schedule-table tbody tr {
+                transition: var(--transition);
+                border-bottom: 1px solid var(--gray-light);
+            }
+            
+            .schedule-table tbody tr:hover {
+                background-color: rgba(0, 123, 255, 0.05);
+                transform: translateY(-2px);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            }
+            
+            .schedule-table tbody tr:last-child {
+                border-bottom: none;
+            }
+            
+            .schedule-table td {
+                padding: 1.25rem;
+                vertical-align: middle;
+            }
+            
+            /* Image styling */
+            .schedule-table .property-img {
+                width: 80px;
+                height: 60px;
+                border-radius: var(--border-radius);
+                object-fit: cover;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                border: 2px solid white;
+                transition: var(--transition);
+            }
+            
+            .schedule-table .property-img:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            }
+            
+            /* Property info styling */
+            .schedule-table .property-title {
+                font-weight: 600;
+                font-size: 1.05rem;
+                color: var(--primary-color);
+                margin-bottom: 0.375rem;
+                transition: var(--transition);
+            }
+            
+            .schedule-table .property-title:hover {
+                color: var(--primary-dark);
+                text-decoration: none;
+            }
+            
+            .schedule-table .property-address {
+                font-size: 0.875rem;
+                color: var(--gray-medium);
+                display: flex;
+                align-items: center;
+                gap: 0.375rem;
+            }
+            
+            .schedule-table .property-address i {
+                color: var(--primary-color);
+                font-size: 0.75rem;
+            }
+            
+            /* Status badges styling */
+            .badge {
+                padding: 0.5rem 1rem;
+                border-radius: 50px;
+                font-weight: 500;
+                font-size: 0.875rem;
+                letter-spacing: 0.3px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+                display: inline-flex;
+                align-items: center;
+                gap: 0.375rem;
+            }
+            
+            .badge i {
+                font-size: 0.75rem;
+            }
+            
+            .badge-pending {
+                background-color: var(--warning-color);
+                color: white;
+            }
+            
+            .badge-confirmed {
+                background-color: var(--success-color);
+                color: white;
+            }
+            
+            .badge-cancelled {
+                background-color: var(--danger-color);
+                color: white;
+            }
+            
+            /* Button styling */
+            .action-btn {
+                padding: 0.5rem 1rem;
+                border-radius: var(--border-radius);
+                font-weight: 500;
+                transition: var(--transition);
+                letter-spacing: 0.2px;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.375rem;
+                border: none;
+            }
+            
+            .confirm-btn {
+                background: linear-gradient(to right, var(--success-color), var(--success-dark));
+                color: white;
+                box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+            }
+            
+            .confirm-btn:hover {
+                background: linear-gradient(to right, var(--success-dark), var(--success-dark));
+                color: white;
+                box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+                transform: translateY(-2px);
+            }
+            
+            .cancel-btn {
+                background: linear-gradient(to right, var(--danger-color), var(--danger-dark));
+                color: white;
+                box-shadow: 0 2px 6px rgba(234, 67, 53, 0.2);
+            }
+            
+            .cancel-btn:hover {
+                background: linear-gradient(to right, var(--danger-dark), var(--danger-dark));
+                color: white;
+                box-shadow: 0 4px 10px rgba(234, 67, 53, 0.3);
+                transform: translateY(-2px);
+            }
+            
+            .btn-outline-primary {
+                border: 1px solid var(--primary-color);
+                color: var(--primary-color);
+                background-color: transparent;
+            }
+            
+            .btn-outline-primary:hover {
+                background-color: var(--primary-color);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+            }
+            
+            /* Page title styling */
+            .schedule-title {
+                position: relative;
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+                font-weight: 700;
+                color: var(--gray-dark);
+                display: inline-block;
+            }
+            
+            .schedule-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+                border-radius: 10px;
+            }
+            
+            /* Empty state styling */
+            .empty-state {
+                text-align: center;
+                padding: 4rem 2rem;
+                background: linear-gradient(135deg, #fff, #f8f9fa);
+                border-radius: var(--border-radius-lg);
+                margin: 2.5rem 0;
+                border: 1px dashed var(--gray-light);
+                box-shadow: var(--card-shadow);
+            }
+            
+            .empty-state i {
+                font-size: 4rem;
+                margin-bottom: 1.5rem;
+                display: block;
+                background: linear-gradient(to right, #8556f0, #6bedd1);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            
+            .empty-state h3 {
+                margin-bottom: 1rem;
+                color: var(--gray-dark);
+                font-weight: 600;
+                font-size: 1.5rem;
+            }
+            
+            .empty-state p {
+                color: var(--gray-medium);
+                max-width: 500px;
+                margin: 0 auto 1.5rem;
+                font-size: 1.05rem;
+            }
+            
+            .empty-state .btn-primary {
+                background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+                color: white;
+                border: none;
+                padding: 0.75rem 2rem;
+                font-weight: 500;
+                border-radius: var(--border-radius);
+                box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+                transition: var(--transition);
+            }
+            
+            .empty-state .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+            }
+            
+            /* User info styling */
+            .user-info {
+                display: flex;
+                align-items: center;
+            }
+            
+            .user-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 1rem;
+                border: 2px solid white;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                transition: var(--transition);
+            }
+            
+            .user-avatar:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+                border-color: var(--primary-color);
+            }
+            
+            .user-name {
+                font-weight: 600;
+                margin-bottom: 0.25rem;
+                color: var(--gray-dark);
+                font-size: 1rem;
+            }
+            
+            .user-contact {
+                font-size: 0.875rem;
+                color: var(--gray-medium);
+                display: flex;
+                gap: 1rem;
+            }
+            
+            .user-contact span {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+            }
+            
+            .user-contact i {
+                color: var(--primary-color);
+            }
+            
+            /* Sorting control */
+            .schedule-sort {
+                margin-bottom: 1.5rem;
+            }
+            
+            .form-select {
+                padding: 0.75rem 1rem;
+                border-radius: var(--border-radius);
+                border: 1px solid var(--gray-light);
+                color: var(--gray-dark);
+                font-weight: 500;
+                background-color: white;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+                transition: var(--transition);
+                width: auto;
+                min-width: 250px;
+            }
+            
+            .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+                outline: none;
+            }
+            
+            /* Loading overlay */
+            .loading-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(255, 255, 255, 0.85);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1050;
+                visibility: hidden;
+                opacity: 0;
+                transition: all 0.3s;
+                backdrop-filter: blur(3px);
+            }
+            
+            .loading-overlay.show {
+                visibility: visible;
+                opacity: 1;
+            }
+            
+            .loading-spinner {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+                background: white;
+                border-radius: var(--border-radius-lg);
+                box-shadow: var(--hover-shadow);
+            }
+            
+            .loading-spinner .spinner-border {
+                width: 3.5rem;
+                height: 3.5rem;
+                margin-bottom: 1.25rem;
+                color: var(--primary-color);
+                border-width: 0.25rem;
+            }
+            
+            /* Special styling for date */
+            .schedule-date {
+                font-weight: 500;
+                background-color: var(--primary-light);
+                padding: 0.5rem 1rem;
+                border-radius: var(--border-radius);
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: var(--primary-dark);
+            }
+            
+            .schedule-date i {
+                color: var(--primary-color);
+            }
+            
+            /* Mobile responsiveness */
+            @media (max-width: 768px) {
+                .nav-tabs .nav-link {
+                    padding: 0.625rem 0.875rem;
+                    font-size: 0.95rem;
+                }
+                
+                .schedule-table th, .schedule-table td {
+                    padding: 1rem 0.75rem;
+                }
+                
+                .user-contact {
+                    flex-direction: column;
+                    gap: 0.25rem;
+                }
+                
+                .property-img {
+                    width: 70px;
+                    height: 50px;
+                }
+                
+                .action-btn {
+                    padding: 0.5rem 0.75rem;
+                    font-size: 0.875rem;
+                }
+                
+                .breadcrumb__title {
+                    font-size: 2.25rem;
+                }
+                
+                .schedule-title {
+                    font-size: 1.5rem;
                 }
             }
-        </script>
-    </head>
-    
-    <body>
+            
+            /* Toast styling */
+            .toast-container {
+                z-index: 1060;
+            }
+            
+            .toast {
+                background-color: white;
+                border-radius: var(--border-radius);
+                overflow: hidden;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                min-width: 300px;
+            }
+            
+            .toast-header {
+                padding: 0.75rem 1rem;
+                background: white;
+                border-bottom-width: 3px;
+            }
+            
+            .toast-body {
+                padding: 1rem;
+                background: white;
+            }
+            
+            /* Badge for filter */
+            .filter-badge {
+                position: relative;
+                display: inline-block;
+                padding: 0.5rem 1rem 0.5rem 2rem;
+                background-color: var(--primary-light);
+                color: var(--primary-color);
+                border-radius: var(--border-radius);
+                margin-right: 0.75rem;
+                margin-bottom: 0.75rem;
+                font-size: 0.9rem;
+                font-weight: 500;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            }
+            
+            .filter-badge::before {
+                content: '';
+                position: absolute;
+                left: 0.75rem;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 0.5rem;
+                height: 0.5rem;
+                background-color: var(--primary-color);
+                border-radius: 50%;
+            }
+            
+            .filter-badge.warning {
+                background-color: var(--warning-light);
+                color: var(--warning-dark);
+            }
+            
+            .filter-badge.warning::before {
+                background-color: var(--warning-color);
+            }
+            
+            .filter-badge.success {
+                background-color: var(--success-light);
+                color: var(--success-dark);
+            }
+            
+            .filter-badge.success::before {
+                background-color: var(--success-color);
+            }
+            
+            .filter-badge.danger {
+                background-color: var(--danger-light);
+                color: var(--danger-dark);
+            }
+            
+            .filter-badge.danger::before {
+                background-color: var(--danger-color);
+            }
+        </style>
+    </head>    <body>
         <!-- Loading overlay -->
-        <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-lg p-8 flex flex-col items-center shadow-lg">
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-orange-500 border-t-transparent mb-4" role="status">
-                    <span class="sr-only">Đang tải...</span>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
                 </div>
-                <div id="loadingMessage" class="text-gray-700 font-medium">Đang xử lý yêu cầu...</div>
+                <div id="loadingMessage">Đang xử lý yêu cầu...</div>
             </div>
         </div>
         
         <div id="root">
-            <main class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100">
+            <main class="body-bg">
                 <jsp:include page="/view/common/header.jsp" />
-                
-                <section class="relative py-20 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                <section class="breadcrumb padding-y-120">
                     <img src="${pageContext.request.contextPath}/view/guest/asset/img/breadcrumb-img-DVKBF4db.png" 
                          alt="Breadcrumb Image" 
-                         class="absolute inset-0 w-full h-full object-cover opacity-10" />
-                    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="flex justify-center">
-                            <div class="max-w-2xl text-center">
-                                <div class="space-y-4">
-                                    <h2 class="text-4xl font-bold text-white">Lịch xem nhà</h2>
-                                    <nav class="flex justify-center" aria-label="Breadcrumb">
-                                        <ol class="flex items-center space-x-2 text-orange-100">
-                                            <li class="flex items-center">
-                                                <a class="hover:text-white transition-colors duration-200" href="${pageContext.request.contextPath}/">Trang chủ</a>
-                                            </li>
-                                            <li class="flex items-center">
-                                                <i class="bi bi-chevron-right mx-2"></i>
-                                                <span class="text-white">Lịch xem nhà</span>
-                                            </li>
-                                        </ol>
-                                    </nav>
+                         class="breadcrumb__img" />
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="breadcrumb__wrapper">
+                                    <h2 class="breadcrumb__title">Lịch xem nhà</h2>
+                                    <ul class="breadcrumb__list">
+                                        <li class="breadcrumb__item">
+                                            <a class="breadcrumb__link" href="${pageContext.request.contextPath}/">Trang chủ</a>
+                                        </li>
+                                        <li class="breadcrumb__item">
+                                            Lịch xem nhà
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
                 
-                <section class="py-16">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <section class="padding-y-80">
+                    <div class="container">
                         <c:if test="${sessionScope.user == null}">
                             <!-- Not logged in -->
-                            <div class="flex justify-center">
-                                <div class="max-w-md w-full">
-                                    <div class="bg-white rounded-xl shadow-lg p-8 text-center border border-orange-100">
-                                        <i class="bi bi-lock text-6xl text-orange-500 mb-4"></i>
-                                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Yêu cầu đăng nhập</h3>
-                                        <p class="text-gray-600 mb-6">Vui lòng đăng nhập để xem lịch hẹn xem nhà của bạn.</p>
-                                        <a href="${pageContext.request.contextPath}/login" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg inline-block">Đăng nhập</a>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="empty-state">
+                                        <i class="bi bi-lock"></i>
+                                        <h3>Yêu cầu đăng nhập</h3>
+                                        <p>Vui lòng đăng nhập để xem lịch hẹn xem nhà của bạn.</p>
+                                        <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">Đăng nhập</a>
                                     </div>
                                 </div>
                             </div>
                         </c:if>
                         
                         <c:if test="${sessionScope.user != null}">
-                            <div class="w-full">
-                                <div class="w-full">
-                                    <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3 class="schedule-title">
                                         <c:choose>
                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
-                                                <span class="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">Yêu cầu xem nhà của khách hàng</span>
+                                                Yêu cầu xem nhà của khách hàng
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">Lịch xem nhà của bạn</span>
+                                                Lịch xem nhà của bạn
                                             </c:otherwise>
                                         </c:choose>
-                                    </h3>
+                                    </h3>                                    
                                     
-                                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
                                         <!-- Sorting options -->
-                                        <div class="w-full sm:w-auto">
-                                            <select id="sortSchedules" class="w-full sm:w-72 px-4 py-2 border border-orange-200 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm">
+                                        <div class="schedule-sort">
+                                            <select id="sortSchedules" class="form-select">
                                                 <option value="date-desc">Sắp xếp theo: Ngày xem (mới nhất)</option>
                                                 <option value="date-asc">Sắp xếp theo: Ngày xem (cũ nhất)</option>
                                                 <option value="name-asc">Sắp xếp theo: Tên bất động sản (A-Z)</option>
@@ -175,53 +685,56 @@
                                     </div>
                                     
                                     <!-- Tab navigation -->
-                                    <div class="bg-white rounded-xl shadow-lg border border-orange-100 overflow-hidden">
-                                        <div class="border-b border-orange-100">
-                                            <nav class="flex space-x-0" id="scheduleTabs" role="tablist">
-                                                <button class="flex-1 flex items-center justify-center px-6 py-4 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset transition-all duration-200" 
-                                                        id="all-tab" data-bs-toggle="tab" data-bs-target="#all-schedules" 
-                                                        type="button" role="tab" aria-controls="all-schedules" aria-selected="true">
-                                                    <i class="bi bi-calendar-week mr-2"></i>Tất cả
+                                    <div class="tab-container">
+                                        <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-schedules" 
+                                                    type="button" role="tab" aria-controls="all-schedules" aria-selected="true">
+                                                    <i class="bi bi-calendar-week me-2"></i>Tất cả
                                                     <c:if test="${not empty schedules}">
-                                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white text-orange-600">${schedules.size()}</span>
+                                                        <span class="ms-1 badge rounded-pill bg-primary">${schedules.size()}</span>
                                                     </c:if>
                                                 </button>
-                                                <button class="flex-1 flex items-center justify-center px-6 py-4 text-sm font-medium text-gray-600 bg-gray-50 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset transition-all duration-200" 
-                                                        id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-schedules" 
-                                                        type="button" role="tab" aria-controls="pending-schedules" aria-selected="false">
-                                                    <i class="bi bi-hourglass-split mr-2"></i>Chờ xác nhận
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-schedules" 
+                                                    type="button" role="tab" aria-controls="pending-schedules" aria-selected="false">
+                                                    <i class="bi bi-hourglass-split me-2"></i>Chờ xác nhận
                                                     <c:if test="${not empty pendingSchedules}">
-                                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">${pendingSchedules.size()}</span>
+                                                        <span class="ms-1 badge rounded-pill bg-warning text-dark">${pendingSchedules.size()}</span>
                                                     </c:if>
                                                 </button>
-                                                <button class="flex-1 flex items-center justify-center px-6 py-4 text-sm font-medium text-gray-600 bg-gray-50 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset transition-all duration-200" 
-                                                        id="confirmed-tab" data-bs-toggle="tab" data-bs-target="#confirmed-schedules" 
-                                                        type="button" role="tab" aria-controls="confirmed-schedules" aria-selected="false">
-                                                    <i class="bi bi-check-circle mr-2"></i>Đã xác nhận
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab" data-bs-target="#confirmed-schedules" 
+                                                    type="button" role="tab" aria-controls="confirmed-schedules" aria-selected="false">
+                                                    <i class="bi bi-check-circle me-2"></i>Đã xác nhận
                                                     <c:if test="${not empty confirmedSchedules}">
-                                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">${confirmedSchedules.size()}</span>
+                                                        <span class="ms-1 badge rounded-pill bg-success">${confirmedSchedules.size()}</span>
                                                     </c:if>
                                                 </button>
-                                                <button class="flex-1 flex items-center justify-center px-6 py-4 text-sm font-medium text-gray-600 bg-gray-50 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset transition-all duration-200" 
-                                                        id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled-schedules" 
-                                                        type="button" role="tab" aria-controls="cancelled-schedules" aria-selected="false">
-                                                    <i class="bi bi-x-circle mr-2"></i>Đã hủy
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="cancelled-tab" data-bs-toggle="tab" data-bs-target="#cancelled-schedules" 
+                                                    type="button" role="tab" aria-controls="cancelled-schedules" aria-selected="false">
+                                                    <i class="bi bi-x-circle me-2"></i>Đã hủy
                                                     <c:if test="${not empty cancelledSchedules}">
-                                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">${cancelledSchedules.size()}</span>
+                                                        <span class="ms-1 badge rounded-pill bg-danger">${cancelledSchedules.size()}</span>
                                                     </c:if>
                                                 </button>
-                                            </nav>
-                                        </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                     
                                     <!-- Tab content -->
                                     <div class="tab-content" id="scheduleTabContent">
                                         <!-- All schedules tab -->
-                                        <div class="tab-pane fade show active p-6" id="all-schedules" role="tabpanel" aria-labelledby="all-tab">
+                                        <div class="tab-pane fade show active" id="all-schedules" role="tabpanel" aria-labelledby="all-tab">
                                             <c:if test="${empty schedules}">
-                                                <div class="text-center py-16">
-                                                    <i class="bi bi-calendar-x text-6xl text-gray-400 mb-4"></i>
-                                                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Không có lịch hẹn nào</h3>
-                                                    <p class="text-gray-500 mb-6 max-w-md mx-auto">
+                                                <div class="empty-state">
+                                                    <i class="bi bi-calendar-x"></i>
+                                                    <h3>Không có lịch hẹn nào</h3>
+                                                    <p>
                                                         <c:choose>
                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
                                                                 Hiện tại bạn không có yêu cầu xem nhà nào từ khách hàng.
@@ -232,112 +745,104 @@
                                                         </c:choose>
                                                     </p>
                                                     <c:if test="${sessionScope.user.role != 'Landlord'}">
-                                                        <a href="${pageContext.request.contextPath}/search" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                                                            <i class="bi bi-search mr-2"></i>Tìm nhà ngay
-                                                        </a>
+                                                        <a href="${pageContext.request.contextPath}/search" class="btn btn-primary">Tìm nhà ngay</a>
                                                     </c:if>
                                                 </div>
                                             </c:if>
                                             
                                             <c:if test="${not empty schedules}">
-                                                <div class="overflow-x-auto">
-                                                    <table class="min-w-full bg-white rounded-lg shadow-sm border border-orange-100 schedule-table">
-                                                        <thead class="bg-gradient-to-r from-orange-50 to-orange-100">
+                                                <div class="table-responsive">
+                                                    <table class="table schedule-table">
+                                                        <thead>
                                                             <tr>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Bất động sản</th>
+                                                                <th>Bất động sản</th>
                                                                 <c:if test="${sessionScope.user.role == 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Người thuê</th>
+                                                                    <th>Người thuê</th>
                                                                 </c:if>
                                                                 <c:if test="${sessionScope.user.role != 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Chủ nhà</th>
+                                                                    <th>Chủ nhà</th>
                                                                 </c:if>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Ngày giờ xem</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Trạng thái</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Hành động</th>
+                                                                <th>Ngày giờ xem</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Hành động</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="bg-white divide-y divide-orange-100">
+                                                        <tbody>
                                                             <c:forEach items="${schedules}" var="schedule">
-                                                                <tr class="hover:bg-orange-50 transition-colors duration-200">
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center">
-                                                                            <img src="${schedule.property.avatar}" alt="Property" class="h-16 w-16 rounded-lg object-cover border border-orange-200 mr-4">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <img src="${schedule.property.avatar}" alt="Property" class="property-img me-3">
                                                                             <div>
-                                                                                <div class="text-sm font-semibold text-gray-900 property-title">${schedule.property.title}</div>
-                                                                                <div class="text-sm text-gray-500 flex items-center mt-1 property-address"><i class="bi bi-geo-alt-fill text-orange-500 mr-1"></i> ${schedule.location.address}</div>
+                                                                                <div class="property-title">${schedule.property.title}</div>
+                                                                                <div class="property-address"><i class="bi bi-geo-alt-fill"></i> ${schedule.location.address}</div>
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.renter.avatar != null && !schedule.renter.avatar.isEmpty() ? schedule.renter.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Renter" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Renter" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.renter.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.renter.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.renter.email}</div>
+                                                                                        <div class="user-name">${schedule.renter.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.renter.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.renter.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.landlord.avatar != null && !schedule.landlord.avatar.isEmpty() ? schedule.landlord.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Landlord" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Landlord" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.landlord.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.landlord.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.landlord.email}</div>
+                                                                                        <div class="user-name">${schedule.landlord.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.landlord.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.landlord.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center text-sm text-gray-900 schedule-date">
-                                                                            <i class="bi bi-calendar-event text-orange-500 mr-2"></i>
+                                                                    <td>
+                                                                        <div class="schedule-date">
+                                                                            <i class="bi bi-calendar-event"></i>
                                                                             <fmt:formatDate value="${schedule.scheduleDateTime}" pattern="dd/MM/yyyy HH:mm" />
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="${schedule.status eq 'Pending'}">
-                                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                                                    <i class="bi bi-hourglass-split mr-1"></i> Chờ xác nhận
-                                                                                </span>
+                                                                                <span class="badge badge-pending"><i class="bi bi-hourglass-split"></i> Chờ xác nhận</span>
                                                                             </c:when>
                                                                             <c:when test="${schedule.status eq 'Confirmed'}">
-                                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                                    <i class="bi bi-check-circle mr-1"></i> Đã xác nhận
-                                                                                </span>
+                                                                                <span class="badge badge-confirmed"><i class="bi bi-check-circle"></i> Đã xác nhận</span>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                                                    <i class="bi bi-x-circle mr-1"></i> Đã hủy
-                                                                                </span>
+                                                                                <span class="badge badge-cancelled"><i class="bi bi-x-circle"></i> Đã hủy</span>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                                    <td>
                                                                         <c:if test="${schedule.status eq 'Pending'}">
                                                                             <c:if test="${sessionScope.user.role == 'Landlord'}">
-                                                                                <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="inline-block mr-2">
+                                                                                <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="d-inline">
                                                                                     <input type="hidden" name="scheduleId" value="${schedule.scheduleId}">
                                                                                     <input type="hidden" name="action" value="confirm">
-                                                                                    <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                                                                                        <i class="bi bi-check-lg mr-1"></i> Xác nhận
+                                                                                    <button type="submit" class="btn action-btn confirm-btn">
+                                                                                        <i class="bi bi-check-lg"></i> Xác nhận
                                                                                     </button>
                                                                                 </form>
-                                                                                <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="inline-block">
+                                                                                <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="d-inline ms-2">
                                                                                     <input type="hidden" name="scheduleId" value="${schedule.scheduleId}">
                                                                                     <input type="hidden" name="action" value="cancel">
-                                                                                    <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                                                                                        <i class="bi bi-x-lg mr-1"></i> Từ chối
+                                                                                    <button type="submit" class="btn action-btn cancel-btn">
+                                                                                        <i class="bi bi-x-lg"></i> Từ chối
                                                                                     </button>
                                                                                 </form>
                                                                             </c:if>
@@ -345,16 +850,16 @@
                                                                                 <form action="${pageContext.request.contextPath}/updateSchedule" method="POST">
                                                                                     <input type="hidden" name="scheduleId" value="${schedule.scheduleId}">
                                                                                     <input type="hidden" name="action" value="cancel">
-                                                                                    <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                                                                                        <i class="bi bi-x-lg mr-1"></i> Hủy lịch
+                                                                                    <button type="submit" class="btn action-btn cancel-btn">
+                                                                                        <i class="bi bi-x-lg"></i> Hủy lịch
                                                                                     </button>
                                                                                 </form>
                                                                             </c:if>
                                                                         </c:if>
                                                                         <c:if test="${schedule.status ne 'Pending'}">
                                                                             <a href="${pageContext.request.contextPath}/property-detail?id=${schedule.propertyId}" 
-                                                                               class="inline-flex items-center px-3 py-2 border border-orange-300 text-sm leading-4 font-medium rounded-md text-orange-700 bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
-                                                                                <i class="bi bi-eye mr-1"></i> Xem chi tiết
+                                                                               class="btn btn-outline-primary action-btn">
+                                                                                <i class="bi bi-eye"></i> Xem chi tiết
                                                                             </a>
                                                                         </c:if>
                                                                     </td>
@@ -367,12 +872,12 @@
                                         </div>
                                         
                                         <!-- Pending schedules tab -->
-                                        <div class="tab-pane fade p-6" id="pending-schedules" role="tabpanel" aria-labelledby="pending-tab">
+                                        <div class="tab-pane fade" id="pending-schedules" role="tabpanel" aria-labelledby="pending-tab">
                                             <c:if test="${empty pendingSchedules}">
-                                                <div class="text-center py-16">
-                                                    <i class="bi bi-hourglass-split text-6xl text-gray-400 mb-4"></i>
-                                                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Không có lịch hẹn đang chờ xác nhận</h3>
-                                                    <p class="text-gray-500 mb-6 max-w-md mx-auto">
+                                                <div class="empty-state">
+                                                    <i class="bi bi-hourglass-split"></i>
+                                                    <h3>Không có lịch hẹn đang chờ xác nhận</h3>
+                                                    <p>
                                                         <c:choose>
                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
                                                                 Hiện tại không có yêu cầu xem nhà nào cần xác nhận.
@@ -384,91 +889,89 @@
                                                     </p>
                                                 </div>
                                             </c:if>
-                                            
+                                              <!-- Pending schedules table structure -->
                                             <c:if test="${not empty pendingSchedules}">
-                                                <div class="overflow-x-auto">
-                                                    <table class="min-w-full bg-white rounded-lg shadow-sm border border-orange-100 schedule-table">
-                                                        <thead class="bg-gradient-to-r from-orange-50 to-orange-100">
+                                                <div class="table-responsive">
+                                                    <table class="table schedule-table">
+                                                        <thead>
                                                             <tr>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Bất động sản</th>
+                                                                <th>Bất động sản</th>
                                                                 <c:if test="${sessionScope.user.role == 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Người thuê</th>
+                                                                    <th>Người thuê</th>
                                                                 </c:if>
                                                                 <c:if test="${sessionScope.user.role != 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Chủ nhà</th>
+                                                                    <th>Chủ nhà</th>
                                                                 </c:if>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Ngày giờ xem</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Trạng thái</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Hành động</th>
+                                                                <th>Ngày giờ xem</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Hành động</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="bg-white divide-y divide-orange-100">
+                                                        <tbody>
                                                             <c:forEach items="${pendingSchedules}" var="schedule">
-                                                                <tr class="hover:bg-orange-50 transition-colors duration-200">
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center">
-                                                                            <img src="${schedule.property.avatar}" alt="Property" class="h-16 w-16 rounded-lg object-cover border border-orange-200 mr-4">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <img src="${schedule.property.avatar}" alt="Property" class="property-img me-3">
                                                                             <div>
-                                                                                <div class="text-sm font-semibold text-gray-900 property-title">${schedule.property.title}</div>
-                                                                                <div class="text-sm text-gray-500 flex items-center mt-1 property-address"><i class="bi bi-geo-alt-fill text-orange-500 mr-1"></i> ${schedule.location.address}</div>
+                                                                                <div class="property-title">${schedule.property.title}</div>
+                                                                                <div class="property-address"><i class="bi bi-geo-alt-fill"></i> ${schedule.location.address}</div>
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.renter.avatar != null && !schedule.renter.avatar.isEmpty() ? schedule.renter.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Renter" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Renter" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.renter.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.renter.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.renter.email}</div>
+                                                                                        <div class="user-name">${schedule.renter.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.renter.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.renter.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.landlord.avatar != null && !schedule.landlord.avatar.isEmpty() ? schedule.landlord.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Landlord" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Landlord" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.landlord.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.landlord.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.landlord.email}</div>
+                                                                                        <div class="user-name">${schedule.landlord.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.landlord.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.landlord.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center text-sm text-gray-900 schedule-date">
-                                                                            <i class="bi bi-calendar-event text-orange-500 mr-2"></i>
+                                                                    <td>
+                                                                        <div class="schedule-date">
+                                                                            <i class="bi bi-calendar-event"></i>
                                                                             <fmt:formatDate value="${schedule.scheduleDateTime}" pattern="dd/MM/yyyy HH:mm" />
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                                            <i class="bi bi-hourglass-split mr-1"></i> Chờ xác nhận
-                                                                        </span>
+                                                                    <td>
+                                                                        <span class="badge badge-pending"><i class="bi bi-hourglass-split"></i> Chờ xác nhận</span>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                                    <td>
                                                                         <c:if test="${sessionScope.user.role == 'Landlord'}">
-                                                                            <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="inline-block mr-2">
+                                                                            <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="d-inline">
                                                                                 <input type="hidden" name="scheduleId" value="${schedule.scheduleId}">
                                                                                 <input type="hidden" name="action" value="confirm">
-                                                                                <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                                                                                    <i class="bi bi-check-lg mr-1"></i> Xác nhận
+                                                                                <button type="submit" class="btn action-btn confirm-btn">
+                                                                                    <i class="bi bi-check-lg"></i> Xác nhận
                                                                                 </button>
                                                                             </form>
-                                                                            <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="inline-block">
+                                                                            <form action="${pageContext.request.contextPath}/updateSchedule" method="POST" class="d-inline ms-2">
                                                                                 <input type="hidden" name="scheduleId" value="${schedule.scheduleId}">
                                                                                 <input type="hidden" name="action" value="cancel">
-                                                                                <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                                                                                    <i class="bi bi-x-lg mr-1"></i> Từ chối
+                                                                                <button type="submit" class="btn action-btn cancel-btn">
+                                                                                    <i class="bi bi-x-lg"></i> Từ chối
                                                                                 </button>
                                                                             </form>
                                                                         </c:if>
@@ -476,8 +979,8 @@
                                                                             <form action="${pageContext.request.contextPath}/updateSchedule" method="POST">
                                                                                 <input type="hidden" name="scheduleId" value="${schedule.scheduleId}">
                                                                                 <input type="hidden" name="action" value="cancel">
-                                                                                <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
-                                                                                    <i class="bi bi-x-lg mr-1"></i> Hủy lịch
+                                                                                <button type="submit" class="btn action-btn cancel-btn">
+                                                                                    <i class="bi bi-x-lg"></i> Hủy lịch
                                                                                 </button>
                                                                             </form>
                                                                         </c:if>
@@ -491,12 +994,12 @@
                                         </div>
                                         
                                         <!-- Confirmed schedules tab -->
-                                        <div class="tab-pane fade p-6" id="confirmed-schedules" role="tabpanel" aria-labelledby="confirmed-tab">
+                                        <div class="tab-pane fade" id="confirmed-schedules" role="tabpanel" aria-labelledby="confirmed-tab">
                                             <c:if test="${empty confirmedSchedules}">
-                                                <div class="text-center py-16">
-                                                    <i class="bi bi-calendar-check text-6xl text-gray-400 mb-4"></i>
-                                                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Không có lịch hẹn đã xác nhận</h3>
-                                                    <p class="text-gray-500 mb-6 max-w-md mx-auto">
+                                                <div class="empty-state">
+                                                    <i class="bi bi-calendar-check"></i>
+                                                    <h3>Không có lịch hẹn đã xác nhận</h3>
+                                                    <p>
                                                         <c:choose>
                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
                                                                 Bạn chưa xác nhận lịch xem nhà nào.
@@ -509,80 +1012,79 @@
                                                 </div>
                                             </c:if>
                                             
+                                            <!-- Confirmed schedules table structure -->
                                             <c:if test="${not empty confirmedSchedules}">
-                                                <div class="overflow-x-auto">
-                                                    <table class="min-w-full bg-white rounded-lg shadow-sm border border-orange-100 schedule-table">
-                                                        <thead class="bg-gradient-to-r from-orange-50 to-orange-100">
+                                                <div class="table-responsive">
+                                                    <table class="table schedule-table">
+                                                        <thead>
                                                             <tr>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Bất động sản</th>
+                                                                <th>Bất động sản</th>
                                                                 <c:if test="${sessionScope.user.role == 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Người thuê</th>
+                                                                    <th>Người thuê</th>
                                                                 </c:if>
                                                                 <c:if test="${sessionScope.user.role != 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Chủ nhà</th>
+                                                                    <th>Chủ nhà</th>
                                                                 </c:if>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Ngày giờ xem</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Trạng thái</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Hành động</th>
+                                                                <th>Ngày giờ xem</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Hành động</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="bg-white divide-y divide-orange-100">
+                                                        <tbody>
                                                             <c:forEach items="${confirmedSchedules}" var="schedule">
-                                                                <tr class="hover:bg-orange-50 transition-colors duration-200">
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center">
-                                                                            <img src="${schedule.property.avatar}" alt="Property" class="h-16 w-16 rounded-lg object-cover border border-orange-200 mr-4">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <img src="${schedule.property.avatar}" alt="Property" class="property-img me-3">
                                                                             <div>
-                                                                                <div class="text-sm font-semibold text-gray-900 property-title">${schedule.property.title}</div>
-                                                                                <div class="text-sm text-gray-500 flex items-center mt-1 property-address"><i class="bi bi-geo-alt-fill text-orange-500 mr-1"></i> ${schedule.location.address}</div>
+                                                                                <div class="property-title">${schedule.property.title}</div>
+                                                                                <div class="property-address"><i class="bi bi-geo-alt-fill"></i> ${schedule.location.address}</div>
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.renter.avatar != null && !schedule.renter.avatar.isEmpty() ? schedule.renter.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Renter" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Renter" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.renter.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.renter.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.renter.email}</div>
+                                                                                        <div class="user-name">${schedule.renter.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.renter.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.renter.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.landlord.avatar != null && !schedule.landlord.avatar.isEmpty() ? schedule.landlord.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Landlord" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Landlord" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.landlord.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.landlord.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.landlord.email}</div>
+                                                                                        <div class="user-name">${schedule.landlord.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.landlord.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.landlord.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center text-sm text-gray-900 schedule-date">
-                                                                            <i class="bi bi-calendar-event text-orange-500 mr-2"></i>
+                                                                    <td>
+                                                                        <div class="schedule-date">
+                                                                            <i class="bi bi-calendar-event"></i>
                                                                             <fmt:formatDate value="${schedule.scheduleDateTime}" pattern="dd/MM/yyyy HH:mm" />
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                                            <i class="bi bi-check-circle mr-1"></i> Đã xác nhận
-                                                                        </span>
+                                                                    <td>
+                                                                        <span class="badge badge-confirmed"><i class="bi bi-check-circle"></i> Đã xác nhận</span>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                                    <td>
                                                                         <a href="${pageContext.request.contextPath}/property-detail?id=${schedule.propertyId}" 
-                                                                           class="inline-flex items-center px-3 py-2 border border-orange-300 text-sm leading-4 font-medium rounded-md text-orange-700 bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
-                                                                            <i class="bi bi-eye mr-1"></i> Xem chi tiết
+                                                                           class="btn btn-outline-primary action-btn">
+                                                                            <i class="bi bi-eye"></i> Xem chi tiết
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -594,91 +1096,90 @@
                                         </div>
                                         
                                         <!-- Cancelled schedules tab -->
-                                        <div class="tab-pane fade p-6" id="cancelled-schedules" role="tabpanel" aria-labelledby="cancelled-tab">
+                                        <div class="tab-pane fade" id="cancelled-schedules" role="tabpanel" aria-labelledby="cancelled-tab">
                                             <c:if test="${empty cancelledSchedules}">
-                                                <div class="text-center py-16">
-                                                    <i class="bi bi-calendar-x text-6xl text-gray-400 mb-4"></i>
-                                                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Không có lịch hẹn đã hủy</h3>
-                                                    <p class="text-gray-500 mb-6 max-w-md mx-auto">
+                                                <div class="empty-state">
+                                                    <i class="bi bi-calendar-x"></i>
+                                                    <h3>Không có lịch hẹn đã hủy</h3>
+                                                    <p>
                                                         Không có lịch xem nhà nào đã bị hủy.
                                                     </p>
                                                 </div>
                                             </c:if>
                                             
+                                            <!-- Cancelled schedules table structure -->
                                             <c:if test="${not empty cancelledSchedules}">
-                                                <div class="overflow-x-auto">
-                                                    <table class="min-w-full bg-white rounded-lg shadow-sm border border-orange-100 schedule-table">
-                                                        <thead class="bg-gradient-to-r from-orange-50 to-orange-100">
+                                                <div class="table-responsive">
+                                                    <table class="table schedule-table">
+                                                        <thead>
                                                             <tr>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Bất động sản</th>
+                                                                <th>Bất động sản</th>
                                                                 <c:if test="${sessionScope.user.role == 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Người thuê</th>
+                                                                    <th>Người thuê</th>
                                                                 </c:if>
                                                                 <c:if test="${sessionScope.user.role != 'Landlord'}">
-                                                                    <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Chủ nhà</th>
+                                                                    <th>Chủ nhà</th>
                                                                 </c:if>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Ngày giờ xem</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Trạng thái</th>
-                                                                <th class="px-6 py-4 text-left text-xs font-semibold text-orange-900 uppercase tracking-wider">Hành động</th>
+                                                                <th>Ngày giờ xem</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Hành động</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="bg-white divide-y divide-orange-100">
+                                                        <tbody>
                                                             <c:forEach items="${cancelledSchedules}" var="schedule">
-                                                                <tr class="hover:bg-orange-50 transition-colors duration-200">
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center">
-                                                                            <img src="${schedule.property.avatar}" alt="Property" class="h-16 w-16 rounded-lg object-cover border border-orange-200 mr-4">
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <img src="${schedule.property.avatar}" alt="Property" class="property-img me-3">
                                                                             <div>
-                                                                                <div class="text-sm font-semibold text-gray-900 property-title">${schedule.property.title}</div>
-                                                                                <div class="text-sm text-gray-500 flex items-center mt-1 property-address"><i class="bi bi-geo-alt-fill text-orange-500 mr-1"></i> ${schedule.location.address}</div>
+                                                                                <div class="property-title">${schedule.property.title}</div>
+                                                                                <div class="property-address"><i class="bi bi-geo-alt-fill"></i> ${schedule.location.address}</div>
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
+                                                                    <td>
                                                                         <c:choose>
                                                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.renter.avatar != null && !schedule.renter.avatar.isEmpty() ? schedule.renter.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Renter" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Renter" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.renter.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.renter.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.renter.email}</div>
+                                                                                        <div class="user-name">${schedule.renter.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.renter.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.renter.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <div class="flex items-center">
+                                                                                <div class="user-info">
                                                                                     <img src="${schedule.landlord.avatar != null && !schedule.landlord.avatar.isEmpty() ? schedule.landlord.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" 
-                                                                                         alt="Landlord" class="h-10 w-10 rounded-full mr-3">
+                                                                                         alt="Landlord" class="user-avatar">
                                                                                     <div>
-                                                                                        <div class="text-sm font-medium text-gray-900">${schedule.landlord.name}</div>
-                                                                                        <div class="text-xs text-gray-500 space-y-1">
-                                                                                            <div class="flex items-center"><i class="bi bi-telephone-fill text-orange-500 mr-1"></i> ${schedule.landlord.phone}</div>
-                                                                                            <div class="flex items-center"><i class="bi bi-envelope-fill text-orange-500 mr-1"></i> ${schedule.landlord.email}</div>
+                                                                                        <div class="user-name">${schedule.landlord.name}</div>
+                                                                                        <div class="user-contact">
+                                                                                            <span><i class="bi bi-telephone-fill"></i> ${schedule.landlord.phone}</span>
+                                                                                            <span><i class="bi bi-envelope-fill"></i> ${schedule.landlord.email}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <div class="flex items-center text-sm text-gray-900 schedule-date">
-                                                                            <i class="bi bi-calendar-event text-orange-500 mr-2"></i>
+                                                                    <td>
+                                                                        <div class="schedule-date">
+                                                                            <i class="bi bi-calendar-event"></i>
                                                                             <fmt:formatDate value="${schedule.scheduleDateTime}" pattern="dd/MM/yyyy HH:mm" />
                                                                         </div>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                                            <i class="bi bi-x-circle mr-1"></i> Đã hủy
-                                                                        </span>
+                                                                    <td>
+                                                                        <span class="badge badge-cancelled"><i class="bi bi-x-circle"></i> Đã hủy</span>
                                                                     </td>
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                                    <td>
                                                                         <a href="${pageContext.request.contextPath}/property-detail?id=${schedule.propertyId}" 
-                                                                           class="inline-flex items-center px-3 py-2 border border-orange-300 text-sm leading-4 font-medium rounded-md text-orange-700 bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
-                                                                            <i class="bi bi-eye mr-1"></i> Xem chi tiết
+                                                                           class="btn btn-outline-primary action-btn">
+                                                                            <i class="bi bi-eye"></i> Xem chi tiết
                                                                         </a>
                                                                     </td>
                                                                 </tr>
@@ -935,10 +1436,12 @@
                 const titleElement = row.querySelector('.property-title');
                 return titleElement ? titleElement.textContent.trim() : '';
             }
-              function showToast(message) {
+            
+            function showToast(message) {
                 // Create toast container
                 const toastContainer = document.createElement('div');
-                toastContainer.className = 'fixed bottom-4 right-4 z-50 p-3';
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                toastContainer.style.zIndex = '5';
                 
                 // Create toast HTML
                 const isSuccess = message.toLowerCase().includes('thÃ nh cÃ´ng') || 
@@ -947,56 +1450,44 @@
                                  !message.toLowerCase().includes('khÃ´ng');
                 
                 const borderColor = isSuccess ? 'success' : 'danger';
-                const iconType = isSuccess ? 'check-circle-fill' : 'exclamation-triangle-fill';                
+                const iconType = isSuccess ? 'check-circle-fill' : 'exclamation-triangle-fill';
+                
                 const toastContent = `
-                    <div class="transform translate-x-full transition-transform duration-300 ease-in-out opacity-0 max-w-sm w-full ${bgColor} border rounded-lg shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="flex items-center justify-between p-4 border-b border-orange-100">
-                            <div class="flex items-center">
-                                <i class="bi bi-${iconType} ${iconColor} mr-2 text-lg"></i>
-                                <span class="font-semibold ${textColor}">Thông báo</span>
-                            </div>
-                            <button type="button" class="ml-4 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-md p-1" aria-label="Close">
-                                <i class="bi bi-x-lg text-sm"></i>
-                            </button>
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header border-${borderColor} border-bottom">
+                            <i class="bi bi-${iconType} me-2 text-${borderColor}"></i>
+                            <strong class="me-auto">ThÃ´ng bÃ¡o</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
-                        <div class="p-4 ${textColor}">
+                        <div class="toast-body">
                             ${message}
                         </div>
                     </div>
-                `;                
+                `;
+                
                 toastContainer.innerHTML = toastContent;
                 document.body.appendChild(toastContainer);
                 
-                // Get toast element and show it
-                const toastElement = toastContainer.querySelector('[role="alert"]');
+                // Initialize Bootstrap toast
+                const toastElement = toastContainer.querySelector('.toast');
                 if (toastElement) {
-                    // Show toast with animation
-                    setTimeout(() => {
-                        toastElement.classList.remove('translate-x-full', 'opacity-0');
-                        toastElement.classList.add('translate-x-0', 'opacity-100');
-                    }, 100);
+                    const bsToast = new bootstrap.Toast(toastElement, {
+                        autohide: true,
+                        delay: 5000
+                    });
                     
-                    // Auto hide after 5 seconds
-                    const hideToast = () => {
-                        toastElement.classList.add('translate-x-full', 'opacity-0');
-                        toastElement.classList.remove('translate-x-0', 'opacity-100');
-                        
-                        // Remove from DOM after animation
-                        setTimeout(() => {
-                            if (document.body.contains(toastContainer)) {
-                                document.body.removeChild(toastContainer);
-                            }
-                        }, 300);
-                    };
-                    
-                    const autoHideTimer = setTimeout(hideToast, 5000);
+                    // Remove from DOM after hiding animation
+                    toastElement.addEventListener('hidden.bs.toast', () => {
+                        if (document.body.contains(toastContainer)) {
+                            document.body.removeChild(toastContainer);
+                        }
+                    });
                     
                     // Handle close button
-                    const closeButton = toastElement.querySelector('button[aria-label="Close"]');
+                    const closeButton = toastElement.querySelector('.btn-close');
                     if (closeButton) {
                         closeButton.addEventListener('click', () => {
-                            clearTimeout(autoHideTimer);
-                            hideToast();
+                            bsToast.hide();
                         });
                     }
                 }
