@@ -67,10 +67,13 @@
     <servlet>
         <servlet-name>ViewContractsServlet</servlet-name>
         <servlet-class>Controller.ViewContractsServlet</servlet-class>
-    </servlet>
-    <servlet>
+    </servlet>    <servlet>
         <servlet-name>PaymentServlet</servlet-name>
         <servlet-class>Controller.PaymentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FavoriteServlet</servlet-name>
+        <servlet-class>Controller.FavoriteServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -140,11 +143,15 @@
     <servlet-mapping>
         <servlet-name>ViewContractsServlet</servlet-name>
         <url-pattern>/view-contracts</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
+    </servlet-mapping>    <servlet-mapping>
         <servlet-name>PaymentServlet</servlet-name>
         <url-pattern>/payments</url-pattern>
         <url-pattern>/payment-action</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FavoriteServlet</servlet-name>
+        <url-pattern>/favorites</url-pattern>
+        <url-pattern>/favorite-action</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

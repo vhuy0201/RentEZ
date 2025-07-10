@@ -50,10 +50,16 @@
                 <ul class="nav-menu flx-align">
                     <li class="nav-menu__item">
                         <a class="nav-menu__link" href="${pageContext.request.contextPath}/">Trang chủ</a>
-                    </li>
-                    <li class="nav-menu__item">
+                    </li>                    <li class="nav-menu__item">
                         <a class="nav-menu__link" href="${pageContext.request.contextPath}/search">Bất động sản</a>
                     </li>
+                    <c:if test="${not empty sessionScope.user}">
+                        <li class="nav-menu__item">
+                            <a class="nav-menu__link" href="${pageContext.request.contextPath}/favorites">
+                                <i class="fas fa-heart"></i> Yêu thích
+                            </a>
+                        </li>
+                    </c:if>
                     <li class="nav-menu__item">
                         <a class="nav-menu__link" href="${pageContext.request.contextPath}/about">Giới thiệu</a>
                     </li>

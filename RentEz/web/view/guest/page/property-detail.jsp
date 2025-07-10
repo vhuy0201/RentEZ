@@ -343,7 +343,39 @@
                                         <h4>${landlord.name}</h4>
                                         <p><i class="fa fa-phone"></i> ${landlord.phone}</p>
                                         <p><i class="fa fa-envelope"></i> ${landlord.email}</p>
-                                    </div>                                </div>                <!-- Button to trigger Schedule Viewing Modal -->                                <div class="mt-3">
+                                    </div>                                </div>                
+                                <!-- Favorite Button -->
+                                <div class="mt-3">
+                                    <c:choose>
+                                        <c:when test="${sessionScope.user != null}">
+                                            <c:choose>
+                                                <c:when test="${isFavorited}">                                                    <button type="button" onclick="toggleFavorite('${property.propertyId}', false)" 
+                                                            class="btn btn-outline-danger w-100 py-3 shadow favorite-btn" 
+                                                            style="font-size: 1.1rem; font-weight: 600; border-radius: 8px; transition: all 0.3s ease;" 
+                                                            id="favoriteBtn">
+                                                        <i class="fas fa-heart me-2"></i> Đã yêu thích
+                                                    </button>
+                                                </c:when>
+                                                <c:otherwise>                                                    <button type="button" onclick="toggleFavorite('${property.propertyId}', true)" 
+                                                            class="btn btn-outline-secondary w-100 py-3 shadow favorite-btn" 
+                                                            style="font-size: 1.1rem; font-weight: 600; border-radius: 8px; transition: all 0.3s ease;" 
+                                                            id="favoriteBtn">
+                                                        <i class="far fa-heart me-2"></i> Thêm vào yêu thích
+                                                    </button>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button type="button" onclick="redirectToLogin()" 
+                                                    class="btn btn-outline-secondary w-100 py-3 shadow" 
+                                                    style="font-size: 1.1rem; font-weight: 600; border-radius: 8px; transition: all 0.3s ease;">
+                                                <i class="far fa-heart me-2"></i> Thêm vào yêu thích
+                                            </button>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                
+                                <!-- Button to trigger Schedule Viewing Modal -->                                <div class="mt-3">
                                     <button type="button" id="openScheduleModalBtn" class="btn btn-success w-100 py-3 shadow" 
                                             style="font-size: 1.1rem; font-weight: 600; border-radius: 8px; transition: all 0.3s ease;" 
                                             data-bs-toggle="modal" data-bs-target="#scheduleViewingModal">
@@ -878,12 +910,54 @@
                     // Display a toast notification for rental booking
                     showToast(decodeURIComponent(rentalMessage));
                     
-                    // Clean the URL - remove message parameter
-                    const url = new URL(window.location.href);
+                    // Clean the URL - remove message parameter                const url = new URL(window.location.href);
                     url.searchParams.delete('message');
                     window.history.replaceState({}, document.title, url.toString());
                 }
             });
+
+            // Favorite functionality
+            function toggleFavorite(propertyId, isAdd) {
+                const favoriteBtn = document.getElementById('favoriteBtn');
+                const originalHtml = favoriteBtn.innerHTML;
+                
+                // Show loading state
+                favoriteBtn.disabled = true;
+                favoriteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Đang xử lý...';
+                
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '${pageContext.request.contextPath}/favorite-action';
+                
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = isAdd ? 'add' : 'remove';
+                
+                const propertyInput = document.createElement('input');
+                propertyInput.type = 'hidden';
+                propertyInput.name = 'propertyId';
+                propertyInput.value = propertyId;
+                
+                const redirectInput = document.createElement('input');
+                redirectInput.type = 'hidden';
+                redirectInput.name = 'redirectUrl';
+                redirectInput.value = window.location.href;
+                
+                form.appendChild(actionInput);
+                form.appendChild(propertyInput);
+                form.appendChild(redirectInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+            function redirectToLogin() {
+                if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
+                    window.location.href = '${pageContext.request.contextPath}/login?redirect=' + 
+                                         encodeURIComponent(window.location.href);
+                }
+            }
         </script>
     </body>
 </html>

@@ -318,10 +318,39 @@
                                                     <li class="amenities-list__item flx-align">
                                                         <span class="icon"><i class="fas fa-bath"></i></span>
                                                         <span class="text">${property.numberOfBathrooms} Phòng tắm</span>
-                                                    </li>
-                                                </ul>                                                <a class="simple-btn" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
-                                                    Xem chi tiết<span class="icon-right"><i class="fas fa-arrow-right"></i></span>
-                                                </a>
+                                                    </li>                                                </ul>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <a class="simple-btn" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
+                                                        Xem chi tiết<span class="icon-right"><i class="fas fa-arrow-right"></i></span>
+                                                    </a>
+                                                    
+                                                    <!-- Favorite button -->
+                                                    <c:choose>
+                                                        <c:when test="${sessionScope.user != null}">
+                                                            <c:choose>
+                                                                <c:when test="${userFavorites.contains(property.propertyId)}">                                                                    <button type="button" onclick="toggleFavoriteHomepage('${property.propertyId}', false)" 
+                                                                            class="btn btn-outline-danger btn-sm favorite-btn" 
+                                                                            style="border-radius: 20px;">
+                                                                        <i class="fas fa-heart"></i>
+                                                                    </button>
+                                                                </c:when>
+                                                                <c:otherwise>                                                                    <button type="button" onclick="toggleFavoriteHomepage('${property.propertyId}', true)" 
+                                                                            class="btn btn-outline-secondary btn-sm favorite-btn" 
+                                                                            style="border-radius: 20px;">
+                                                                        <i class="far fa-heart"></i>
+                                                                    </button>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <button type="button" onclick="redirectToLoginHomepage()" 
+                                                                    class="btn btn-outline-secondary btn-sm" 
+                                                                    style="border-radius: 20px;">
+                                                                <i class="far fa-heart"></i>
+                                                            </button>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -899,10 +928,53 @@
             <div class="scrollToTop" style="visibility: hidden">
                 <i class="fas fa-chevron-up text-gradient"></i>
             </div>
-        </div>
-
-        <!-- Bootstrap Bundle Js -->
+        </div>        <!-- Bootstrap Bundle Js -->
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
+        
+        <script>
+            // Favorite functionality for homepage
+            function toggleFavoriteHomepage(propertyId, isAdd) {
+                const favoriteBtn = event.target.closest('.favorite-btn');
+                const originalHtml = favoriteBtn.innerHTML;
+                
+                // Show loading state
+                favoriteBtn.disabled = true;
+                favoriteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '${pageContext.request.contextPath}/favorite-action';
+                
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = isAdd ? 'add' : 'remove';
+                
+                const propertyInput = document.createElement('input');
+                propertyInput.type = 'hidden';
+                propertyInput.name = 'propertyId';
+                propertyInput.value = propertyId;
+                
+                const redirectInput = document.createElement('input');
+                redirectInput.type = 'hidden';
+                redirectInput.name = 'redirectUrl';
+                redirectInput.value = window.location.href;
+                
+                form.appendChild(actionInput);
+                form.appendChild(propertyInput);
+                form.appendChild(redirectInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+
+            function redirectToLoginHomepage() {
+                if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
+                    window.location.href = '${pageContext.request.contextPath}/login?redirect=' + 
+                                         encodeURIComponent(window.location.href);
+                }
+            }
+        </script>
     </body>
     <ddict-div style="visibility: visible !important"
                ><template shadowrootmode="open"
