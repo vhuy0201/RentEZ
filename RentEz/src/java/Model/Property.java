@@ -15,8 +15,10 @@ public class Property {
     private String availabilityStatus;
     private int priorityLevel;
     private String avatar;
+    
+    // Additional fields for display purposes
+    private String address; // For displaying location address from joined queries
 
-    // Constructors
     public Property() {
     }
 
@@ -141,5 +143,13 @@ public class Property {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+    
+    public String getAddress() {
+        return address;
+    }
+    
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

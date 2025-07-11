@@ -4,6 +4,7 @@ import DAO.PropertyDAO;
 import DAO.PropertyTypeDAO;
 import Model.Property;
 import Model.PropertyType;
+import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,30 +25,26 @@ public class ViewPropertyServlet extends HttpServlet {
             throws ServletException, IOException {
         // Get session to retrieve LandlordID
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("landlordId") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
 
-        // Get landlordId from session
-        Integer landlordId = (Integer) session.getAttribute("landlordId");
-
+        User user = (User) session.getAttribute("user");
         try {
             // Retrieve properties for the landlord
             PropertyDAO propertyDAO = new PropertyDAO();
             List<Property> allProperties = propertyDAO.getAll(); // Get all properties
             List<Property> filteredProperties = new ArrayList<>();
             PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
-            List<PropertyType> allTypes = propertyTypeDAO.getAll();
             Map<Integer, String> typeNames = new HashMap<>();
-            for (PropertyType type : allTypes) {
-                typeNames.put(type.getTypeId(), type.getTypeName());
-            }
 
-            // Filter properties by landlordId
+            // Filter properties by landlordId and retrieve TypeName
             for (Property property : allProperties) {
-                if (property.getLandlordId() == landlordId) {
+                if (property.getLandlordId() == user.getUserId()) {
                     filteredProperties.add(property);
+                    PropertyType propertyType = propertyTypeDAO.getById(property.getTypeId());
+                    if (propertyType != null) {
+                        typeNames.put(property.getTypeId(), propertyType.getTypeName());
+                    } else {
+                        typeNames.put(property.getTypeId(), "Unknown");
+                    }
                 }
             }
 
