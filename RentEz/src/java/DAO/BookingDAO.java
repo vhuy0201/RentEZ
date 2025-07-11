@@ -555,4 +555,79 @@ public class BookingDAO {
     public int getCancelledBookingsCount() {
         return getBookingsCountByStatus("Cancelled");
     }
+    
+    public List<Booking> getActiveBookingsByLandlordId(int landlordId) {
+        List<Booking> bookings = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT b.* FROM Booking b " +
+                    "INNER JOIN Property p ON b.PropertyID = p.PropertyID " +
+                    "WHERE p.LandlordID = ? AND b.Status = 'Confirmed' " +
+                    "AND b.EndDate >= GETDATE() " +
+                    "ORDER BY b.StartDate DESC";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setBookingId(rs.getInt("BookingID"));
+                booking.setRenterId(rs.getInt("RenterID"));
+                booking.setPropertyId(rs.getInt("PropertyID"));
+                booking.setStartDate(rs.getDate("StartDate"));
+                booking.setEndDate(rs.getDate("EndDate"));
+                booking.setTotalPrice(rs.getDouble("TotalPrice"));
+                booking.setStatus(rs.getString("Status"));
+                booking.setDepositAmount(rs.getDouble("DepositAmount"));
+                booking.setMonthlyRent(rs.getDouble("MonthlyRent"));
+                booking.setPenaltyClause(rs.getString("PenaltyClause"));
+                booking.setTermsAndConditions(rs.getString("TermsAndConditions"));
+                booking.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                booking.setSignedAt(rs.getTimestamp("SignedAt"));
+                booking.setSignedByRenter(rs.getBoolean("SignedByRenter"));
+                booking.setSignedByLandlord(rs.getBoolean("SignedByLandlord"));
+                bookings.add(booking);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error getting active bookings by landlord: " + e);
+        }
+        return bookings;
+    }
+    
+    public Booking getByPropertyAndRenter(int propertyId, int renterId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM Booking WHERE PropertyID = ? AND RenterID = ? ORDER BY CreatedAt DESC";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, propertyId);
+            pstmt.setInt(2, renterId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                Booking booking = new Booking();
+                booking.setBookingId(rs.getInt("BookingID"));
+                booking.setRenterId(rs.getInt("RenterID"));
+                booking.setPropertyId(rs.getInt("PropertyID"));
+                booking.setStartDate(rs.getDate("StartDate"));
+                booking.setEndDate(rs.getDate("EndDate"));
+                booking.setTotalPrice(rs.getDouble("TotalPrice"));
+                booking.setStatus(rs.getString("Status"));
+                booking.setDepositAmount(rs.getDouble("DepositAmount"));
+                booking.setMonthlyRent(rs.getDouble("MonthlyRent"));
+                booking.setPenaltyClause(rs.getString("PenaltyClause"));
+                booking.setTermsAndConditions(rs.getString("TermsAndConditions"));
+                booking.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                booking.setSignedAt(rs.getTimestamp("SignedAt"));
+                booking.setSignedByRenter(rs.getBoolean("SignedByRenter"));
+                booking.setSignedByLandlord(rs.getBoolean("SignedByLandlord"));
+                
+                conn.close();
+                return booking;
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error getting booking by property and renter: " + e);
+        }
+        return null;
+    }
 }

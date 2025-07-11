@@ -99,7 +99,7 @@ public class GoogleLoginServlet extends HttpServlet {
                 response.sendRedirect("view/guest/page/homepage.jsp");
                 break;
             case "admin":
-                response.sendRedirect("/RentEz/admin/dashboard");
+                response.sendRedirect("admin/dashboard");
                 break;
             default:
                 // Default to home page if role is not recognized

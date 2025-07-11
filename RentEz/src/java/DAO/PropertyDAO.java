@@ -164,12 +164,11 @@ public class PropertyDAO {
                 property.setAvatar(rs.getString("Avatar"));
                 properties.add(property);
             }
-            conn.close();
+          conn.close();
         } catch (Exception e) {
-            System.out.println("Error in getPropertiesByLandlordId: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("Error: " + e);
         }
-        return properties;
+      return properties;
     }
       
     public List<Property> searchProperties(String keyword, String location, String roomType) {
@@ -253,10 +252,8 @@ public class PropertyDAO {
     public int addProperty(Property property) {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO Property (Title, Description, TypeID, LocationID, LandlordID, Price, Size, NumberOfBedrooms, NumberOfBathrooms, AvailabilityStatus, PriorityLevel, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
         try {
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, property.getTitle());
             pstmt.setString(2, property.getDescription());
             pstmt.setInt(3, property.getTypeId());
@@ -269,29 +266,12 @@ public class PropertyDAO {
             pstmt.setString(10, property.getAvailabilityStatus());
             pstmt.setInt(11, property.getPriorityLevel());
             pstmt.setString(12, property.getAvatar());
-            
             int rows = pstmt.executeUpdate();
-            if (rows > 0) {
-                rs = pstmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int generatedId = rs.getInt(1);
-                    System.out.println("Generated Property ID: " + generatedId); // Debug log
-                    return generatedId; // Trả về ID vừa tạo
-                }
-            }
-            return -1; // Trả về -1 nếu không thành công
+            conn.close();
+            return rows;
         } catch (Exception e) {
-            System.out.println("Error in addProperty: " + e.getMessage());
-            e.printStackTrace();
-            return -1;
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (Exception e) {
-                System.out.println("Error closing resources: " + e.getMessage());
-            }
+            System.out.println("Error: " + e);
+            return 0;
         }
     }
     
