@@ -108,18 +108,75 @@ public class AddPropertyServlet extends HttpServlet {
             property.setNumberOfBathrooms(numberOfBathrooms);
             property.setAvailabilityStatus(availabilityStatus);
             property.setPriorityLevel(priorityLevel);
-            property.setAvatar(null);
+            // Xử lý upload ảnh chính
+            Part mainImagePart = request.getPart("mainImage");
+            String avatarPath = null;
+            
+            // Debug: In ra thông tin về file upload
+            System.out.println("=== DEBUG IMAGE UPLOAD ===");
+            System.out.println("mainImagePart: " + mainImagePart);
+            if (mainImagePart != null) {
+                System.out.println("File name: " + mainImagePart.getSubmittedFileName());
+                System.out.println("File size: " + mainImagePart.getSize());
+                System.out.println("Content type: " + mainImagePart.getContentType());
+            }
+            
+            if (mainImagePart != null && mainImagePart.getSize() > 0) {
+                try {
+                    // Lấy tên file gốc
+                    String fileName = Paths.get(mainImagePart.getSubmittedFileName()).getFileName().toString();
+                    System.out.println("Original file name: " + fileName);
+                    
+                    // Đặt tên file duy nhất để tránh trùng
+                    String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+                    System.out.println("Unique file name: " + uniqueFileName);
+                    
+                    // Đường dẫn lưu file trên server
+                    String uploadDir = getServletContext().getRealPath("/") + "view/guest/asset/img";
+                    File dir = new File(uploadDir);
+                    if (!dir.exists()) {
+                        boolean created = dir.mkdirs();
+                        System.out.println("Created upload directory: " + created);
+                    }
+                    System.out.println("Upload directory: " + uploadDir);
+                    
+                    // Lưu file
+                    String filePath = uploadDir + File.separator + uniqueFileName;
+                    System.out.println("Full file path: " + filePath);
+                    mainImagePart.write(filePath);
+                    
+                    // Kiểm tra file đã được lưu
+                    File savedFile = new File(filePath);
+                    System.out.println("File saved successfully: " + savedFile.exists());
+                    System.out.println("File size on disk: " + savedFile.length());
+                    
+                    // Đường dẫn để lưu vào DB (tương đối để show lên web)
+                    avatarPath = "view/guest/asset/img/" + uniqueFileName;
+                    System.out.println("Avatar path for DB: " + avatarPath);
+                } catch (Exception e) {
+                    System.out.println("Error saving image: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("No image uploaded or image is empty");
+            }
+            System.out.println("Final avatarPath: " + avatarPath);
+            System.out.println("=== END DEBUG IMAGE UPLOAD ===");
+            
+            property.setAvatar(avatarPath);
 
             // Insert the property using PropertyDAO
             PropertyDAO propertyDAO = new PropertyDAO();
             int propertyId = propertyDAO.addProperty(property);
 
             // Set response message
-            if (propertyId == -1) {
+            if (propertyId <= 0) {
                 request.setAttribute("error", "Failed to add property. Please try again.");
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                 return;
             }
+            
+            System.out.println("Property added successfully with ID: " + propertyId); // Debug log
 
             // Handle Booking creation if booking parameters are present
             String startDateStr = request.getParameter("startDate");

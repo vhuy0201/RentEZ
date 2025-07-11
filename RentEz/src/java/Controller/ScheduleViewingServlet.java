@@ -2,7 +2,7 @@ package Controller;
 
 import DAO.NotificationDAO;
 import DAO.ScheduleDAO;
-import DAO.UserDao;
+import DAO.UsersDao;
 import Model.Notification;
 import Model.Schedule;
 import Model.User;
@@ -101,7 +101,7 @@ public class ScheduleViewingServlet extends HttpServlet {
                 // Send notification to landlord
                 try {
                     NotificationDAO notifDAO = new NotificationDAO();
-                    UserDao userDao = new UserDao();
+                    UsersDao userDao = new UsersDao();
                     User landlord = userDao.getById(landlordId);
                     
                     if (landlord != null) {                        // Create notification for landlord

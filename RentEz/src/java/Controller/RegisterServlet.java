@@ -4,9 +4,10 @@
  */
 package Controller;
 
-import DAO.UserDao;
+import DAO.UsersDao;
+import DAO.WalletDAO;
 import Model.User;
-import Util.Common;
+import Model.Wallet;
 import Util.Email;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -74,7 +76,7 @@ public class RegisterServlet extends HttpServlet {
         }
         
         // Check if email already exists
-        UserDao userDao = new UserDao();
+        UsersDao userDao = new UsersDao();
         User existingUser = userDao.getByEmail(email);
         if (existingUser != null) {
             isValid = false;
@@ -132,6 +134,12 @@ public class RegisterServlet extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs /**
+     * Handle email verification code submission
+     * 
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     private void verifyEmail(HttpServletRequest request, HttpServletResponse response) 
@@ -156,17 +164,25 @@ public class RegisterServlet extends HttpServlet {
         
         String submittedCode = code1 + code2 + code3 + code4 + code5 + code6;
         String email = request.getParameter("email");
-        
-        // Validate verification code
+          // Validate verification code
         if (storedCode.equals(submittedCode)) {
             try {
                 // Insert user into database
-                UserDao userDao = new UserDao();
+                UsersDao userDao = new UsersDao();
                 boolean result = userDao.insert(tempUser);
                 
                 if (result) {
                     // Get the newly created user with ID
                     User createdUser = userDao.getByEmail(tempUser.getEmail());
+                      // Create wallet for the new user
+                    WalletDAO walletDAO = new WalletDAO();
+                    Wallet newWallet = new Wallet();
+                    newWallet.setUserId(createdUser.getUserId());
+                    newWallet.setBalance(0.0); // Initial balance is 0
+                    newWallet.setLastUpdated(new Date());
+                    
+                    // Save wallet to database
+                    walletDAO.create(newWallet);
                     
                     // Remove verification data from session
                     session.removeAttribute("tempUser");

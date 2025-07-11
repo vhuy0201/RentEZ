@@ -3,7 +3,7 @@ package Controller;
 import DAO.NotificationDAO;
 import DAO.PropertyDAO;
 import DAO.ScheduleDAO;
-import DAO.UserDao;
+import DAO.UsersDao;
 import DAO.LocationDAO;
 import DTO.ScheduleDTO;
 import Model.Location;
@@ -46,7 +46,7 @@ public class SchedulesServlet extends HttpServlet {
         
         ScheduleDAO scheduleDAO = new ScheduleDAO();
         PropertyDAO propertyDAO = new PropertyDAO();
-        UserDao userDAO = new UserDao();
+        UsersDao userDAO = new UsersDao();
         LocationDAO locationDAO = new LocationDAO();
         
         // Get schedules based on user role

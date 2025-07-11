@@ -147,11 +147,29 @@ public class PropertyDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, landlordId);
             ResultSet rs = pstmt.executeQuery();
-          conn.close();
+            while (rs.next()) {
+                Property property = new Property();
+                property.setPropertyId(rs.getInt("PropertyID"));
+                property.setTitle(rs.getString("Title"));
+                property.setDescription(rs.getString("Description"));
+                property.setTypeId(rs.getInt("TypeID"));
+                property.setLocationId(rs.getInt("LocationID"));
+                property.setLandlordId(rs.getInt("LandlordID"));
+                property.setPrice(rs.getDouble("Price"));
+                property.setSize(rs.getDouble("Size"));
+                property.setNumberOfBedrooms(rs.getInt("NumberOfBedrooms"));
+                property.setNumberOfBathrooms(rs.getInt("NumberOfBathrooms"));
+                property.setAvailabilityStatus(rs.getString("AvailabilityStatus"));
+                property.setPriorityLevel(rs.getInt("PriorityLevel"));
+                property.setAvatar(rs.getString("Avatar"));
+                properties.add(property);
+            }
+            conn.close();
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error in getPropertiesByLandlordId: " + e.getMessage());
+            e.printStackTrace();
         }
-      return properties;
+        return properties;
     }
       
     public List<Property> searchProperties(String keyword, String location, String roomType) {
@@ -235,8 +253,10 @@ public class PropertyDAO {
     public int addProperty(Property property) {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO Property (Title, Description, TypeID, LocationID, LandlordID, Price, Size, NumberOfBedrooms, NumberOfBathrooms, AvailabilityStatus, PriorityLevel, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, property.getTitle());
             pstmt.setString(2, property.getDescription());
             pstmt.setInt(3, property.getTypeId());
@@ -249,12 +269,114 @@ public class PropertyDAO {
             pstmt.setString(10, property.getAvailabilityStatus());
             pstmt.setInt(11, property.getPriorityLevel());
             pstmt.setString(12, property.getAvatar());
+            
             int rows = pstmt.executeUpdate();
-            conn.close();
-            return rows;
+            if (rows > 0) {
+                rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    int generatedId = rs.getInt(1);
+                    System.out.println("Generated Property ID: " + generatedId); // Debug log
+                    return generatedId; // Trả về ID vừa tạo
+                }
+            }
+            return -1; // Trả về -1 nếu không thành công
         } catch (Exception e) {
-            System.out.println("Error: " + e);
-            return 0;
+            System.out.println("Error in addProperty: " + e.getMessage());
+            e.printStackTrace();
+            return -1;
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
         }
+    }
+    
+    // Methods for AdminDashboardServlet
+    public int getTotalProperties() {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Property";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int total = rs.getInt(1);
+                conn.close();
+                return total;
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getTotalProperties: " + e);
+        }
+        return 0;
+    }
+    
+    public List<Property> getRecentProperties(int limit) {
+        List<Property> properties = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT TOP (?) * FROM Property ORDER BY PropertyID DESC";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, limit);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Property property = new Property();
+                property.setPropertyId(rs.getInt("PropertyID"));
+                property.setTitle(rs.getString("Title"));
+                property.setDescription(rs.getString("Description"));
+                property.setTypeId(rs.getInt("TypeID"));
+                property.setLocationId(rs.getInt("LocationID"));
+                property.setLandlordId(rs.getInt("LandlordID"));
+                property.setPrice(rs.getDouble("Price"));
+                property.setSize(rs.getDouble("Size"));
+                property.setNumberOfBedrooms(rs.getInt("NumberOfBedrooms"));
+                property.setNumberOfBathrooms(rs.getInt("NumberOfBathrooms"));
+                property.setAvailabilityStatus(rs.getString("AvailabilityStatus"));
+                property.setPriorityLevel(rs.getInt("PriorityLevel"));
+                property.setAvatar(rs.getString("Avatar"));
+                properties.add(property);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getRecentProperties: " + e);
+        }
+        return properties;
+    }
+    
+    public int getRentedPropertiesCount() {
+        int count = 0;
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Rented' OR AvailabilityStatus = 'Occupied'";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getRentedPropertiesCount: " + e);
+        }
+        return count;
+    }
+    
+    public int getAvailablePropertiesCount() {
+        int count = 0;
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Available' OR AvailabilityStatus = 'Vacant'";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getAvailablePropertiesCount: " + e);
+        }
+        return count;
     }
 }

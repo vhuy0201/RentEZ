@@ -38,18 +38,16 @@ public class ViewPropertyServlet extends HttpServlet {
             List<Property> allProperties = propertyDAO.getAll(); // Get all properties
             List<Property> filteredProperties = new ArrayList<>();
             PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
+            List<PropertyType> allTypes = propertyTypeDAO.getAll();
             Map<Integer, String> typeNames = new HashMap<>();
+            for (PropertyType type : allTypes) {
+                typeNames.put(type.getTypeId(), type.getTypeName());
+            }
 
-            // Filter properties by landlordId and retrieve TypeName
+            // Filter properties by landlordId
             for (Property property : allProperties) {
                 if (property.getLandlordId() == landlordId) {
                     filteredProperties.add(property);
-                    PropertyType propertyType = propertyTypeDAO.getById(property.getTypeId());
-                    if (propertyType != null) {
-                        typeNames.put(property.getTypeId(), propertyType.getTypeName());
-                    } else {
-                        typeNames.put(property.getTypeId(), "Unknown");
-                    }
                 }
             }
 

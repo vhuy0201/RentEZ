@@ -3,7 +3,7 @@ package Controller;
 import DAO.NotificationDAO;
 import DAO.PropertyDAO;
 import DAO.ScheduleDAO;
-import DAO.UserDao;
+import DAO.UsersDao;
 import Model.Notification;
 import Model.Property;
 import Model.Schedule;
@@ -114,7 +114,7 @@ public class UpdateScheduleServlet extends HttpServlet {
     private void createNotifications(Schedule schedule, String newStatus, User actionUser) {
         try {
             NotificationDAO notifDAO = new NotificationDAO();
-            UserDao userDAO = new UserDao();
+            UsersDao userDAO = new UsersDao();
             PropertyDAO propertyDAO = new PropertyDAO();
             
             User renter = userDAO.getById(schedule.getRenterId());

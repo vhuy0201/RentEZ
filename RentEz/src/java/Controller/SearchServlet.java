@@ -3,18 +3,23 @@ package Controller;
 import DAO.LocationDAO;
 import DAO.PropertyDAO;
 import DAO.PropertyTypeDAO;
+import DAO.UserFavoriteDAO;
 import Model.Location;
 import Model.Property;
 import Model.PropertyType;
+import Model.User;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
 public class SearchServlet extends HttpServlet {
@@ -49,9 +54,22 @@ public class SearchServlet extends HttpServlet {
         for (PropertyType type : allTypes) {
             propertyTypes.put(type.getTypeId(), type);
         }
-        
-        // Lấy danh sách các thành phố từ cơ sở dữ liệu
+          // Lấy danh sách các thành phố từ cơ sở dữ liệu
         List<String> allCities = locationDAO.getAllCities();
+        
+        // Check user favorites if logged in
+        HttpSession session = request.getSession();
+        User currentUser = (User) session.getAttribute("user");
+        Set<Integer> userFavorites = new HashSet<>();
+        
+        if (currentUser != null) {
+            UserFavoriteDAO favoriteDAO = new UserFavoriteDAO();
+            for (Property property : searchResults) {
+                if (favoriteDAO.isFavorited(currentUser.getUserId(), property.getPropertyId())) {
+                    userFavorites.add(property.getPropertyId());
+                }
+            }
+        }
         
         // Lưu thông tin vào request
         request.setAttribute("searchResults", searchResults);
@@ -63,6 +81,7 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("selectedRoomType", roomType);
         request.setAttribute("selectedLocation", location);
         request.setAttribute("resultCount", searchResults.size());
+        request.setAttribute("userFavorites", userFavorites);
         
         // Chuyển hướng đến trang kết quả tìm kiếm
         request.getRequestDispatcher("/view/guest/page/search-results.jsp").forward(request, response);

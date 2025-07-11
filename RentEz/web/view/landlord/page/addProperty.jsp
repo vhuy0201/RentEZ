@@ -28,6 +28,81 @@
                     }
                 }
             }
+
+            // Form validation
+            function validateForm() {
+                const title = document.getElementById('title').value.trim();
+                const description = document.getElementById('description').value.trim();
+                const typeId = document.getElementById('typeId').value;
+                const price = document.getElementById('price').value;
+                const size = document.getElementById('size').value;
+                const address = document.getElementById('address').value.trim();
+                const city = document.getElementById('city').value.trim();
+                const stateProvince = document.getElementById('stateProvince').value.trim();
+                const mainImage = document.getElementById('mainImage');
+
+                console.log('=== FORM VALIDATION DEBUG ===');
+                console.log('Title:', title);
+                console.log('Description:', description);
+                console.log('Type ID:', typeId);
+                console.log('Price:', price);
+                console.log('Size:', size);
+                console.log('Address:', address);
+                console.log('City:', city);
+                console.log('State/Province:', stateProvince);
+                console.log('Image file:', mainImage.files[0]);
+                console.log('=== END FORM VALIDATION DEBUG ===');
+
+                if (!title) {
+                    alert('Vui lòng nhập tiêu đề tin đăng!');
+                    document.getElementById('title').focus();
+                    return false;
+                }
+
+                if (!description) {
+                    alert('Vui lòng nhập mô tả chi tiết!');
+                    document.getElementById('description').focus();
+                    return false;
+                }
+
+                if (!typeId) {
+                    alert('Vui lòng chọn loại bất động sản!');
+                    document.getElementById('typeId').focus();
+                    return false;
+                }
+
+                if (!price || price <= 0) {
+                    alert('Vui lòng nhập giá hợp lệ!');
+                    document.getElementById('price').focus();
+                    return false;
+                }
+
+                if (!size || size <= 0) {
+                    alert('Vui lòng nhập diện tích hợp lệ!');
+                    document.getElementById('size').focus();
+                    return false;
+                }
+
+                if (!address) {
+                    alert('Vui lòng nhập địa chỉ!');
+                    document.getElementById('address').focus();
+                    return false;
+                }
+
+                if (!city) {
+                    alert('Vui lòng nhập thành phố/tỉnh!');
+                    document.getElementById('city').focus();
+                    return false;
+                }
+
+                if (!stateProvince) {
+                    alert('Vui lòng nhập quận/huyện!');
+                    document.getElementById('stateProvince').focus();
+                    return false;
+                }
+
+                return true;
+            }
         </script>
         <style>
             body {
@@ -483,11 +558,36 @@
                 background: #fff8f0;
                 cursor: pointer;
                 transition: all 0.3s ease;
+                position: relative;
             }
 
             .image-upload:hover {
                 border-color: #ff9800;
                 background: #fff5e6;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
+            }
+
+            .image-upload input[type="file"] {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+            }
+
+            #imagePreview {
+                border: 2px solid #ffe0b2;
+                border-radius: 1rem;
+                padding: 1rem;
+                background: #fff8f0;
+                text-align: center;
+            }
+
+            #previewImg {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             }
 
             .image-upload-icon {
@@ -703,6 +803,12 @@
                             ${message}
                         </div>
                     </c:if>
+                    <c:if test="${not empty successMessage}">
+                        <div class="alert alert-success mb-4" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            ${successMessage}
+                        </div>
+                    </c:if>
 
                     <!-- Property Form -->
                     <div class="form-card mb-4">
@@ -713,7 +819,7 @@
                             </h4>
                         </div>
                         <div class="form-body">
-                            <form action="addProperty" method="post" enctype="multipart/form-data" id="propertyForm">
+                            <form action="addProperty" method="post" enctype="multipart/form-data" id="propertyForm" onsubmit="return validateForm()">
                                 <!-- Basic Information Section -->
                                 <div class="form-section">
                                     <div class="form-section-title">
@@ -816,7 +922,7 @@
                                                 <input type="number" id="price" name="price" step="1000" class="form-control" placeholder="Nhập giá" required>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
-                                            <small class="text-muted">Nhập giá cho thuê/bán (VD: 5000000)</small>
+                                            <small class="text-muted">Nhập giá cho thuê (VD: 5000000)</small>
                                         </div>
 
                                         <div class="col-md-6 mb-3">
@@ -846,6 +952,53 @@
                                             <option value="3">Cao cấp</option>
                                         </select>
                                         <small class="text-muted">Tin đăng có mức độ ưu tiên cao sẽ được hiển thị nổi bật hơn</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <div class="form-section-title">
+                                        <div class="form-section-icon">
+                                            <i class="fas fa-images"></i>
+                                        </div>
+                                        Hình ảnh bất động sản
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Hình ảnh chính</label>
+                                        <div class="image-upload" id="imageUploadContainer" onclick="document.getElementById('mainImage').click()">
+                                            <input type="file" id="mainImage" name="mainImage" style="display: none;" accept="image/*">
+                                            <div class="image-upload-icon">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                            </div>
+                                            <h5>Tải lên hình ảnh chính</h5>
+                                            <p class="text-muted mb-0">Kéo thả hoặc nhấp để tải lên (JPG, PNG)</p>
+                                        </div>
+                                        <div id="imagePreview" class="mt-3" style="display: none;">
+                                            <img id="previewImg" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 0.5rem; border: 2px solid #ffe0b2;">
+                                            <div class="mt-2">
+                                                <span id="fileName" class="text-muted"></span>
+                                                <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeImage()">
+                                                    <i class="fas fa-trash me-1"></i>Xóa ảnh
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <c:if test="${not empty property.avatar}">
+                                            <div class="mt-2">
+                                                <p>Hình ảnh hiện tại: <a href="${pageContext.request.contextPath}/${property.avatar}" target="_blank">Xem ảnh</a></p>
+                                            </div>
+                                        </c:if>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Hình ảnh bổ sung</label>
+                                        <div class="image-upload" onclick="document.getElementById('additionalImages').click()">
+                                            <input type="file" id="additionalImages" name="additionalImages" style="display: none;" accept="image/*" multiple>
+                                            <div class="image-upload-icon">
+                                                <i class="fas fa-images"></i>
+                                            </div>
+                                            <h5>Tải lên hình ảnh bổ sung</h5>
+                                            <p class="text-muted mb-0">Tối đa 10 hình ảnh (JPG, PNG)</p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -969,6 +1122,65 @@
                 if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
                     window.location.href = '${pageContext.request.contextPath}/logout';
                 }
+            }
+
+            // Image preview functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const mainImageInput = document.getElementById('mainImage');
+                const imageUploadContainer = document.getElementById('imageUploadContainer');
+                const imagePreview = document.getElementById('imagePreview');
+                const previewImg = document.getElementById('previewImg');
+                const fileName = document.getElementById('fileName');
+                
+                console.log('Image preview script loaded');
+                
+                mainImageInput.addEventListener('change', function(e) {
+                    console.log('File input changed');
+                    const file = e.target.files[0];
+                    if (file) {
+                        console.log('File selected:', file.name, 'Size:', file.size, 'Type:', file.type);
+                        
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                            alert('Vui lòng chọn file hình ảnh!');
+                            this.value = '';
+                            return;
+                        }
+                        
+                        // Validate file size (max 10MB)
+                        if (file.size > 10 * 1024 * 1024) {
+                            alert('File quá lớn! Vui lòng chọn file nhỏ hơn 10MB.');
+                            this.value = '';
+                            return;
+                        }
+                        
+                        // Create preview
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            console.log('File read successfully');
+                            previewImg.src = e.target.result;
+                            fileName.textContent = file.name;
+                            imagePreview.style.display = 'block';
+                            imageUploadContainer.style.display = 'none';
+                        };
+                        reader.onerror = function() {
+                            console.error('Error reading file');
+                            alert('Lỗi khi đọc file!');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+
+            function removeImage() {
+                console.log('Removing image');
+                const mainImageInput = document.getElementById('mainImage');
+                const imageUploadContainer = document.getElementById('imageUploadContainer');
+                const imagePreview = document.getElementById('imagePreview');
+                
+                mainImageInput.value = '';
+                imagePreview.style.display = 'none';
+                imageUploadContainer.style.display = 'block';
             }
         </script>
     </body>

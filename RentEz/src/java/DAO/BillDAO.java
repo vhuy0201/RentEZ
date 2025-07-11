@@ -3,6 +3,8 @@ package DAO;
 import Connection.DBConnection;
 import Model.Bill;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BillDAO {
 
@@ -50,6 +52,66 @@ public class BillDAO {
             System.out.println("Error: " + e);
         }
         return null;
+    }
+
+    /**
+     * Get all bills for a specific renter
+     */
+    public List<Bill> getBillsByRenterId(int renterId) {
+        List<Bill> bills = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM Bill WHERE RenterID = ? ORDER BY DueDate DESC";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, renterId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Bill bill = new Bill();
+                bill.setBillId(rs.getInt("BillID"));
+                bill.setPropertyId(rs.getInt("PropertyID"));
+                bill.setRenterId(rs.getInt("RenterID"));
+                bill.setBillingPeriod(rs.getString("BillingPeriod"));
+                bill.setTotalAmount(rs.getDouble("TotalAmount"));
+                bill.setDueDate(rs.getDate("DueDate"));
+                bill.setStatus(rs.getString("Status"));
+                bills.add(bill);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return bills;
+    }
+
+    /**
+     * Get all bills for properties owned by a landlord
+     */
+    public List<Bill> getBillsForLandlord(int landlordId) {
+        List<Bill> bills = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT b.* FROM Bill b " +
+                    "JOIN Property p ON b.PropertyID = p.PropertyID " +
+                    "WHERE p.LandlordID = ? ORDER BY b.DueDate DESC";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Bill bill = new Bill();
+                bill.setBillId(rs.getInt("BillID"));
+                bill.setPropertyId(rs.getInt("PropertyID"));
+                bill.setRenterId(rs.getInt("RenterID"));
+                bill.setBillingPeriod(rs.getString("BillingPeriod"));
+                bill.setTotalAmount(rs.getDouble("TotalAmount"));
+                bill.setDueDate(rs.getDate("DueDate"));
+                bill.setStatus(rs.getString("Status"));
+                bills.add(bill);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return bills;
     }
 
     public boolean update(Bill bill) {

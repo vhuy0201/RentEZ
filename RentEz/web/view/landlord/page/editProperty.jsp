@@ -753,7 +753,7 @@
                                                 <input type="number" id="price" name="price" step="1000" class="form-control" value="${property.price}" required>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
-                                            <small class="text-muted">Nhập giá cho thuê/bán (VD: 5000000)</small>
+                                            <small class="text-muted">Nhập giá cho thuê (VD: 5000000)</small>
                                         </div>
 
                                         <div class="col-md-6 mb-3">

@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.UserDao;
+import DAO.UsersDao;
 import Model.User;
 import Util.Common;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class ResetPasswordServlet extends HttpServlet {
         }
         
         // Check if email exists in the system
-        UserDao userDao = new UserDao();
+        UsersDao userDao = new UsersDao();
         User user = userDao.getByEmail(email);
         
         if (user == null) {
@@ -85,7 +85,7 @@ public class ResetPasswordServlet extends HttpServlet {
         }
         
         // Check if email exists in our system
-        UserDao userDao = new UserDao();
+        UsersDao userDao = new UsersDao();
         User user = userDao.getByEmail(email);
         
         if (user == null) {

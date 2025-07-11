@@ -153,10 +153,37 @@
                                          alt="${sessionScope.user.name}" />
                                 </c:otherwise>
                             </c:choose>
-                        </div>
-                        <h3>${sessionScope.user.name}</h3>
+                        </div>                        <h3>${sessionScope.user.name}</h3>
                         <p>${sessionScope.user.email}</p>
                         <p><span class="badge bg-secondary">${sessionScope.user.role}</span></p>
+                        
+                        <c:if test="${sessionScope.user.role == 'Landlord' && not empty ratingStats}">
+                            <div class="rating-badge">
+                                <span class="rating-stars">
+                                    <c:forEach begin="1" end="5" var="i">
+                                        <c:choose>
+                                            <c:when test="${i <= ratingStats.averageRating}">
+                                                <i class="fas fa-star text-warning"></i>
+                                            </c:when>
+                                            <c:when test="${i - 0.5 <= ratingStats.averageRating}">
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="far fa-star text-warning"></i>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </span>
+                                <span class="badge bg-warning text-dark">
+                                    ${ratingStats.averageRating}/5 (${ratingStats.totalRatings} đánh giá)
+                                </span>
+                                <p>
+                                    <a href="${pageContext.request.contextPath}/ratings" class="btn btn-sm btn-outline-primary mt-2">
+                                        <i class="fas fa-star"></i> Xem tất cả đánh giá
+                                    </a>
+                                </p>
+                            </div>
+                        </c:if>
                     </div>
                       <ul class="nav nav-tabs profile-tabs" id="profileTabs" role="tablist">
                         <li class="nav-item" role="presentation">

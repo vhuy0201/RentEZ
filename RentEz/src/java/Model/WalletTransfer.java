@@ -4,7 +4,7 @@ public class WalletTransfer {
     private String transCode, timeCode, content;
     private int userID, walletTransferID;
     private boolean isRefunded;
-    private float amount;
+    private Double amount;
     public String getContent() {
         return content;
     }
@@ -21,11 +21,11 @@ public class WalletTransfer {
         this.walletTransferID = walletTransferID;
     }
 
-    public float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.UserDao;
+import DAO.UsersDao;
 import Model.User;
 import Util.Email;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String email = request.getParameter("email");
         
         // Validate email exists in our system
-        UserDao userDao = new UserDao();
+        UsersDao userDao = new UsersDao();
         User user = userDao.getByEmail(email);
         
         if (user != null) {

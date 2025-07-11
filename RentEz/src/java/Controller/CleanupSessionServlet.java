@@ -7,7 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/cleanupSession")
+@WebServlet(name = "CleanupSessionServlet", urlPatterns = {"/cleanupSession"})
+
 public class CleanupSessionServlet extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
