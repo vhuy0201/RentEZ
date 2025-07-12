@@ -6,6 +6,7 @@ import DAO.PropertyDAO;
 import Model.Booking;
 import Model.Location;
 import Model.Property;
+import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -32,10 +33,6 @@ public class AddPropertyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("landlordId") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
         request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
     }
 
@@ -45,12 +42,8 @@ public class AddPropertyServlet extends HttpServlet {
         try {
             // Get session to retrieve LandlordID
             HttpSession session = request.getSession();
-            Integer landlordId = (Integer) session.getAttribute("landlordId");
-            if (landlordId == null) {
-                request.setAttribute("error", "You must be logged in as a landlord to add a property.");
-                request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
-                return;
-            }
+            User user = (User) session.getAttribute("user");
+
             // Get parameters from the form
             String title = request.getParameter("title");
             String description = request.getParameter("description");
@@ -66,19 +59,9 @@ public class AddPropertyServlet extends HttpServlet {
             int numberOfBathrooms = Integer.parseInt(request.getParameter("numberOfBathrooms"));
             String availabilityStatus = request.getParameter("availabilityStatus");
             int priorityLevel = Integer.parseInt(request.getParameter("priorityLevel"));
-// Xử lý ảnh
-//            String image = handleFileUpload(request);
-//            Part filePart = request.getPart("image");
-//            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-//            String uploadPath = getServletContext().getRealPath("/") + "view/guest/asset/img";
-//
-//            File uploadDir = new File(uploadPath);
-//            if (!uploadDir.exists()) {
-//                uploadDir.mkdir();
-//            }
-//
-//            String filePath = uploadPath + File.separator + fileName;
-//            filePart.write(filePath);
+
+            // Handle image upload
+            String imagePath = handleFileUpload(request);
 
             // Create and save Location
             Location location = new Location();
@@ -101,82 +84,25 @@ public class AddPropertyServlet extends HttpServlet {
             property.setDescription(description);
             property.setTypeId(typeId); // TypeID from form, assumed to reference PropertyType table
             property.setLocationId(locationId); // Newly created LocationID
-            property.setLandlordId(landlordId); // From session
+            property.setLandlordId(user.getUserId()); // From session
             property.setPrice(price);
             property.setSize(size);
             property.setNumberOfBedrooms(numberOfBedrooms);
             property.setNumberOfBathrooms(numberOfBathrooms);
             property.setAvailabilityStatus(availabilityStatus);
             property.setPriorityLevel(priorityLevel);
-            // Xử lý upload ảnh chính
-            Part mainImagePart = request.getPart("mainImage");
-            String avatarPath = null;
-            
-            // Debug: In ra thông tin về file upload
-            System.out.println("=== DEBUG IMAGE UPLOAD ===");
-            System.out.println("mainImagePart: " + mainImagePart);
-            if (mainImagePart != null) {
-                System.out.println("File name: " + mainImagePart.getSubmittedFileName());
-                System.out.println("File size: " + mainImagePart.getSize());
-                System.out.println("Content type: " + mainImagePart.getContentType());
-            }
-            
-            if (mainImagePart != null && mainImagePart.getSize() > 0) {
-                try {
-                    // Lấy tên file gốc
-                    String fileName = Paths.get(mainImagePart.getSubmittedFileName()).getFileName().toString();
-                    System.out.println("Original file name: " + fileName);
-                    
-                    // Đặt tên file duy nhất để tránh trùng
-                    String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
-                    System.out.println("Unique file name: " + uniqueFileName);
-                    
-                    // Đường dẫn lưu file trên server
-                    String uploadDir = getServletContext().getRealPath("/") + "view/guest/asset/img";
-                    File dir = new File(uploadDir);
-                    if (!dir.exists()) {
-                        boolean created = dir.mkdirs();
-                        System.out.println("Created upload directory: " + created);
-                    }
-                    System.out.println("Upload directory: " + uploadDir);
-                    
-                    // Lưu file
-                    String filePath = uploadDir + File.separator + uniqueFileName;
-                    System.out.println("Full file path: " + filePath);
-                    mainImagePart.write(filePath);
-                    
-                    // Kiểm tra file đã được lưu
-                    File savedFile = new File(filePath);
-                    System.out.println("File saved successfully: " + savedFile.exists());
-                    System.out.println("File size on disk: " + savedFile.length());
-                    
-                    // Đường dẫn để lưu vào DB (tương đối để show lên web)
-                    avatarPath = "view/guest/asset/img/" + uniqueFileName;
-                    System.out.println("Avatar path for DB: " + avatarPath);
-                } catch (Exception e) {
-                    System.out.println("Error saving image: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("No image uploaded or image is empty");
-            }
-            System.out.println("Final avatarPath: " + avatarPath);
-            System.out.println("=== END DEBUG IMAGE UPLOAD ===");
-            
-            property.setAvatar(avatarPath);
+            property.setAvatar(imagePath);
 
             // Insert the property using PropertyDAO
             PropertyDAO propertyDAO = new PropertyDAO();
             int propertyId = propertyDAO.addProperty(property);
 
             // Set response message
-            if (propertyId <= 0) {
+            if (propertyId == -1) {
                 request.setAttribute("error", "Failed to add property. Please try again.");
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                 return;
             }
-            
-            System.out.println("Property added successfully with ID: " + propertyId); // Debug log
 
             // Handle Booking creation if booking parameters are present
             String startDateStr = request.getParameter("startDate");
@@ -223,24 +149,33 @@ public class AddPropertyServlet extends HttpServlet {
         }
     }
 
-//    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
-//        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-//        File uploadDir = new File(uploadPath);
-//        if (!uploadDir.exists()) {
-//            uploadDir.mkdir();
-//        }
-//
-//        String fileName = null;
-//        for (Part part : request.getParts()) {
-//            String submittedFileName = part.getSubmittedFileName();
-//            if (submittedFileName != null && !submittedFileName.isEmpty()) {
-//                fileName = System.currentTimeMillis() + "_" + submittedFileName;
-//                part.write(new File(uploadPath + File.separator + fileName));
-//                break; // Only handle the first file for simplicity
-//            }
-//        }
-//        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
-//    }
+    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
+        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
+        String fileName = null;
+        for (Part part : request.getParts()) {
+            if ("propertyImage".equals(part.getName())) {
+                String submittedFileName = part.getSubmittedFileName();
+                if (submittedFileName != null && !submittedFileName.isEmpty()) {
+                    // Generate unique filename
+                    String fileExtension = "";
+                    int lastDotIndex = submittedFileName.lastIndexOf('.');
+                    if (lastDotIndex > 0) {
+                        fileExtension = submittedFileName.substring(lastDotIndex);
+                    }
+                    fileName = System.currentTimeMillis() + "_" + submittedFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+                    String filePath = uploadPath + File.separator + fileName;
+                    part.write(filePath);
+                    break;
+                }
+            }
+        }
+        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
+    }
     @Override
     public String getServletInfo() {
         return "Add Property Servlet handles property creation with type, location, and landlord details.";

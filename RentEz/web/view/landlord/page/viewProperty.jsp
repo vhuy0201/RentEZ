@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -679,76 +680,7 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <!-- Sidebar với theme cam gradient -->
-                <aside class="col-md-3 col-lg-2 d-none d-md-block sidebar py-4">
-                    <div class="d-flex flex-column h-100">
-                        <!-- User Profile Section -->
-                        <div class="text-center user-info">
-                            <div class="account-avatar mx-auto mb-3">T</div>
-                            <div class="fw-bold fs-5 mb-2">Dũng Trần</div>
-                            <div class="user-points">
-                                <i class="fas fa-star me-2"></i>0 điểm
-                            </div>
-                        </div>
-
-                        <!-- Navigation Menu -->
-                        <nav class="flex-grow-1">
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/HomeServlet">
-                                        <i class="fas fa-home"></i>Trang chủ
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/landLordHomeServlet">
-                                        <i class="fas fa-tachometer-alt"></i>Tổng quan
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="${pageContext.request.contextPath}/viewProperties">
-                                        <i class="fas fa-list"></i>Quản lý tin đăng
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/addProperty">
-                                        <i class="fas fa-plus"></i>Đăng tin mới
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-user-friends"></i>Khách hàng
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-gem"></i>Gói hội viên
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-wallet"></i>Quản lý tài chính
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-cog"></i>Cài đặt tài khoản
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                        <!-- Logout Button -->
-                        <div class="logout-section">
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" onclick="confirmLogout()">
-                                        <i class="fas fa-sign-out-alt"></i>Đăng xuất
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </aside>
+                <jsp:include page="../common/navigation.jsp" />
 
                 <!-- Main content -->
                 <main class="col-md-9 col-lg-10 ms-sm-auto px-4 py-4">

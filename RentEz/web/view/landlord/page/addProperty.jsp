@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -28,81 +29,6 @@
                     }
                 }
             }
-
-            // Form validation
-            function validateForm() {
-                const title = document.getElementById('title').value.trim();
-                const description = document.getElementById('description').value.trim();
-                const typeId = document.getElementById('typeId').value;
-                const price = document.getElementById('price').value;
-                const size = document.getElementById('size').value;
-                const address = document.getElementById('address').value.trim();
-                const city = document.getElementById('city').value.trim();
-                const stateProvince = document.getElementById('stateProvince').value.trim();
-                const mainImage = document.getElementById('mainImage');
-
-                console.log('=== FORM VALIDATION DEBUG ===');
-                console.log('Title:', title);
-                console.log('Description:', description);
-                console.log('Type ID:', typeId);
-                console.log('Price:', price);
-                console.log('Size:', size);
-                console.log('Address:', address);
-                console.log('City:', city);
-                console.log('State/Province:', stateProvince);
-                console.log('Image file:', mainImage.files[0]);
-                console.log('=== END FORM VALIDATION DEBUG ===');
-
-                if (!title) {
-                    alert('Vui lòng nhập tiêu đề tin đăng!');
-                    document.getElementById('title').focus();
-                    return false;
-                }
-
-                if (!description) {
-                    alert('Vui lòng nhập mô tả chi tiết!');
-                    document.getElementById('description').focus();
-                    return false;
-                }
-
-                if (!typeId) {
-                    alert('Vui lòng chọn loại bất động sản!');
-                    document.getElementById('typeId').focus();
-                    return false;
-                }
-
-                if (!price || price <= 0) {
-                    alert('Vui lòng nhập giá hợp lệ!');
-                    document.getElementById('price').focus();
-                    return false;
-                }
-
-                if (!size || size <= 0) {
-                    alert('Vui lòng nhập diện tích hợp lệ!');
-                    document.getElementById('size').focus();
-                    return false;
-                }
-
-                if (!address) {
-                    alert('Vui lòng nhập địa chỉ!');
-                    document.getElementById('address').focus();
-                    return false;
-                }
-
-                if (!city) {
-                    alert('Vui lòng nhập thành phố/tỉnh!');
-                    document.getElementById('city').focus();
-                    return false;
-                }
-
-                if (!stateProvince) {
-                    alert('Vui lòng nhập quận/huyện!');
-                    document.getElementById('stateProvince').focus();
-                    return false;
-                }
-
-                return true;
-            }
         </script>
         <style>
             body {
@@ -110,75 +36,7 @@
                 font-family: 'Inter', Arial, sans-serif;
             }
 
-            /* Sidebar với theme cam gradient */
-            .sidebar {
-                background: linear-gradient(135deg, #e65100 0%, #ff6d00 50%, #ff9800 100%);
-                color: #fff;
-                min-height: 100vh;
-                border-radius: 0 2rem 2rem 0;
-                box-shadow: 0 8px 32px rgba(230, 81, 0, 0.2);
-                position: relative;
-                overflow: hidden;
-            }
 
-            .sidebar::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(135deg, rgba(230, 81, 0, 0.95) 0%, rgba(255, 109, 0, 0.95) 50%, rgba(255, 152, 0, 0.95) 100%);
-                z-index: 1;
-            }
-
-            .sidebar > * {
-                position: relative;
-                z-index: 2;
-            }
-
-            .sidebar a {
-                color: #fff;
-                font-weight: 500;
-                border-radius: 0.75rem;
-                margin-bottom: 0.5rem;
-                transition: all 0.3s ease;
-                padding: 1rem 1.25rem;
-                display: flex;
-                align-items: center;
-                text-decoration: none;
-                border: 1px solid transparent;
-            }
-
-            .sidebar .active {
-                background: rgba(255, 255, 255, 0.25);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            }
-
-            .sidebar a:hover {
-                background: rgba(255, 255, 255, 0.15);
-                backdrop-filter: blur(10px);
-                transform: translateX(8px);
-                color: #fff;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .account-avatar {
-                width: 85px;
-                height: 85px;
-                background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.95) 100%);
-                color: #e65100;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 2.5rem;
-                font-weight: bold;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-                border: 4px solid rgba(255, 255, 255, 0.3);
-            }
 
             .dashboard-header {
                 border-radius: 1.5rem;
@@ -287,53 +145,7 @@
                 opacity: 1;
             }
 
-            .nav-link {
-                padding: 1rem 1.25rem;
-            }
 
-            .nav-link i {
-                width: 22px;
-                margin-right: 0.875rem;
-                font-size: 1.1rem;
-            }
-
-            .user-info {
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 1rem;
-                padding: 1.5rem;
-                margin-bottom: 2rem;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-            }
-
-            .user-points {
-                background: rgba(255, 255, 255, 0.2);
-                padding: 0.5rem 1rem;
-                border-radius: 2rem;
-                font-size: 0.875rem;
-                font-weight: 600;
-                display: inline-flex;
-                align-items: center;
-                margin-top: 0.5rem;
-            }
-
-            .logout-section {
-                margin-top: auto;
-                padding-top: 2rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .logout-section a {
-                background: rgba(244, 67, 54, 0.15);
-                border: 1px solid rgba(244, 67, 54, 0.2);
-                color: #ffcdd2;
-            }
-
-            .logout-section a:hover {
-                background: rgba(244, 67, 54, 0.25);
-                color: #fff;
-                transform: translateX(5px);
-            }
 
             .form-card {
                 border-radius: 1.5rem;
@@ -558,36 +370,11 @@
                 background: #fff8f0;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                position: relative;
             }
 
             .image-upload:hover {
                 border-color: #ff9800;
                 background: #fff5e6;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(255, 152, 0, 0.2);
-            }
-
-            .image-upload input[type="file"] {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                opacity: 0;
-                cursor: pointer;
-            }
-
-            #imagePreview {
-                border: 2px solid #ffe0b2;
-                border-radius: 1rem;
-                padding: 1rem;
-                background: #fff8f0;
-                text-align: center;
-            }
-
-            #previewImg {
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             }
 
             .image-upload-icon {
@@ -668,76 +455,8 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <!-- Sidebar với theme cam gradient -->
-                <aside class="col-md-3 col-lg-2 d-none d-md-block sidebar py-4">
-                    <div class="d-flex flex-column h-100">
-                        <!-- User Profile Section -->
-                        <div class="text-center user-info">
-                            <div class="account-avatar mx-auto mb-3">T</div>
-                            <div class="fw-bold fs-5 mb-2">Dũng Trần</div>
-                            <div class="user-points">
-                                <i class="fas fa-star me-2"></i>0 điểm
-                            </div>
-                        </div>
-
-                        <!-- Navigation Menu -->
-                        <nav class="flex-grow-1">
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/HomeServlet">
-                                        <i class="fas fa-home"></i>Trang chủ
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/landLordHomeServlet">
-                                        <i class="fas fa-tachometer-alt"></i>Tổng quan
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/viewProperties">
-                                        <i class="fas fa-list"></i>Quản lý tin đăng
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="${pageContext.request.contextPath}/addProperty">
-                                        <i class="fas fa-plus"></i>Đăng tin mới
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-user-friends"></i>Khách hàng
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-gem"></i>Gói hội viên
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-wallet"></i>Quản lý tài chính
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        <i class="fas fa-cog"></i>Cài đặt tài khoản
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-
-                        <!-- Logout Button -->
-                        <div class="logout-section">
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" onclick="confirmLogout()">
-                                        <i class="fas fa-sign-out-alt"></i>Đăng xuất
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </aside>
+                <!-- Navigation -->
+                <jsp:include page="../common/navigation.jsp" />
 
                 <!-- Main content -->
                 <main class="col-md-9 col-lg-10 ms-sm-auto px-4 py-4">
@@ -803,12 +522,6 @@
                             ${message}
                         </div>
                     </c:if>
-                    <c:if test="${not empty successMessage}">
-                        <div class="alert alert-success mb-4" role="alert">
-                            <i class="fas fa-check-circle me-2"></i>
-                            ${successMessage}
-                        </div>
-                    </c:if>
 
                     <!-- Property Form -->
                     <div class="form-card mb-4">
@@ -819,7 +532,7 @@
                             </h4>
                         </div>
                         <div class="form-body">
-                            <form action="addProperty" method="post" enctype="multipart/form-data" id="propertyForm" onsubmit="return validateForm()">
+                            <form action="addProperty" method="post" enctype="multipart/form-data" id="propertyForm">
                                 <!-- Basic Information Section -->
                                 <div class="form-section">
                                     <div class="form-section-title">
@@ -954,7 +667,8 @@
                                         <small class="text-muted">Tin đăng có mức độ ưu tiên cao sẽ được hiển thị nổi bật hơn</small>
                                     </div>
                                 </div>
-                                
+
+                                <!-- Image Upload Section -->
                                 <div class="form-section">
                                     <div class="form-section-title">
                                         <div class="form-section-icon">
@@ -962,42 +676,20 @@
                                         </div>
                                         Hình ảnh bất động sản
                                     </div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label">Hình ảnh chính</label>
-                                        <div class="image-upload" id="imageUploadContainer" onclick="document.getElementById('mainImage').click()">
-                                            <input type="file" id="mainImage" name="mainImage" style="display: none;" accept="image/*">
-                                            <div class="image-upload-icon">
-                                                <i class="fas fa-cloud-upload-alt"></i>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="propertyImage" class="form-label">Tải lên hình ảnh <span class="text-danger">*</span></label>
+                                            <div class="image-upload" onclick="document.getElementById('propertyImage').click()">
+                                                <div class="image-upload-icon">
+                                                    <i class="fas fa-cloud-upload-alt"></i>
+                                                </div>
+                                                <h5>Kéo thả hoặc nhấp để chọn ảnh</h5>
+                                                <p class="text-muted mb-0">Hỗ trợ: JPG, PNG, GIF (tối đa 10MB)</p>
+                                                <input type="file" id="propertyImage" name="propertyImage" accept="image/*" style="display: none;" required onchange="previewImage(this)">
                                             </div>
-                                            <h5>Tải lên hình ảnh chính</h5>
-                                            <p class="text-muted mb-0">Kéo thả hoặc nhấp để tải lên (JPG, PNG)</p>
-                                        </div>
-                                        <div id="imagePreview" class="mt-3" style="display: none;">
-                                            <img id="previewImg" src="" alt="Preview" style="max-width: 100%; max-height: 300px; border-radius: 0.5rem; border: 2px solid #ffe0b2;">
-                                            <div class="mt-2">
-                                                <span id="fileName" class="text-muted"></span>
-                                                <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeImage()">
-                                                    <i class="fas fa-trash me-1"></i>Xóa ảnh
-                                                </button>
+                                            <div id="imagePreview" class="mt-3" style="display: none;">
+                                                <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e65100;">
                                             </div>
-                                        </div>
-                                        <c:if test="${not empty property.avatar}">
-                                            <div class="mt-2">
-                                                <p>Hình ảnh hiện tại: <a href="${pageContext.request.contextPath}/${property.avatar}" target="_blank">Xem ảnh</a></p>
-                                            </div>
-                                        </c:if>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Hình ảnh bổ sung</label>
-                                        <div class="image-upload" onclick="document.getElementById('additionalImages').click()">
-                                            <input type="file" id="additionalImages" name="additionalImages" style="display: none;" accept="image/*" multiple>
-                                            <div class="image-upload-icon">
-                                                <i class="fas fa-images"></i>
-                                            </div>
-                                            <h5>Tải lên hình ảnh bổ sung</h5>
-                                            <p class="text-muted mb-0">Tối đa 10 hình ảnh (JPG, PNG)</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1036,18 +728,19 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="startDate" class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
-                                            <input type="date" id="startDate" name="startDate" class="form-control" required>
+                                            <input type="date" id="startDate" name="startDate" class="form-control" required onchange="calculateTotalPrice()">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="endDate" class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
-                                            <input type="date" id="endDate" name="endDate" class="form-control" required>
+                                            <input type="date" id="endDate" name="endDate" class="form-control" required onchange="calculateTotalPrice()">
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="totalPrice" class="form-label">Tổng giá (VNĐ) <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Nhập tổng giá" required>
+                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Tự động tính toán" readonly>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
+                                            <small class="text-muted">Tự động tính toán dựa trên giá thuê hàng tháng và thời gian thuê</small>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="depositAmount" class="form-label">Số tiền đặt cọc (VNĐ) <span class="text-danger">*</span></label>
@@ -1059,9 +752,10 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="monthlyRent" class="form-label">Tiền thuê hàng tháng (VNĐ) <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input type="number" id="monthlyRent" name="monthlyRent" step="1000" class="form-control" placeholder="Nhập tiền thuê" required>
+                                                <input type="number" id="monthlyRent" name="monthlyRent" step="1000" class="form-control" placeholder="Nhập tiền thuê" required readonly>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
+                                            <small class="text-muted">Tự động lấy từ giá ở phần chi tiết bất động sản</small>
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label for="penaltyClause" class="form-label">Điều khoản phạt</label>
@@ -1093,6 +787,11 @@
         <script>
             // Modal control functions
             function openBookingModal() {
+                // Auto-fill monthly rent from property price
+                const propertyPrice = document.getElementById('price').value;
+                if (propertyPrice) {
+                    document.getElementById('monthlyRent').value = propertyPrice;
+                }
                 document.getElementById('bookingModal').style.display = 'flex';
             }
 
@@ -1100,8 +799,62 @@
                 document.getElementById('bookingModal').style.display = 'none';
             }
 
+            // Image preview function
+            function previewImage(input) {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('previewImg').src = e.target.result;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // Calculate total price based on monthly rent and duration
+            function calculateTotalPrice() {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const monthlyRent = document.getElementById('monthlyRent').value;
+
+                if (startDate && endDate && monthlyRent) {
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    
+                    // Calculate difference in months
+                    const diffTime = Math.abs(end - start);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const diffMonths = Math.ceil(diffDays / 30); // Approximate months
+                    
+                    if (diffMonths > 0) {
+                        const totalPrice = monthlyRent * diffMonths;
+                        document.getElementById('totalPrice').value = totalPrice;
+                    }
+                }
+            }
+
+            // Auto-update monthly rent when property price changes
+            document.getElementById('price').addEventListener('input', function() {
+                const monthlyRentField = document.getElementById('monthlyRent');
+                if (monthlyRentField) {
+                    monthlyRentField.value = this.value;
+                }
+            });
+
             // Submit property form with booking data
             function submitWithBooking() {
+                // Validate required fields
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const totalPrice = document.getElementById('totalPrice').value;
+                const depositAmount = document.getElementById('depositAmount').value;
+                
+                if (!startDate || !endDate || !totalPrice || !depositAmount) {
+                    alert('Vui lòng điền đầy đủ thông tin chính sách thuê nhà!');
+                    return;
+                }
+
                 const propertyForm = document.getElementById('propertyForm');
                 const bookingFields = ['startDate', 'endDate', 'totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
                 
@@ -1124,64 +877,31 @@
                 }
             }
 
-            // Image preview functionality
-            document.addEventListener('DOMContentLoaded', function() {
-                const mainImageInput = document.getElementById('mainImage');
-                const imageUploadContainer = document.getElementById('imageUploadContainer');
-                const imagePreview = document.getElementById('imagePreview');
-                const previewImg = document.getElementById('previewImg');
-                const fileName = document.getElementById('fileName');
-                
-                console.log('Image preview script loaded');
-                
-                mainImageInput.addEventListener('change', function(e) {
-                    console.log('File input changed');
-                    const file = e.target.files[0];
-                    if (file) {
-                        console.log('File selected:', file.name, 'Size:', file.size, 'Type:', file.type);
-                        
-                        // Validate file type
-                        if (!file.type.startsWith('image/')) {
-                            alert('Vui lòng chọn file hình ảnh!');
-                            this.value = '';
-                            return;
-                        }
-                        
-                        // Validate file size (max 10MB)
-                        if (file.size > 10 * 1024 * 1024) {
-                            alert('File quá lớn! Vui lòng chọn file nhỏ hơn 10MB.');
-                            this.value = '';
-                            return;
-                        }
-                        
-                        // Create preview
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            console.log('File read successfully');
-                            previewImg.src = e.target.result;
-                            fileName.textContent = file.name;
-                            imagePreview.style.display = 'block';
-                            imageUploadContainer.style.display = 'none';
-                        };
-                        reader.onerror = function() {
-                            console.error('Error reading file');
-                            alert('Lỗi khi đọc file!');
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
+            // Validate form before submission
+            document.getElementById('propertyForm').addEventListener('submit', function(e) {
+                const imageInput = document.getElementById('propertyImage');
+                if (!imageInput.files.length) {
+                    e.preventDefault();
+                    alert('Vui lòng chọn ít nhất một hình ảnh cho bất động sản!');
+                    return false;
+                }
 
-            function removeImage() {
-                console.log('Removing image');
-                const mainImageInput = document.getElementById('mainImage');
-                const imageUploadContainer = document.getElementById('imageUploadContainer');
-                const imagePreview = document.getElementById('imagePreview');
-                
-                mainImageInput.value = '';
-                imagePreview.style.display = 'none';
-                imageUploadContainer.style.display = 'block';
-            }
+                // Validate file size (10MB max)
+                const file = imageInput.files[0];
+                if (file.size > 10 * 1024 * 1024) {
+                    e.preventDefault();
+                    alert('Kích thước file ảnh không được vượt quá 10MB!');
+                    return false;
+                }
+
+                // Validate file type
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(file.type)) {
+                    e.preventDefault();
+                    alert('Chỉ chấp nhận file ảnh định dạng JPG, PNG, GIF!');
+                    return false;
+                }
+            });
         </script>
     </body>
 </html>
