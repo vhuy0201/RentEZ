@@ -443,7 +443,7 @@
                     </h5>
                     <button type="button" class="text-orange-600 hover:text-orange-800 focus:outline-none" onclick="closeAddFundsModal()">&times;</button>
                 </div>
-                <form action="${pageContext.request.contextPath}/payment-action" method="POST" class="px-6 py-4">
+                <form id="addFundsForm" action="${pageContext.request.contextPath}/payment-action" method="POST" class="px-6 py-4">
                     <input type="hidden" name="action" value="add-funds" />
                     <input type="hidden" name="paymentMethod" value="wallet" />
                     <input type="hidden" name="description" value="Nap tien vao tai khoan" />
@@ -470,6 +470,10 @@
                                 <span class="ml-2 cursor-pointer"><i class="fas fa-credit-card mr-2"></i>Thẻ tín dụng</span>
                             </label>
                             <label class="inline-flex items-center">
+                                <input type="radio" name="method" value="vnpay" id="addFundsVNPay" class="form-radio text-orange-500" />
+                                <span class="ml-2 cursor-pointer"><i class="fas fa-wallet mr-2"></i>Ví VNPay</span>
+                            </label>
+                            <label class="inline-flex items-center">
                                 <input type="radio" name="method" value="momo" id="addFundsMomo" class="form-radio text-orange-500" />
                                 <span class="ml-2 cursor-pointer"><i class="fas fa-mobile-alt mr-2"></i>Ví MoMo</span>
                             </label>
@@ -479,7 +483,7 @@
                     <div class="flex justify-end space-x-3">
                         <button type="button" class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
                                 onclick="closeAddFundsModal()">Hủy</button>
-                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">
+                        <button type="button" id="addFundsSubmitBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">
                             <i class="fas fa-plus mr-2"></i> Nạp Tiền
                         </button>
                     </div>
@@ -614,6 +618,65 @@
             document.querySelector('[data-modal-toggle="withdrawModal"]').addEventListener('click', () => {
                 document.getElementById('withdrawModal').classList.remove('hidden');
             });
+
+            // Handle Add Funds form submit
+            document.getElementById('addFundsSubmitBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const form = document.getElementById('addFundsForm');
+                const formData = new FormData(form);
+                const amount = formData.get('amount');
+                const method = formData.get('method');
+                
+                // Validate amount
+                if (!amount || amount < 10000) {
+                    alert('Vui lòng nhập số tiền hợp lệ (tối thiểu 10,000 VND)');
+                    return;
+                }
+                
+                if (method === 'vnpay') {
+                    // Handle VNPay payment
+                    handleVNPayPayment(amount);
+                } else {
+                    // Handle other payment methods (existing logic)
+                    form.submit();
+                }
+            });
+
+            function handleVNPayPayment(amount) {
+                // Show loading state
+                const submitBtn = document.getElementById('addFundsSubmitBtn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Đang xử lý...';
+                submitBtn.disabled = true;
+                
+                // Make AJAX request to Deposit servlet which will route to VNPay
+                fetch('${pageContext.request.contextPath}/deposit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'amount=' + encodeURIComponent(amount) + '&method=vnpay'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === '00') {
+                        // Redirect to VNPay payment page
+                        window.location.href = data.data;
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi tạo liên kết thanh toán');
+                })
+                .finally(() => {
+                    // Restore button state
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+            }
         </script>
 
     </body>
