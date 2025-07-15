@@ -47,7 +47,6 @@
                     </div>
                 </div>
             </header>
-
             <!-- Content -->
             <main class="p-6">
                 <!-- Search and Filter -->

@@ -52,6 +52,12 @@
                         <i class="fas fa-file-invoice"></i>Quản lý hóa đơn
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link ${pageContext.request.requestURI.contains('contractManagement') ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/contractManagement">
+                        <i class="fas fa-file-contract"></i>Quản lý hợp đồng
+                    </a>
+                </li>
 <!--                <li class="nav-item">
                     <a class="nav-link ${pageContext.request.requestURI.contains('financialManagement') ? 'active' : ''}" 
                        href="${pageContext.request.contextPath}/financialManagement">

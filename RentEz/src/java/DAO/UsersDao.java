@@ -14,7 +14,7 @@ import java.util.Random;
 public class UsersDao {
     public boolean insert(User user) {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO [User] (Name, Email, Phone, Address, Role, Password, Avatar, status) VALUES (?, ?, ?, ?, ?, ?, ?, True)";
+        String sql = "INSERT INTO [User] (Name, Email, Phone, Address, Role, Password, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user.getName());
