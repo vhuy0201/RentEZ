@@ -6,10 +6,14 @@ package DAO;
 
 import Connection.DBConnection;
 import Model.BillDetail;
+import Model.Booking;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BillDetailDAO {
-   public boolean insert(BillDetail billDetail) {
+
+    public boolean insert(BillDetail billDetail) {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO BillDetail (BillDetailID, BillID, CategoryID, UsageValue, Amount) VALUES (?, ?, ?, ?, ?)";
         try {
@@ -83,5 +87,29 @@ public class BillDetailDAO {
             System.out.println("Error: " + e);
             return false;
         }
-    } 
+    }
+
+    public List<BillDetail> getBillDetailByBillId(int billId) {
+        Connection conn = DBConnection.getConnection();
+        List<BillDetail> billDetails = new ArrayList<>();
+        String sql = "SELECT * FROM BillDetail WHERE BillID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, billId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                BillDetail billDetail = new BillDetail();
+                billDetail.setBillDetailId(rs.getInt("BillDetailID"));
+                billDetail.setBillId(rs.getInt("BillID"));
+                billDetail.setCategoryId(rs.getInt("CategoryID"));
+                billDetail.setUsageValue(rs.getDouble("UsageValue"));
+                billDetail.setAmount(rs.getDouble("Amount"));
+                billDetails.add(billDetail);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return billDetails;
+    }
 }
