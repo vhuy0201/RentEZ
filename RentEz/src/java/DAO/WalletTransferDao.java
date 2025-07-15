@@ -32,7 +32,6 @@ public class WalletTransferDao {
                 }
                 walletTransfer.setUserID(userID);
                 walletTransfer.setAmount(rs.getDouble("Amount"));
-                walletTransfer.setContent(rs.getString("Content"));
                 walletTransfer.setIsRefunded(rs.getBoolean("IsRefunded"));
                 walletTransfers.add(walletTransfer);
             }

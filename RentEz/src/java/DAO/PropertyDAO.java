@@ -147,23 +147,6 @@ public class PropertyDAO {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, landlordId);
             ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Property property = new Property();
-                property.setPropertyId(rs.getInt("PropertyID"));
-                property.setTitle(rs.getString("Title"));
-                property.setDescription(rs.getString("Description"));
-                property.setTypeId(rs.getInt("TypeID"));
-                property.setLocationId(rs.getInt("LocationID"));
-                property.setLandlordId(rs.getInt("LandlordID"));
-                property.setPrice(rs.getDouble("Price"));
-                property.setSize(rs.getDouble("Size"));
-                property.setNumberOfBedrooms(rs.getInt("NumberOfBedrooms"));
-                property.setNumberOfBathrooms(rs.getInt("NumberOfBathrooms"));
-                property.setAvailabilityStatus(rs.getString("AvailabilityStatus"));
-                property.setPriorityLevel(rs.getInt("PriorityLevel"));
-                property.setAvatar(rs.getString("Avatar"));
-                properties.add(property);
-            }
           conn.close();
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -324,39 +307,5 @@ public class PropertyDAO {
             System.out.println("Error in getRecentProperties: " + e);
         }
         return properties;
-    }
-    
-    public int getRentedPropertiesCount() {
-        int count = 0;
-        Connection conn = DBConnection.getConnection();
-        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Rented' OR AvailabilityStatus = 'Occupied'";
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                count = rs.getInt(1);
-            }
-            conn.close();
-        } catch (Exception e) {
-            System.out.println("Error in getRentedPropertiesCount: " + e);
-        }
-        return count;
-    }
-    
-    public int getAvailablePropertiesCount() {
-        int count = 0;
-        Connection conn = DBConnection.getConnection();
-        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Available' OR AvailabilityStatus = 'Vacant'";
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                count = rs.getInt(1);
-            }
-            conn.close();
-        } catch (Exception e) {
-            System.out.println("Error in getAvailablePropertiesCount: " + e);
-        }
-        return count;
     }
 }

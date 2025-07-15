@@ -7,7 +7,7 @@ package Controller;
 import DAO.PropertyDAO;
 import DAO.PropertyTypeDAO;
 import DAO.LocationDAO;
-import DAO.UsersDao;
+import DAO.UserDao;
 import DAO.UserFavoriteDAO;
 import Model.Property;
 import Model.PropertyType;
@@ -66,7 +66,7 @@ public class HomeServlet extends HttpServlet {
      */    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UsersDao userDAO = new UsersDao();
+        UserDao userDAO = new UserDao();
         PropertyDAO propertyDAO = new PropertyDAO();
         PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
         LocationDAO locationDAO = new LocationDAO();

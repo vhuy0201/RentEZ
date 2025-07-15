@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.UsersDao;
+import DAO.UserDao;
 import Model.User;
 import Util.Common;
 import java.io.IOException;
@@ -89,7 +89,7 @@ public class ProfileServlet extends HttpServlet {
         
         // Get user from session
         User sessionUser = (User) session.getAttribute("user");
-        UsersDao userDao = new UsersDao();
+        UserDao userDao = new UserDao();
         
         // Get action parameter to determine what operation to perform
         String action = request.getParameter("action");
@@ -117,7 +117,7 @@ public class ProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void updateProfile(HttpServletRequest request, HttpServletResponse response, User user, UsersDao userDao, HttpSession session)
+    private void updateProfile(HttpServletRequest request, HttpServletResponse response, User user, UserDao userDao, HttpSession session)
             throws ServletException, IOException {
         // Get updated values from form
         String name = request.getParameter("name");
@@ -197,7 +197,7 @@ public class ProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void changePassword(HttpServletRequest request, HttpServletResponse response, User user, UsersDao userDao)
+    private void changePassword(HttpServletRequest request, HttpServletResponse response, User user, UserDao userDao)
             throws ServletException, IOException {
         // Get password values from form
         String currentPassword = request.getParameter("currentPassword");

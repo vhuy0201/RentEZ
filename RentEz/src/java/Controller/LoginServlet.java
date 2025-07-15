@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import DAO.UsersDao;
+import DAO.UserDao;
 import Model.User;
 import Util.Common;
 import jakarta.servlet.ServletException;
@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String remember = request.getParameter("remember"); // Check if "remember me" is selected
         
-        UsersDao userDao = new UsersDao();
+        UserDao userDao = new UserDao();
         User authenticatedUser = authenticateUser(userDao, email, password);
         
         if (authenticatedUser != null) {
@@ -91,11 +91,11 @@ public class LoginServlet extends HttpServlet {
       /**
      * Authenticates user credentials against the database
      * 
-     * @param userDao The UsersDao instance to use for database access
+     * @param userDao The UserDao instance to use for database access
      * @param email The email provided by the user
      * @param password The password provided by the user
      * @return User object if authentication is successful, null otherwise
-     */    private User authenticateUser(UsersDao userDao, String email, String password) {
+     */    private User authenticateUser(UserDao userDao, String email, String password) {
         // Get user by email
         User user = userDao.getByEmail(email);
         
@@ -129,7 +129,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("view/guest/page/homepage.jsp");
                 break;
             case "admin":
-                response.sendRedirect("admin/dashboard");
+                response.sendRedirect("view/admin/dashboard.jsp");
                 break;
             default:
                 // Default to home page if role is not recognized

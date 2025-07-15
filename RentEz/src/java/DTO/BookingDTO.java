@@ -4,7 +4,6 @@ import Model.Booking;
 import Model.Location;
 import Model.Property;
 import Model.User;
-import Model.PropertyType;
 import java.util.Date;
 
 /**
@@ -17,18 +16,9 @@ public class BookingDTO {
     private User landlord;
     private User renter;
     private Location location;
-    private PropertyType type;
     
     public BookingDTO() {
         
-    }
-
-    public PropertyType getType() {
-        return type;
-    }
-
-    public void setType(PropertyType type) {
-        this.type = type;
     }
     
     public BookingDTO(Booking booking) {

@@ -12,7 +12,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -355,89 +354,39 @@
                 align-items: center;
             }
 
-            /* Image Upload Styles */
-            .image-upload-container {
-                margin-bottom: 1rem;
+            .form-note {
+                background: rgba(255, 152, 0, 0.1);
+                border-left: 4px solid #ff9800;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                margin-bottom: 1.5rem;
             }
 
-            .image-upload-area {
-                border: 2px dashed #e65100;
-                border-radius: 12px;
-                padding: 3rem 2rem;
-                text-align: center;
-                background: #fff9f5;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                position: relative;
-            }
-
-            .image-upload-area:hover,
-            .image-upload-area.drag-over {
-                border-color: #ff6d00;
-                background: #fff3e0;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(230, 81, 0, 0.15);
-            }
-
-            .image-upload-content {
-                pointer-events: none;
-            }
-
-            .upload-icon {
-                font-size: 3rem;
+            .form-note-title {
+                font-weight: 700;
                 color: #e65100;
-                margin-bottom: 1rem;
-                display: block;
-            }
-
-            .image-upload-area h5 {
-                color: #e65100;
-                font-weight: 600;
                 margin-bottom: 0.5rem;
-            }
-
-            .image-preview-container {
-                position: relative;
-                display: inline-block;
-            }
-
-            .image-preview {
-                max-width: 100%;
-                max-height: 300px;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            }
-
-            .image-preview-overlay {
-                position: absolute;
-                top: 10px;
-                right: 10px;
                 display: flex;
+                align-items: center;
                 gap: 0.5rem;
             }
 
-            .current-image {
-                padding: 1rem;
-                background: #f8f9fa;
-                border-radius: 8px;
-                border: 1px solid #dee2e6;
-            }
-
-            .current-image-preview {
-                margin-top: 0.5rem;
-            }
-
-            .current-property-image {
-                max-width: 200px;
-                max-height: 150px;
-                border-radius: 8px;
-                object-fit: cover;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .image-validation-error {
+            .error {
+                color: #f44336;
                 font-size: 0.875rem;
                 margin-top: 0.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .success {
+                color: #4caf50;
+                font-size: 0.875rem;
+                margin-top: 0.5rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
             }
 
             .progress-container {
@@ -602,12 +551,17 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/customerManagement">
+                                    <a class="nav-link" href="#">
                                         <i class="fas fa-user-friends"></i>Khách hàng
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/financialManagement">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-gem"></i>Gói hội viên
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
                                         <i class="fas fa-wallet"></i>Quản lý tài chính
                                     </a>
                                 </li>
@@ -890,38 +844,32 @@
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="propertyImage" class="form-label">Hình ảnh chính</label>
-                                        <div class="image-upload-container">
-                                            <div class="image-upload-area" id="imageUploadArea">
-                                                <div class="image-upload-content">
-                                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                                    <h5>Tải lên hình ảnh chính</h5>
-                                                    <p class="text-muted">Kéo thả hoặc nhấp để chọn ảnh (JPG, PNG, tối đa 5MB)</p>
-                                                    <input type="file" id="propertyImage" name="propertyImage" accept="image/*" class="form-control d-none">
-                                                </div>
+                                        <label class="form-label">Hình ảnh chính</label>
+                                        <div class="image-upload" onclick="document.getElementById('mainImage').click()">
+                                            <input type="file" id="mainImage" name="mainImage" style="display: none;" accept="image/*">
+                                            <div class="image-upload-icon">
+                                                <i class="fas fa-cloud-upload-alt"></i>
                                             </div>
-                                            <div class="image-preview-container d-none" id="imagePreviewContainer">
-                                                <img id="imagePreview" src="" alt="Preview" class="image-preview">
-                                                <div class="image-preview-overlay">
-                                                    <button type="button" class="btn btn-sm btn-danger" id="removeImage">
-                                                        <i class="fas fa-trash"></i> Xóa
-                                                    </button>
-                                                    <button type="button" class="btn btn-sm btn-secondary" id="changeImage">
-                                                        <i class="fas fa-edit"></i> Thay đổi
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <h5>Tải lên hình ảnh chính</h5>
+                                            <p class="text-muted mb-0">Kéo thả hoặc nhấp để tải lên (JPG, PNG)</p>
                                         </div>
                                         <c:if test="${not empty property.avatar}">
-                                            <div class="current-image mt-3">
-                                                <label class="form-label">Hình ảnh hiện tại:</label>
-                                                <div class="current-image-preview">
-                                                    <img src="${pageContext.request.contextPath}/image?path=${property.avatar}" alt="Current Property Image" class="current-property-image">
-                                                </div>
-                                                <small class="text-muted">Chọn ảnh mới để thay thế ảnh hiện tại</small>
+                                            <div class="mt-2">
+                                                <p>Hình ảnh hiện tại: <a href="${property.avatar}" target="_blank">Xem ảnh</a></p>
                                             </div>
                                         </c:if>
-                                        <div class="image-validation-error text-danger d-none" id="imageError"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Hình ảnh bổ sung</label>
+                                        <div class="image-upload" onclick="document.getElementById('additionalImages').click()">
+                                            <input type="file" id="additionalImages" name="additionalImages" style="display: none;" accept="image/*" multiple>
+                                            <div class="image-upload-icon">
+                                                <i class="fas fa-images"></i>
+                                            </div>
+                                            <h5>Tải lên hình ảnh bổ sung</h5>
+                                            <p class="text-muted mb-0">Tối đa 10 hình ảnh (JPG, PNG)</p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -936,8 +884,6 @@
             </div>
         </div>
 
-
-
         <jsp:include page="/view/common/footer.jsp" />
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
         <script>
@@ -946,159 +892,6 @@
                     window.location.href = '${pageContext.request.contextPath}/logout';
                 }
             }
-
-            // Image upload functionality
-            document.addEventListener('DOMContentLoaded', function() {
-                const imageInput = document.getElementById('propertyImage');
-                const imageUploadArea = document.getElementById('imageUploadArea');
-                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-                const imagePreview = document.getElementById('imagePreview');
-                const removeImageBtn = document.getElementById('removeImage');
-                const changeImageBtn = document.getElementById('changeImage');
-                const imageError = document.getElementById('imageError');
-                const priceInput = document.getElementById('price');
-                const monthlyRentInput = document.getElementById('monthlyRent');
-                const startDateInput = document.getElementById('startDate');
-                const endDateInput = document.getElementById('endDate');
-                const totalPriceInput = document.getElementById('totalPrice');
-
-                // Initialize monthly rent from property price
-                if (priceInput && monthlyRentInput) {
-                    monthlyRentInput.value = priceInput.value;
-                    
-                    priceInput.addEventListener('input', function() {
-                        monthlyRentInput.value = this.value;
-                        calculateTotalPrice();
-                    });
-                }
-
-                // Image upload area click handler
-                imageUploadArea.addEventListener('click', function() {
-                    imageInput.click();
-                });
-
-                // Drag and drop handlers
-                imageUploadArea.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.classList.add('drag-over');
-                });
-
-                imageUploadArea.addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('drag-over');
-                });
-
-                imageUploadArea.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('drag-over');
-                    
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        handleImageUpload(files[0]);
-                    }
-                });
-
-                // File input change handler
-                imageInput.addEventListener('change', function(e) {
-                    if (e.target.files.length > 0) {
-                        handleImageUpload(e.target.files[0]);
-                    }
-                });
-
-                // Remove image handler
-                removeImageBtn.addEventListener('click', function() {
-                    resetImageUpload();
-                });
-
-                // Change image handler
-                changeImageBtn.addEventListener('click', function() {
-                    imageInput.click();
-                });
-
-                function handleImageUpload(file) {
-                    // Validate file type
-                    if (!file.type.startsWith('image/')) {
-                        showImageError('Vui lòng chọn file hình ảnh (JPG, PNG, GIF)');
-                        return;
-                    }
-
-                    // Validate file size (5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        showImageError('Kích thước file không được vượt quá 5MB');
-                        return;
-                    }
-
-                    // Show preview
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreview.src = e.target.result;
-                        imageUploadArea.classList.add('d-none');
-                        imagePreviewContainer.classList.remove('d-none');
-                        hideImageError();
-                    };
-                    reader.readAsDataURL(file);
-                }
-
-                function resetImageUpload() {
-                    imageInput.value = '';
-                    imagePreview.src = '';
-                    imagePreviewContainer.classList.add('d-none');
-                    imageUploadArea.classList.remove('d-none');
-                    hideImageError();
-                }
-
-                function showImageError(message) {
-                    imageError.textContent = message;
-                    imageError.classList.remove('d-none');
-                }
-
-                function hideImageError() {
-                    imageError.classList.add('d-none');
-                }
-
-                // Date range and price calculation
-                function calculateTotalPrice() {
-                    const startDate = startDateInput.value;
-                    const endDate = endDateInput.value;
-                    const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
-
-                    if (startDate && endDate && monthlyRent > 0) {
-                        const start = new Date(startDate);
-                        const end = new Date(endDate);
-                        
-                        if (end > start) {
-                            // Calculate number of months
-                            const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-                            const totalPrice = months * monthlyRent;
-                            totalPriceInput.value = totalPrice;
-                        } else {
-                            totalPriceInput.value = 0;
-                        }
-                    } else {
-                        totalPriceInput.value = 0;
-                    }
-                }
-
-                // Event listeners for date inputs
-                if (startDateInput && endDateInput) {
-                    startDateInput.addEventListener('change', calculateTotalPrice);
-                    endDateInput.addEventListener('change', calculateTotalPrice);
-                }
-
-                // Form submission
-                document.getElementById('submitBooking')?.addEventListener('click', function() {
-                    const form = document.getElementById('bookingForm');
-                    if (form.checkValidity()) {
-                        // Here you would normally submit the booking data to server
-                        alert('Yêu cầu xem bất động sản đã được gửi thành công!');
-                        $('#bookingModal').modal('hide');
-                        form.reset();
-                        totalPriceInput.value = 0;
-                    } else {
-                        form.reportValidity();
-                    }
-                });
-            });
         </script>
     </body>
 </html>

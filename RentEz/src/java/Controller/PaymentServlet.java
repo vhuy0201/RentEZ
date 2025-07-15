@@ -9,7 +9,7 @@ import DAO.BillDetailDAO;
 import DAO.FeeCategoryDAO;
 import DAO.PaymentDAO;
 import DAO.PropertyDAO;
-import DAO.UsersDao;
+import DAO.UserDao;
 import DAO.WalletDAO;
 import DAO.WalletTransferDao;
 import Model.Bill;
@@ -263,7 +263,7 @@ public class PaymentServlet extends HttpServlet {
             BillDetailDAO billDetailDAO = new BillDetailDAO();
             FeeCategoryDAO feeCategoryDAO = new FeeCategoryDAO();
             PropertyDAO propertyDAO = new PropertyDAO();
-            UsersDao userDAO = new UsersDao();
+            UserDao userDAO = new UserDao();
 
             Bill bill = billDAO.getById(billId);
 
@@ -391,7 +391,7 @@ public class PaymentServlet extends HttpServlet {
             WalletDAO walletDAO = new WalletDAO();
             WalletTransferDao walletTransferDAO = new WalletTransferDao();
             PropertyDAO propertyDAO = new PropertyDAO();
-            UsersDao userDAO = new UsersDao();
+            UserDao userDAO = new UserDao();
 
             // Get data
             Bill bill = billDAO.getById(billId);

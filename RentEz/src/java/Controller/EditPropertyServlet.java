@@ -4,31 +4,26 @@ import DAO.LocationDAO;
 import DAO.PropertyDAO;
 import Model.Location;
 import Model.Property;
-import Model.User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
-import java.io.File;
 import java.io.IOException;
 
 @WebServlet(name = "EditPropertyServlet", urlPatterns = {"/editProperty"})
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50)   // 50MB
 public class EditPropertyServlet extends HttpServlet {
-
-    private static final String UPLOAD_DIR = "uploads";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Kiểm tra đăng nhập và vai trò landlord
         HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("landlordId") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
         // Lấy propertyId từ query parameter
         String propertyIdStr = request.getParameter("propertyId");
@@ -55,8 +50,10 @@ public class EditPropertyServlet extends HttpServlet {
             request.getRequestDispatcher("/view/landlord/page/viewProperty.jsp").forward(request, response);
             return;
         }
-        User user = (User) session.getAttribute("user");
-        if (user.getUserId() != property.getLandlordId()) {
+
+        // Kiểm tra quyền sở hữu
+        Integer landlordId = (Integer) session.getAttribute("landlordId");
+        if (landlordId != property.getLandlordId()) {
             request.setAttribute("error", "Bạn không có quyền chỉnh sửa bất động sản này.");
             request.getRequestDispatcher("/view/landlord/page/viewProperty.jsp").forward(request, response);
             return;
@@ -84,8 +81,12 @@ public class EditPropertyServlet extends HttpServlet {
             request.setCharacterEncoding("UTF-8");
 
             HttpSession session = request.getSession(false);
+            if (session == null || session.getAttribute("landlordId") == null) {
+                response.sendRedirect(request.getContextPath() + "/login");
+                return;
+            }
+            Integer landlordId = (Integer) session.getAttribute("landlordId");
 
-            User user = (User) session.getAttribute("user");
             String propertyIdStr = request.getParameter("propertyId");
             if (propertyIdStr == null || propertyIdStr.trim().isEmpty()) {
                 request.setAttribute("error", "Không tìm thấy bất động sản.");
@@ -213,21 +214,14 @@ public class EditPropertyServlet extends HttpServlet {
             property.setDescription(description);
             property.setTypeId(typeId);
             property.setLocationId(existingProperty.getLocationId());
-            property.setLandlordId(user.getUserId());
+            property.setLandlordId(landlordId);
             property.setPrice(price);
             property.setSize(size);
             property.setNumberOfBedrooms(numberOfBedrooms);
             property.setNumberOfBathrooms(numberOfBathrooms);
             property.setAvailabilityStatus(availabilityStatus);
             property.setPriorityLevel(priorityLevel);
-            
-            // Handle image upload - keep existing image if no new image is uploaded
-            String imagePath = handleFileUpload(request);
-            if (imagePath != null) {
-                property.setAvatar(imagePath);
-            } else {
-                property.setAvatar(existingProperty.getAvatar()); // Keep existing avatar
-            }
+            property.setAvatar(null); // Cần xử lý upload hình ảnh nếu có
 
             boolean propertySuccess = propertyDAO.update(property);
             if (propertySuccess) {
@@ -254,34 +248,6 @@ public class EditPropertyServlet extends HttpServlet {
             request.setAttribute("location", location);
             request.getRequestDispatcher("/view/landlord/page/editProperty.jsp").forward(request, response);
         }
-    }
-
-    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
-        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-
-        String fileName = null;
-        for (Part part : request.getParts()) {
-            if ("propertyImage".equals(part.getName())) {
-                String submittedFileName = part.getSubmittedFileName();
-                if (submittedFileName != null && !submittedFileName.isEmpty()) {
-                    // Generate unique filename
-                    String fileExtension = "";
-                    int lastDotIndex = submittedFileName.lastIndexOf('.');
-                    if (lastDotIndex > 0) {
-                        fileExtension = submittedFileName.substring(lastDotIndex);
-                    }
-                    fileName = System.currentTimeMillis() + "_" + submittedFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-                    String filePath = uploadPath + File.separator + fileName;
-                    part.write(filePath);
-                    break;
-                }
-            }
-        }
-        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
     }
 
     @Override

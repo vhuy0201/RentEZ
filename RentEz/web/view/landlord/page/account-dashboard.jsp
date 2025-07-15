@@ -11,7 +11,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"/>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -33,6 +32,76 @@
             body {
                 background: #fafafa;
                 font-family: 'Inter', Arial, sans-serif;
+            }
+            
+            /* Sidebar với theme cam gradient */
+            .sidebar {
+                background: linear-gradient(135deg, #e65100 0%, #ff6d00 50%, #ff9800 100%);
+                color: #fff;
+                min-height: 100vh;
+                border-radius: 0 2rem 2rem 0;
+                box-shadow: 0 8px 32px rgba(230, 81, 0, 0.2);
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .sidebar::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, rgba(230, 81, 0, 0.95) 0%, rgba(255, 109, 0, 0.95) 50%, rgba(255, 152, 0, 0.95) 100%);
+                z-index: 1;
+            }
+            
+            .sidebar > * {
+                position: relative;
+                z-index: 2;
+            }
+            
+            .sidebar a {
+                color: #fff;
+                font-weight: 500;
+                border-radius: 0.75rem;
+                margin-bottom: 0.5rem;
+                transition: all 0.3s ease;
+                padding: 1rem 1.25rem;
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                border: 1px solid transparent;
+            }
+            
+            .sidebar .active {
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            }
+            
+            .sidebar a:hover {
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(10px);
+                transform: translateX(8px);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .account-avatar {
+                width: 85px;
+                height: 85px;
+                background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.95) 100%);
+                color: #e65100;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2.5rem;
+                font-weight: bold;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+                border: 4px solid rgba(255, 255, 255, 0.3);
             }
             
             .dashboard-card, .dashboard-header {
@@ -119,6 +188,16 @@
                 opacity: 1;
             }
             
+            .nav-link {
+                padding: 1rem 1.25rem;
+            }
+            
+            .nav-link i {
+                width: 22px;
+                margin-right: 0.875rem;
+                font-size: 1.1rem;
+            }
+            
             /* Card icons với theme cam */
             .card-icon {
                 width: 65px;
@@ -143,6 +222,57 @@
             
             .card-icon-tertiary {
                 background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+            }
+            
+            /* User info styling */
+            .user-info {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 1rem;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+            }
+            
+            .user-points {
+                background: rgba(255, 255, 255, 0.2);
+                padding: 0.5rem 1rem;
+                border-radius: 2rem;
+                font-size: 0.875rem;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                margin-top: 0.5rem;
+            }
+            
+            /* Responsive */
+            @media (max-width: 768px) {
+                .sidebar {
+                    border-radius: 0;
+                }
+                
+                .dashboard-header {
+                    padding: 1.5rem;
+                }
+            }
+            
+            /* Logout button styling */
+            .logout-section {
+                margin-top: auto;
+                padding-top: 2rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .logout-section a {
+                background: rgba(244, 67, 54, 0.15);
+                border: 1px solid rgba(244, 67, 54, 0.2);
+                color: #ffcdd2;
+            }
+            
+            .logout-section a:hover {
+                background: rgba(244, 67, 54, 0.25);
+                color: #fff;
+                transform: translateX(5px);
             }
             
             /* Info section styling */
@@ -175,8 +305,76 @@
     <body class="bg-gray-50">
         <div class="container-fluid">
             <div class="row">
-                <!-- Navigation -->
-                <jsp:include page="../common/navigation.jsp" />
+                <!-- Sidebar với theme cam gradient -->
+                <aside class="col-md-3 col-lg-2 d-none d-md-block sidebar py-4">
+                    <div class="d-flex flex-column h-100">
+                        <!-- User Profile Section -->
+                        <div class="text-center user-info">
+                            <div class="account-avatar mx-auto mb-3">T</div>
+                            <div class="fw-bold fs-5 mb-2">Dũng Trần</div>
+                            <div class="user-points">
+                                <i class="fas fa-star me-2"></i>0 điểm
+                            </div>
+                        </div>
+                        
+                        <!-- Navigation Menu -->
+                        <nav class="flex-grow-1">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/HomeServlet">
+                                        <i class="fas fa-home"></i>Trang chủ
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">
+                                        <i class="fas fa-tachometer-alt"></i>Tổng quan
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/viewProperties">
+                                        <i class="fas fa-list"></i>Quản lý tin đăng
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="${pageContext.request.contextPath}/addProperty">
+                                        <i class="fas fa-plus"></i>Đăng tin mới
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-user-friends"></i>Khách hàng
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-gem"></i>Gói hội viên
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-wallet"></i>Quản lý tài chính
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-cog"></i>Cài đặt tài khoản
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        
+                        <!-- Logout Button -->
+                        <div class="logout-section">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" onclick="confirmLogout()">
+                                        <i class="fas fa-sign-out-alt"></i>Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </aside>
                 
                 <!-- Main content -->
                 <main class="col-md-9 col-lg-10 ms-sm-auto px-4 py-4">

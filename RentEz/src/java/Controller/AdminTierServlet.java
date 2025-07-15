@@ -4,6 +4,7 @@ import DAO.TierDAO;
 import DAO.UserTierDAO;
 import Model.Tier;
 import Model.User;
+import Model.UserTier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

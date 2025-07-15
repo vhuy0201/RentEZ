@@ -6,7 +6,6 @@ import DAO.PropertyDAO;
 import Model.Booking;
 import Model.Location;
 import Model.Property;
-import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,6 +32,10 @@ public class AddPropertyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("landlordId") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
     }
 
@@ -42,8 +45,12 @@ public class AddPropertyServlet extends HttpServlet {
         try {
             // Get session to retrieve LandlordID
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-
+            Integer landlordId = (Integer) session.getAttribute("landlordId");
+            if (landlordId == null) {
+                request.setAttribute("error", "You must be logged in as a landlord to add a property.");
+                request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
+                return;
+            }
             // Get parameters from the form
             String title = request.getParameter("title");
             String description = request.getParameter("description");
@@ -59,9 +66,19 @@ public class AddPropertyServlet extends HttpServlet {
             int numberOfBathrooms = Integer.parseInt(request.getParameter("numberOfBathrooms"));
             String availabilityStatus = request.getParameter("availabilityStatus");
             int priorityLevel = Integer.parseInt(request.getParameter("priorityLevel"));
-
-            // Handle image upload
-            String imagePath = handleFileUpload(request);
+// Xử lý ảnh
+//            String image = handleFileUpload(request);
+//            Part filePart = request.getPart("image");
+//            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+//            String uploadPath = getServletContext().getRealPath("/") + "view/guest/asset/img";
+//
+//            File uploadDir = new File(uploadPath);
+//            if (!uploadDir.exists()) {
+//                uploadDir.mkdir();
+//            }
+//
+//            String filePath = uploadPath + File.separator + fileName;
+//            filePart.write(filePath);
 
             // Create and save Location
             Location location = new Location();
@@ -84,14 +101,14 @@ public class AddPropertyServlet extends HttpServlet {
             property.setDescription(description);
             property.setTypeId(typeId); // TypeID from form, assumed to reference PropertyType table
             property.setLocationId(locationId); // Newly created LocationID
-            property.setLandlordId(user.getUserId()); // From session
+            property.setLandlordId(landlordId); // From session
             property.setPrice(price);
             property.setSize(size);
             property.setNumberOfBedrooms(numberOfBedrooms);
             property.setNumberOfBathrooms(numberOfBathrooms);
             property.setAvailabilityStatus(availabilityStatus);
             property.setPriorityLevel(priorityLevel);
-            property.setAvatar(imagePath);
+            property.setAvatar(null);
 
             // Insert the property using PropertyDAO
             PropertyDAO propertyDAO = new PropertyDAO();
@@ -149,33 +166,24 @@ public class AddPropertyServlet extends HttpServlet {
         }
     }
 
-    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
-        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-
-        String fileName = null;
-        for (Part part : request.getParts()) {
-            if ("propertyImage".equals(part.getName())) {
-                String submittedFileName = part.getSubmittedFileName();
-                if (submittedFileName != null && !submittedFileName.isEmpty()) {
-                    // Generate unique filename
-                    String fileExtension = "";
-                    int lastDotIndex = submittedFileName.lastIndexOf('.');
-                    if (lastDotIndex > 0) {
-                        fileExtension = submittedFileName.substring(lastDotIndex);
-                    }
-                    fileName = System.currentTimeMillis() + "_" + submittedFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-                    String filePath = uploadPath + File.separator + fileName;
-                    part.write(filePath);
-                    break;
-                }
-            }
-        }
-        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
-    }
+//    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
+//        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+//        File uploadDir = new File(uploadPath);
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdir();
+//        }
+//
+//        String fileName = null;
+//        for (Part part : request.getParts()) {
+//            String submittedFileName = part.getSubmittedFileName();
+//            if (submittedFileName != null && !submittedFileName.isEmpty()) {
+//                fileName = System.currentTimeMillis() + "_" + submittedFileName;
+//                part.write(new File(uploadPath + File.separator + fileName));
+//                break; // Only handle the first file for simplicity
+//            }
+//        }
+//        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
+//    }
     @Override
     public String getServletInfo() {
         return "Add Property Servlet handles property creation with type, location, and landlord details.";

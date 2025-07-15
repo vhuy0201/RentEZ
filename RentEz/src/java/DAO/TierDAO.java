@@ -156,19 +156,4 @@ public class TierDAO {
             return false;
         }
     }
-    
-    public boolean deleteTier(int tierId) {
-        Connection conn = DBConnection.getConnection();
-        String sql = "UPDATE Tier SET Status = 'inactive' WHERE TierID = ?";
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, tierId);
-            int rows = pstmt.executeUpdate();
-            conn.close();
-            return rows > 0;
-        } catch (Exception e) {
-            System.out.println("Error in deleteTier: " + e);
-            return false;
-        }
-    }
 }

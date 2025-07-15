@@ -485,29 +485,23 @@
                                                     <label class="form-label">Tiền thuê hàng tháng:</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text">₫</span>
-                                                        <input type="text" class="form-control" id="monthlyRentDisplay" 
-                                                               value="<fmt:formatNumber value='${property.price}' type='number' groupingUsed='true'/>" readonly>
-                                                        <input type="hidden" id="monthlyRent" name="monthlyRent" value="${property.price}">
+                                                        <input type="number" class="form-control" id="monthlyRent" name="monthlyRent" 
+                                                               value="${property.price}" readonly>
                                                     </div>
                                                 </div>                                                <div class="mb-3">
                                                     <label class="form-label">Tiền cọc:</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text">₫</span>
-                                                        <input type="text" class="form-control" id="depositAmountDisplay" 
-                                                               value="<fmt:formatNumber value='${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : property.price}' type='number' groupingUsed='true'/>" readonly>
-                                                        <input type="hidden" id="depositAmount" name="depositAmount" 
-                                                               value="${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : property.price}">
+                                                        <input type="number" class="form-control" id="depositAmount" name="depositAmount" 
+                                                               value="${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : ''}" 
+                                                               readonly>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label fw-bold">Tổng tiền cần thanh toán:</label>
                                                     <div class="input-group">
                                                         <span class="input-group-text">₫</span>
-                                                        <input type="text" class="form-control fw-bold text-success" id="totalPriceDisplay" readonly>
-                                                        <input type="hidden" id="totalPrice" name="totalPrice">
-                                                    </div>
-                                                    <div class="form-text text-muted">
-                                                        <small>Tổng tiền = Tiền thuê hàng tháng + Tiền cọc</small>
+                                                        <input type="number" class="form-control fw-bold text-success" id="totalPrice" name="totalPrice" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -638,20 +632,12 @@
                                                     const monthlyRentInput = document.getElementById('monthlyRent');
                                                     const depositAmountInput = document.getElementById('depositAmount');
                                                     const totalPriceInput = document.getElementById('totalPrice');
-                                                    const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
 
                                                     function calculateTotalPrice() {
                                                         const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
                                                         const depositAmount = parseFloat(depositAmountInput.value) || 0;
                                                         const totalPrice = monthlyRent + depositAmount;
-                                                        
-                                                        // Update hidden field value
                                                         totalPriceInput.value = totalPrice;
-                                                        
-                                                        // Update display field with formatted number
-                                                        if (totalPriceDisplayInput) {
-                                                            totalPriceDisplayInput.value = totalPrice.toLocaleString('vi-VN');
-                                                        }
                                                     }
 
                                                     // Set minimum dates for rental period
@@ -674,17 +660,12 @@
                                                                     });
                                                                 }
 
-                                                                // Calculate total price when modal is shown (initial calculation)
-                                                                // Remove the deposit amount input listener since it's now readonly
-                                                                
-                                                                // Initial calculation when modal opens
-                                                                if (rentalBookingModal) {
-                                                                    rentalBookingModal.addEventListener('shown.bs.modal', function () {
-                                                                        calculateTotalPrice();
-                                                                    });
+                                                                // Calculate total price when deposit amount changes
+                                                                if (depositAmountInput) {
+                                                                    depositAmountInput.addEventListener('input', calculateTotalPrice);
                                                                 }
 
-                                                                // Also calculate on page load
+                                                                // Initial calculation
                                                                 calculateTotalPrice();
 
                                                                 // Rental form validation and submission
