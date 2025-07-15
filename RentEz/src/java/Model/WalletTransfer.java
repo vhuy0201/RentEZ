@@ -1,5 +1,4 @@
 package Model;
-
 public class WalletTransfer {
     private String transCode, timeCode, content;
     private int userID, walletTransferID;
