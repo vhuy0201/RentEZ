@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.Date;
-import java.util.List;
 
 public class Bill {
 
@@ -9,20 +8,15 @@ public class Bill {
     private int propertyId;
     private int renterId;
     private String billingPeriod;
-    private Double totalAmount;
+    private double totalAmount;
     private Date dueDate;
-    private String status; // 'Pending', 'Paid', 'Unpaid', 'Overdue'
-    
-    // Additional properties for display purposes
-    private List<BillDetail> billDetails;
-    private Property property;
-    private String renterName;
+    private String status; // 'Pending', 'Paid'
 
     // Constructors
     public Bill() {
     }
 
-    public Bill(int billId, int propertyId, int renterId, String billingPeriod, Double totalAmount, Date dueDate, String status) {
+    public Bill(int billId, int propertyId, int renterId, String billingPeriod, double totalAmount, Date dueDate, String status) {
         this.billId = billId;
         this.propertyId = propertyId;
         this.renterId = renterId;
@@ -65,15 +59,10 @@ public class Bill {
         this.billingPeriod = billingPeriod;
     }
 
-    public Double getTotalAmount() {
+    public double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-    
-    // Legacy method for backward compatibility
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
@@ -92,29 +81,5 @@ public class Bill {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public List<BillDetail> getBillDetails() {
-        return billDetails;
-    }
-
-    public void setBillDetails(List<BillDetail> billDetails) {
-        this.billDetails = billDetails;
-    }
-
-    public Property getProperty() {
-        return property;
-    }
-
-    public void setProperty(Property property) {
-        this.property = property;
-    }
-    
-    public String getRenterName() {
-        return renterName;
-    }
-    
-    public void setRenterName(String renterName) {
-        this.renterName = renterName;
     }
 }

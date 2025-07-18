@@ -1,22 +1,18 @@
 package Model;
 
-
 public class BillDetail {
 
     private int billDetailId;
     private int billId;
     private int categoryId;
-    private Double usageValue;
-    private Double amount;
-    
-    // Additional property for display purposes
-    private FeeCategory feeCategory;
+    private double usageValue;
+    private double amount;
 
     // Constructors
     public BillDetail() {
     }
 
-    public BillDetail(int billDetailId, int billId, int categoryId, Double usageValue, Double amount) {
+    public BillDetail(int billDetailId, int billId, int categoryId, double usageValue, double amount) {
         this.billDetailId = billDetailId;
         this.billId = billId;
         this.categoryId = categoryId;
@@ -49,37 +45,19 @@ public class BillDetail {
         this.categoryId = categoryId;
     }
 
-    public Double getUsageValue() {
+    public double getUsageValue() {
         return usageValue;
     }
 
-    public void setUsageValue(Double usageValue) {
+    public void setUsageValue(double usageValue) {
         this.usageValue = usageValue;
     }
-    
-    // Legacy method for backward compatibility
-    public void setUsageValue(double usageValue) {
-        this.usageValue = Double.valueOf(usageValue);
-    }
 
-    public Double getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-    
-    // Legacy method for backward compatibility
     public void setAmount(double amount) {
-        this.amount = Double.valueOf(amount);
-    }
-
-    public FeeCategory getFeeCategory() {
-        return feeCategory;
-    }
-
-    public void setFeeCategory(FeeCategory feeCategory) {
-        this.feeCategory = feeCategory;
+        this.amount = amount;
     }
 }

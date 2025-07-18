@@ -3,45 +3,22 @@
 <%@ page import="Model.User" %>
 <%@ page import="Model.UserTier" %>
 <%@ page import="DAO.UserTierDAO" %>
-<%@ page import="DAO.NotificationDAO" %>
 
 <%
     // Get the current user from session
     User currentUser = (User) session.getAttribute("user");
     UserTier userTier = null;
-    int unreadNotificationCount = 0;
     
-    // If user is logged in, get their membership tier info and notification count
+    // If user is logged in, get their membership tier info
     if (currentUser != null) {
         try {
             UserTierDAO userTierDAO = new UserTierDAO();
             userTier = userTierDAO.getByUserId(currentUser.getUserId());
-            
-            NotificationDAO notificationDAO = new NotificationDAO();
-            unreadNotificationCount = notificationDAO.getUnreadCount(currentUser.getUserId());
         } catch (Exception e) {
-            System.out.println("Error in header: " + e.getMessage());
+            System.out.println("Error getting user tier: " + e.getMessage());
         }
     }
 %>
-<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ sơ người dùng - RentEz</title>
-     <link
-      rel="shortcut icon"
-      href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png"
-    />
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/bootstrap.min.css" />
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css" />
-    <!-- Line awesome -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css" />
-    <!-- Main stylesheet -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css" />
-    
-    <!-- Vietnamese Fonts -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css" />
 
 <header class="header">
     <div class="container container-two">
@@ -55,16 +32,10 @@
                 <ul class="nav-menu flx-align">
                     <li class="nav-menu__item">
                         <a class="nav-menu__link" href="${pageContext.request.contextPath}/">Trang chủ</a>
-                    </li>                    <li class="nav-menu__item">
+                    </li>
+                    <li class="nav-menu__item">
                         <a class="nav-menu__link" href="${pageContext.request.contextPath}/search">Bất động sản</a>
                     </li>
-                    <c:if test="${not empty sessionScope.user}">
-                        <li class="nav-menu__item">
-                            <a class="nav-menu__link" href="${pageContext.request.contextPath}/favorites">
-                                <i class="fas fa-heart"></i> Yêu thích
-                            </a>
-                        </li>
-                    </c:if>
                     <li class="nav-menu__item">
                         <a class="nav-menu__link" href="${pageContext.request.contextPath}/about">Giới thiệu</a>
                     </li>
@@ -73,22 +44,13 @@
                     </li>
                 </ul>
             </div>
-            <div class="header-right flx-align">                <c:choose>
+            <div class="header-right flx-align">
+                <c:choose>
                     <c:when test="${empty sessionScope.user}">
                         <!-- Show login button if user is not logged in -->
                         <a class="btn btn-main d-lg-block d-none" href="${pageContext.request.contextPath}/login">Đăng nhập</a>
                     </c:when>
                     <c:otherwise>
-                        <!-- Notification Bell -->
-                        <div class="notification-bell">
-                            <a href="${pageContext.request.contextPath}/notifications" class="notification-icon">
-                                <i class="fas fa-bell"></i>
-                                <c:if test="${unreadNotificationCount > 0}">
-                                    <span class="notification-badge">${unreadNotificationCount}</span>
-                                </c:if>
-                            </a>
-                        </div>
-                        
                         <!-- Show user avatar and dropdown if user is logged in -->
                         <div class="user-dropdown">
                             <div class="user-dropdown__toggle">                                <span class="user-avatar">
@@ -113,19 +75,29 @@
                                     <p>Tiết kiệm đến 39% so với đăng tin riêng lẻ</p>
                                     <a href="${pageContext.request.contextPath}/membership" class="text-link">Tìm hiểu thêm</a>
                                 </div>
-                                  <!-- User menu items -->                                <ul class="user-menu">                                  <li>
+                                  <!-- User menu items -->                                <ul class="user-menu">
+                                  <li>
                                         <c:choose>
-                                            <c:when test="${sessionScope.user.role == 'Landlord'}">
-                                                <a href="${pageContext.request.contextPath}/landLordHomeServlet">
+                                            <c:when test="${sessionScope.user.role == 'landlord'}">
+                                                <a href="/view/landlord/account-dashboard.jsp">
                                                     <i class="fas fa-columns"></i> Bảng điều khiển
                                                 </a>
                                             </c:when>
+                                            <c:when test="${sessionScope.user.role == 'renter'}">
+                                                <a href="${pageContext.request.contextPath}/renter/account-dashboard.jsp">
+                                                    <i class="fas fa-columns"></i> Bảng điều khiển
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="${pageContext.request.contextPath}/account-dashboard.jsp">
+                                                    <i class="fas fa-columns"></i> Bảng điều khiển
+                                                </a>
+                                            </c:otherwise>
                                         </c:choose>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/view-contracts"><i class="fas fa-file-contract"></i> Hợp đồng thuê</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/payments"><i class="fas fa-credit-card"></i> Thanh toán</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/ratings"><i class="fas fa-star"></i> Đánh giá</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/dashboard"><i class="fas fa-columns"></i> Bảng điều khiển</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
                                     <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a></li>
                                     <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ</a></li>
                                     <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>
@@ -145,58 +117,10 @@
     </div>
 </header>
 
-<style>    /* Set gradient color variable for consistency */
+<style>
+    /* Set gradient color variable for consistency */
     :root {
         --gradient-one: linear-gradient(135deg, #ffaa00 0%, #ffcb66 100%);
-    }
-    
-    /* Notification Bell Styles */
-    .notification-bell {
-        margin-right: 15px;
-        position: relative;
-    }
-    
-    .notification-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.1);
-        transition: all 0.3s;
-    }
-    
-    .notification-icon:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .notification-icon i {
-        font-size: 18px;
-        color: currentColor;
-    }
-    
-    .notification-badge {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background-color: #ff3838;
-        color: #fff;
-        border-radius: 50%;
-        font-size: 10px;
-        width: 18px;
-        height: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
     }
 
     /* User dropdown styles */
@@ -336,17 +260,15 @@
     }
 </style>
 
-<script>    // Add Font Awesome if not already included
+<script>
+    // Add Font Awesome if not already included
     if (!document.getElementById('fontawesome-css')) {
         var fontAwesome = document.createElement('link');
         fontAwesome.id = 'fontawesome-css';
         fontAwesome.rel = 'stylesheet';
         fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
         document.head.appendChild(fontAwesome);
-    }
-    
-    // Set global context path for notifications.js
-    window.contextPath = '${pageContext.request.contextPath}';// Enhanced dropdown behavior 
+    }    // Enhanced dropdown behavior 
     document.addEventListener('DOMContentLoaded', function () {
         var userDropdown = document.querySelector('.user-dropdown');
         var dropdownMenu = document.querySelector('.user-dropdown__menu');
@@ -376,9 +298,7 @@
                     dropdownMenu.style.visibility = 'hidden';
                     dropdownMenu.style.opacity = '0';
                 }
-            });        }
+            });
+        }
     });
 </script>
-
-<!-- Load notification system -->
-<script src="${pageContext.request.contextPath}/view/guest/asset/js/notifications.js"></script>

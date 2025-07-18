@@ -5,290 +5,189 @@
     <head>
         <title>Quản lý tài khoản - RentEz</title>
         <!-- Sử dụng lại các file css của homepage.jsp -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="shortcut icon" href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"/>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
-        <!-- Tailwind CSS -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            'orange-dark': '#e65100',
-                            'orange-primary': '#ff6d00',
-                            'orange-light': '#ff9800',
-                            'orange-lighter': '#ffb74d',
-                            'orange-lightest': '#ffe0b2'
-                        }
-                    }
-                }
-            }
-        </script>
         <style>
             body {
-                background: #fafafa;
+                background: #f5f7fa;
                 font-family: 'Inter', Arial, sans-serif;
             }
-            
+            .sidebar {
+                background: linear-gradient(135deg, #8556f0 0%, #439beb 100%);
+                color: #fff;
+                min-height: 100vh;
+                border-radius: 0 2rem 2rem 0;
+                box-shadow: 0 0 2rem #0001;
+            }
+            .sidebar a {
+                color: #fff;
+                font-weight: 500;
+                border-radius: 0.5rem;
+                margin-bottom: 0.25rem;
+                transition: background 0.2s;
+            }
+            .sidebar .active, .sidebar a:hover {
+                background: rgba(255,255,255,0.12);
+            }
+            .account-avatar {
+                width: 64px;
+                height: 64px;
+                background: linear-gradient(135deg, #8556f0 0%, #439beb 100%);
+                color: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                font-weight: bold;
+                box-shadow: 0 2px 8px #0002;
+            }
             .dashboard-card, .dashboard-header {
-                border-radius: 1.5rem;
+                border-radius: 1rem;
                 border: none;
-                box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+                box-shadow: 0 2px 12px #0001;
                 background: #fff;
-                transition: all 0.3s ease;
-                border-left: 4px solid transparent;
             }
-            
-            .dashboard-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-                border-left: 4px solid #ff6d00;
-            }
-            
             .dashboard-header {
-                padding: 2rem 2.5rem;
+                padding: 1.5rem 2rem;
                 margin-bottom: 2rem;
-                border-left: 6px solid #e65100;
-                background: linear-gradient(135deg, #fff 0%, #fff8f0 100%);
             }
-            
             .dashboard-section-title {
-                font-size: 1.875rem;
+                font-size: 1.5rem;
                 font-weight: 700;
-                color: #1a1a1a;
-                margin-bottom: 0.5rem;
+                color: #1a1f2a;
             }
-            
             .dashboard-section-subtitle {
-                font-size: 0.95rem;
-                color: #e65100;
+                font-size: 1rem;
+                color: #8556f0;
                 font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1px;
             }
-            
             .text-gradient {
-                background: linear-gradient(90deg, #e65100 0%, #ff6d00 50%, #ff9800 100%);
+                background: linear-gradient(90deg, #8556f0 0%, #439beb 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-                background-clip: text;
-                font-weight: 600;
             }
-            
             .btn-main {
-                background: linear-gradient(135deg, #e65100 0%, #ff6d00 50%, #ff9800 100%);
+                background: linear-gradient(90deg, #8556f0 0%, #439beb 100%);
                 color: #fff;
                 border: none;
-                border-radius: 0.75rem;
+                border-radius: 0.5rem;
                 font-weight: 600;
-                padding: 0.875rem 1.75rem;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 20px rgba(230, 81, 0, 0.3);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                font-size: 0.875rem;
+                transition: background 0.2s;
             }
-            
             .btn-main:hover {
-                background: linear-gradient(135deg, #bf360c 0%, #e65100 50%, #ff6d00 100%);
-                transform: translateY(-3px);
-                box-shadow: 0 8px 30px rgba(230, 81, 0, 0.4);
-                color: #fff;
+                background: linear-gradient(90deg, #439beb 0%, #8556f0 100%);
             }
-            
             .success-message {
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+                background: linear-gradient(90deg, #28a745 0%, #34c759 100%);
                 color: #fff;
-                padding: 1rem 1.5rem;
-                border-radius: 0.75rem;
-                box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                 z-index: 1000;
                 opacity: 0;
                 transition: opacity 0.5s;
             }
-            
             .success-message.show {
                 opacity: 1;
             }
-            
-            /* Card icons với theme cam */
-            .card-icon {
-                width: 65px;
-                height: 65px;
-                border-radius: 1.25rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.5rem;
-                color: #fff;
-                margin-right: 1.25rem;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            }
-            
-            .card-icon-primary {
-                background: linear-gradient(135deg, #e65100 0%, #ff6d00 100%);
-            }
-            
-            .card-icon-secondary {
-                background: linear-gradient(135deg, #ff6d00 0%, #ff9800 100%);
-            }
-            
-            .card-icon-tertiary {
-                background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
-            }
-            
-            /* Info section styling */
-            .info-section {
-                background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
-                border: 1px solid #ffe0b2;
-            }
-            
-            .info-item {
-                padding: 0.75rem 0;
-                border-bottom: 1px solid #ffe0b2;
-            }
-            
-            .info-item:last-child {
-                border-bottom: none;
-            }
-            
-            .info-bullet {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #e65100 0%, #ff9800 100%);
-                margin-right: 1rem;
-                margin-top: 0.5rem;
-                flex-shrink: 0;
+            .nav-link {
+                padding: 0.75rem 1rem;
             }
         </style>
-        
     </head>
-    <body class="bg-gray-50">
+    <body>
         <div class="container-fluid">
             <div class="row">
-                <!-- Navigation -->
-                <jsp:include page="../common/navigation.jsp" />
-                
+                <!-- Sidebar -->
+                <aside class="col-md-2 d-none d-md-block sidebar py-4">
+                    <div class="text-center mb-4">
+                        <div class="account-avatar mx-auto mb-2">T</div>
+                        <div><strong>Dũng Trần</strong></div>
+                        <div class="small">0 điểm</div>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item w-100"><a class="nav-link active" href="#"><i class="fas fa-tachometer-alt me-2"></i>Tổng quan</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="${pageContext.request.contextPath}/viewProperties"><i class="fas fa-list me-2"></i>Quản lý tin đăng</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="${pageContext.request.contextPath}/addProperty"><i class="fas fa-plus me-2"></i>Đăng tin</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="#"><i class="fas fa-user-friends me-2"></i>Khách hàng</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="#"><i class="fas fa-gem me-2"></i>Gói hội viên</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="#"><i class="fas fa-wallet me-2"></i>Quản lý tài chính</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="#"><i class="fas fa-cog me-2"></i>Cài đặt tài khoản</a></li>
+                        <li class="nav-item w-100"><a class="nav-link" href="#"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+                    </ul>
+                </aside>
                 <!-- Main content -->
-                <main class="col-md-9 col-lg-10 ms-sm-auto px-4 py-4">
-                    <!-- Header -->
+                <main class="col-lg-9">
                     <div class="dashboard-header d-flex flex-wrap justify-content-between align-items-center">
                         <div>
-                            <div class="dashboard-section-subtitle mb-2">Kênh thông tin bất động sản</div>
+                            <div class="dashboard-section-subtitle">Kênh thông tin bất động sản</div>
                             <div class="dashboard-section-title">Quản lý tài khoản</div>
                         </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
-                            <a href="#" class="btn btn-main">
-                                <i class="fas fa-plus me-2"></i>Nạp tiền
-                            </a>
+                        <div>
+                            <span class="me-3">Xin chào, <strong>Dũng Trần</strong></span>
+                            <a href="#" class="btn btn-main btn-sm">Nạp tiền</a>
                         </div>
                     </div>
-                    
                     <!-- Success message -->
                     <c:if test="${not empty sessionScope.successMessage}">
                         <div class="success-message" id="successMessage">
-                            <i class="fas fa-check-circle me-2"></i>
                             ${sessionScope.successMessage}
                         </div>
                     </c:if>
-                    
-                    <!-- Dashboard Cards -->
-                    <div class="row g-4 mb-5">
+                    <!-- Tổng quan -->
+                    <div class="row g-4 mb-4">
                         <div class="col-md-4">
-                            <div class="dashboard-card p-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon card-icon-primary">
-                                        <i class="fas fa-file-alt"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-bold fs-5 mb-1 text-dark">Tin đăng</div>
-                                        <div class="text-muted mb-2">0 tin đang hiển thị</div>
-                                        <a href="#" class="btn btn-link p-0 text-gradient fw-semibold text-decoration-none">
-                                            <i class="fas fa-plus me-1"></i>Đăng tin mới
-                                        </a>
-                                    </div>
+                            <div class="dashboard-card p-4 d-flex align-items-center gap-3">
+                                <div><i class="fas fa-file-alt text-gradient" style="font-size:2rem;"></i></div>
+                                <div>
+                                    <div class="fw-bold">Tin đăng</div>
+                                    <div>0 tin đang hiển thị</div>
+                                    <a href="#" class="btn btn-link p-0 mt-2 text-gradient">Đăng tin mới</a>
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="col-md-4">
-                            <div class="dashboard-card p-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon card-icon-secondary">
-                                        <i class="fas fa-users"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-bold fs-5 mb-1 text-dark">Liên hệ 30 ngày</div>
-                                        <div class="text-muted mb-1">0 người</div>
-                                        <div class="text-success small fw-semibold">
-                                            <i class="fas fa-arrow-up me-1"></i>+0 mới hôm nay
-                                        </div>
-                                    </div>
+                            <div class="dashboard-card p-4 d-flex align-items-center gap-3">
+                                <div><i class="fas fa-users text-gradient" style="font-size:2rem;"></i></div>
+                                <div>
+                                    <div class="fw-bold">Liên hệ 30 ngày</div>
+                                    <div>0 người</div>
+                                    <div class="text-success small">+0 mới hôm nay</div>
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="col-md-4">
-                            <div class="dashboard-card p-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon card-icon-tertiary">
-                                        <i class="fas fa-wallet"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="fw-bold fs-5 mb-1 text-dark">Số dư tài khoản</div>
-                                        <div class="text-muted mb-2">0 đ</div>
-                                        <a href="#" class="btn btn-link p-0 text-gradient fw-semibold text-decoration-none">
-                                            <i class="fas fa-credit-card me-1"></i>Nạp tiền
-                                        </a>
-                                    </div>
+                            <div class="dashboard-card p-4 d-flex align-items-center gap-3">
+                                <div><i class="fas fa-wallet text-gradient" style="font-size:2rem;"></i></div>
+                                <div>
+                                    <div class="fw-bold">Số dư tài khoản</div>
+                                    <div>0 đ</div>
+                                    <a href="#" class="btn btn-link p-0 mt-2 text-gradient">Nạp tiền</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
                     <!-- Thông tin dành riêng cho bạn -->
-                    <div class="dashboard-card info-section mb-4">
-                        <div class="p-4">
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="card-icon card-icon-primary me-3" style="width: 55px; height: 55px; font-size: 1.25rem;">
-                                    <i class="fas fa-info-circle"></i>
-                                </div>
-                                <div class="dashboard-section-subtitle mb-0">Thông tin dành riêng cho bạn</div>
-                            </div>
-                            <div class="ps-4">
-                                <div class="info-item d-flex align-items-start">
-                                    <div class="info-bullet"></div>
-                                    <span>Bạn chưa có tin đăng nào. 
-                                        <a href="#" class="text-gradient fw-semibold text-decoration-none">
-                                            Tạo tin đăng đầu tiên
-                                        </a>
-                                    </span>
-                                </div>
-                                <div class="info-item d-flex align-items-start">
-                                    <div class="info-bullet"></div>
-                                    <span>Chưa có liên hệ mới trong 30 ngày qua.</span>
-                                </div>
-                                <div class="info-item d-flex align-items-start">
-                                    <div class="info-bullet"></div>
-                                    <span>Hãy cập nhật thông tin cá nhân để tăng uy tín.</span>
-                                </div>
-                            </div>
+                    <div class="dashboard-card mb-4">
+                        <div class="p-3 fw-bold dashboard-section-subtitle">Thông tin dành riêng cho bạn</div>
+                        <div class="p-3">
+                            <ul>
+                                <li>Bạn chưa có tin đăng nào. <a href="#" class="text-gradient">Tạo tin đăng đầu tiên</a></li>
+                                <li>Chưa có liên hệ mới trong 30 ngày qua.</li>
+                                <li>Hãy cập nhật thông tin cá nhân để tăng uy tín.</li>
+                            </ul>
                         </div>
                     </div>
                 </main>
             </div>
         </div>
-        
         <!-- Bootstrap JS -->
         <jsp:include page="/view/common/footer.jsp" />
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
@@ -313,14 +212,7 @@
                     }).catch(error => console.error('Error cleaning session:', error));
                 }
             });
-            
-            // Confirm logout function
-            function confirmLogout() {
-                if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                    // Add your logout logic here
-                    window.location.href = '${pageContext.request.contextPath}/logout';
-                }
-            }
         </script>
+        <script src="${pageContext.request.contextPath}/view/landlord/asset/fontAwesome.js"></script>
     </body>
 </html>

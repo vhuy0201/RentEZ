@@ -4,15 +4,12 @@ import DAO.LocationDAO;
 import DAO.PropertyDAO;
 import DAO.PropertyImageDAO;
 import DAO.PropertyTypeDAO;
-import DAO.UsersDao;
-import DAO.BookingDAO;
-import DAO.UserFavoriteDAO;
+import DAO.UserDao;
 import Model.Location;
 import Model.Property;
 import Model.PropertyImage;
 import Model.PropertyType;
 import Model.User;
-import Model.Booking;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -20,7 +17,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "PropertyDetailServlet", urlPatterns = {"/property-detail"})
 public class PropertyDetailServlet extends HttpServlet {
@@ -40,13 +36,13 @@ public class PropertyDetailServlet extends HttpServlet {
         
         try {
             int propertyId = Integer.parseInt(propertyIdStr);
-              // Khởi tạo các DAO
+            
+            // Khởi tạo các DAO
             PropertyDAO propertyDAO = new PropertyDAO();
             LocationDAO locationDAO = new LocationDAO();
             PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
             PropertyImageDAO propertyImageDAO = new PropertyImageDAO();
-            UsersDao userDAO = new UsersDao();
-            BookingDAO bookingDAO = new BookingDAO();
+            UserDao userDAO = new UserDao();
             
             // Lấy thông tin chi tiết bất động sản
             Property property = propertyDAO.getById(propertyId);
@@ -70,41 +66,12 @@ public class PropertyDetailServlet extends HttpServlet {
             // Lấy thông tin của chủ nhà
             User landlord = userDAO.getById(property.getLandlordId());
             
-            // Lấy booking template của property (booking đã được landlord tạo sẵn)
-            Booking propertyBookingTemplate = null;
-            List<Booking> propertyBookings = bookingDAO.getBookingsByPropertyId(propertyId);
-            
-            // Tìm booking template (booking mà landlord đã signed và có status là "Template" hoặc booking đầu tiên)
-            for (Booking booking : propertyBookings) {
-                if ("Template".equals(booking.getStatus()) || 
-                    (booking.isSignedByLandlord() && !booking.isSignedByRenter())) {
-                    propertyBookingTemplate = booking;
-                    break;
-                }
-            }
-              // Nếu không có template, lấy booking đầu tiên làm template
-            if (propertyBookingTemplate == null && !propertyBookings.isEmpty()) {
-                propertyBookingTemplate = propertyBookings.get(0);
-            }
-
-            // Check if user is logged in and if property is favorited
-            HttpSession session = request.getSession();
-            User currentUser = (User) session.getAttribute("user");
-            boolean isFavorited = false;
-            
-            if (currentUser != null) {
-                UserFavoriteDAO favoriteDAO = new UserFavoriteDAO();
-                isFavorited = favoriteDAO.isFavorited(currentUser.getUserId(), propertyId);
-            }
-              
             // Lưu thông tin vào request
             request.setAttribute("property", property);
             request.setAttribute("location", location);
             request.setAttribute("propertyType", propertyType);
             request.setAttribute("propertyImages", propertyImages);
             request.setAttribute("landlord", landlord);
-            request.setAttribute("propertyBookingTemplate", propertyBookingTemplate);
-            request.setAttribute("isFavorited", isFavorited);
             
             // Chuyển hướng đến trang chi tiết bất động sản
             request.getRequestDispatcher("/view/guest/page/property-detail.jsp").forward(request, response);
@@ -114,11 +81,12 @@ public class PropertyDetailServlet extends HttpServlet {
             request.setAttribute("errorMessage", "ID bất động sản không hợp lệ");
             request.getRequestDispatcher("/view/guest/page/error.jsp").forward(request, response);
         }
-    }    @Override
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // For POST requests, redirect to GET
+        // Xử lý các hành động POST (nếu có), ví dụ như gửi tin nhắn cho chủ nhà
         doGet(request, response);
     }
 }

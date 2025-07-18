@@ -10,7 +10,6 @@ public class User {
     private String role;
     private String password;
     private String avatar;
-    private boolean status;
 
     // Constructors
     public User() {
@@ -25,14 +24,6 @@ public class User {
         this.role = role;
         this.password = password;
         this.avatar = avatar;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
     }
 
     // Getters and Setters

@@ -28,8 +28,6 @@
             --dark-gray: #6c757d;
             --message-sent-bg: #0084ff;
             --message-received-bg: #ffffff;
-            --message-sent-text: #ffffff;
-            --message-received-text: #212529;
         }
         
         .chat-container {
@@ -41,7 +39,6 @@
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             background-color: white;
-            max-width: 1200px;
         }
         
         .conversation-list {
@@ -52,405 +49,6 @@
         }
         
         .conversation-item {
-            display: flex;
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            position: relative;
-        }
-        
-        .conversation-item:hover {
-            background-color: rgba(0, 132, 255, 0.05);
-        }
-        
-        .conversation-item.active {
-            background-color: var(--light-primary-color);
-        }
-        
-        .conversation-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-        
-        .conversation-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .conversation-info {
-            flex-grow: 1;
-            min-width: 0;
-        }
-        
-        .conversation-name {
-            font-weight: 600;
-            margin-bottom: 0px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .property-title {
-            font-size: 0.8rem;
-            color: var(--dark-gray);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 3px;
-        }
-        
-        .conversation-last-message {
-            font-size: 0.85rem;
-            color: var(--dark-gray);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .sent-by-me {
-            font-weight: 500;
-        }
-        
-        .conversation-meta {
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: space-between;
-            padding-left: 8px;
-            margin-left: 5px;
-        }
-        
-        .conversation-time {
-            font-size: 0.75rem;
-            color: var(--dark-gray);
-        }
-        
-        .unread-indicator {
-            width: 10px;
-            height: 10px;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-        }
-        
-        .conversation-item.unread {
-            background-color: rgba(0, 132, 255, 0.05);
-        }
-        
-        .chat-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-        }
-        
-        .empty-chat-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--dark-gray);
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .empty-chat-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.3;
-        }
-        
-        .chat-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #e0e0e0;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .chat-header-user {
-            display: flex;
-            align-items: center;
-        }
-        
-        .chat-header-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            margin-right: 12px;
-            object-fit: cover;
-        }
-        
-        .chat-header-name {
-            font-weight: 600;
-            margin-bottom: 0;
-        }
-        
-        .chat-header-property {
-            display: flex;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--dark-gray);
-        }
-        
-        .property-thumbnail {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            margin-right: 6px;
-            object-fit: cover;
-        }
-        
-        .chat-messages {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-color: var(--light-gray);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .date-separator {
-            text-align: center;
-            margin: 10px 0;
-            color: var(--dark-gray);
-            font-size: 0.8rem;
-            position: relative;
-        }
-        
-        .date-separator:before, .date-separator:after {
-            content: "";
-            height: 1px;
-            background-color: #e0e0e0;
-            position: absolute;
-            top: 50%;
-            width: 42%;
-        }
-        
-        .date-separator:before {
-            left: 0;
-        }
-        
-        .date-separator:after {
-            right: 0;
-        }
-        
-        .message {
-            max-width: 70%;
-            margin-bottom: 8px;
-            display: flex;
-        }
-        
-        .message.sent {
-            align-self: flex-end;
-        }
-        
-        .message.received {
-            align-self: flex-start;
-        }
-        
-        .message-content {
-            padding: 10px 15px;
-            border-radius: 18px;
-            position: relative;
-            word-wrap: break-word;
-            white-space: pre-wrap;
-        }
-        
-        .message.sent .message-content {
-            background-color: var(--message-sent-bg);
-            color: var(--message-sent-text);
-            border-bottom-right-radius: 4px;
-        }
-        
-        .message.received .message-content {
-            background-color: var(--message-received-bg);
-            color: var(--message-received-text);
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        
-        .message-time {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            margin-left: 8px;
-            white-space: nowrap;
-        }
-        
-        .message.sent .message-time {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .status-icon {
-            font-size: 0.7rem;
-            margin-left: 5px;
-        }
-        
-        .message.sent .status-icon {
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .message-form {
-            padding: 15px;
-            border-top: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-            background-color: white;
-        }
-        
-        .message-input {
-            flex-grow: 1;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            padding: 10px 15px;
-            resize: none;
-            max-height: 100px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        
-        .message-input:focus {
-            border-color: var(--primary-color);
-        }
-        
-        .send-button {
-            background-color: var(--primary-color);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            margin-left: 10px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        
-        .send-button:hover {
-            background-color: #006fd6;
-        }
-        
-        .send-button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        .empty-chat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: var(--dark-gray);
-            text-align: center;
-        }
-        
-        .empty-chat i {
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-        
-        .empty-chat p {
-            margin-bottom: 5px;
-        }
-        
-        .empty-chat .hint {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-        
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            color: var(--dark-gray);
-            height: 100%;
-        }
-        
-        .message.sending .status-icon {
-            animation: rotating 2s linear infinite;
-        }
-        
-        .message.error .message-content {
-            background-color: rgba(220, 53, 69, 0.8);
-        }
-        
-        .btn-retry {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            padding: 0;
-            font-size: 0.7rem;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-left: 5px;
-            transition: background-color 0.2s;
-        }
-        
-        .btn-retry:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        
-        @keyframes rotating {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        
-        /* Mobile responsive styles */
-        @media (max-width: 768px) {
-            .conversation-list {
-                width: 40%;
-            }
-            
-            .conversation-avatar {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .message {
-                max-width: 85%;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .chat-container {
-                flex-direction: column;
-                height: calc(100vh - 150px);
-                margin: 15px;
-            }
-            
-            .conversation-list {
-                width: 100%;
-                height: 30%;
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
-            }
-            
-            .chat-area {
-                height: 70%;
-            }
-        }
             padding: 15px;
             border-bottom: 1px solid #e0e0e0;
             cursor: pointer;
@@ -844,47 +442,41 @@
                 </div>
             </div>
             
-            <div class="chat-container">                <!-- Danh sách cuộc trò chuyện -->
-                <div class="conversation-list" id="conversation-list">
+            <div class="chat-container">
+                <!-- Danh sách cuộc trò chuyện -->
+                <div class="conversation-list">
                     <c:choose>
                         <c:when test="${not empty conversations}">
                             <c:forEach var="conversation" items="${conversations}">
-                                <div class="conversation-item ${conversation.userId == chatUser.userId ? 'active' : ''} ${!conversation.isRead && !conversation.isSentByMe ? 'unread' : ''}" 
-                                     data-user-id="${conversation.userId}" 
-                                     data-property-id="${conversation.propertyId}">
+                                <div class="conversation-item ${conversation.userId == chatUser.userId ? 'active' : ''}" 
+                                     onclick="location.href='${pageContext.request.contextPath}/messages?userId=${conversation.userId}&propertyId=${conversation.propertyId}'">
                                     
-                                    <div class="conversation-avatar">
-                                        <img src="${pageContext.request.contextPath}/${not empty conversation.userAvatar ? conversation.userAvatar : '/view/guest/asset/img/default-avatar.png'}" 
-                                             alt="${conversation.userName}" 
-                                             onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" />
-                                    </div>
+                                    <img src="${pageContext.request.contextPath}/${not empty conversation.userAvatar ? conversation.userAvatar : '/view/guest/asset/img/default-avatar.png'}" 
+                                         class="avatar" alt="${conversation.userName}" 
+                                         onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" />
                                     
-                                    <div class="conversation-info">
-                                        <div class="conversation-name">${conversation.userName}</div>
-                                        <div class="property-title">${conversation.propertyTitle}</div>
-                                        <div class="conversation-last-message">
-                                            ${conversation.isSentByMe ? '<span class="sent-by-me">Bạn: </span>' : ''}
-                                            ${conversation.lastMessage}
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="conversation-meta">
-                                        <div class="conversation-time">
-                                            <fmt:formatDate value="${conversation.lastMessageDate}" type="date" 
-                                                           pattern="${conversation.isToday ? 'HH:mm' : (conversation.isYesterday ? 'Hôm qua' : 'dd/MM')}" />
-                                        </div>
-                                        ${!conversation.isRead && !conversation.isSentByMe ? '<div class="unread-indicator"></div>' : ''}
+                                    <div class="user-info">
+                                        <h5 class="user-name">
+                                            ${conversation.userName}
+                                            <c:if test="${conversation.unreadCount > 0}">
+                                                <span class="unread-badge">${conversation.unreadCount}</span>
+                                            </c:if>
+                                        </h5>
+                                        <p class="property-title">${conversation.propertyTitle}</p>
+                                        <p class="last-message">${conversation.lastMessage}</p>
+                                        <span class="message-time">
+                                            <fmt:formatDate value="${conversation.lastMessageDate}" pattern="dd/MM/yyyy HH:mm" />
+                                            <span class="status-indicator ${conversation.isOnline ? 'status-online' : 'status-offline'}"></span>
+                                            ${conversation.isOnline ? 'Online' : 'Offline'}
+                                        </span>
                                     </div>
                                 </div>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <div class="empty-state">
-                                <div class="text-center p-4">
-                                    <i class="fas fa-comments fa-3x text-muted"></i>
-                                    <p class="mt-2">Bạn chưa có cuộc trò chuyện nào</p>
-                                    <p class="small text-muted">Hãy liên hệ với chủ nhà hoặc người thuê để bắt đầu trò chuyện</p>
-                                </div>
+                            <div class="no-conversation-message">
+                                <p>Bạn chưa có cuộc trò chuyện nào.</p>
+                                <p>Hãy bắt đầu bằng cách nhắn tin cho chủ nhà hoặc người thuê tiềm năng!</p>
                             </div>
                         </c:otherwise>
                     </c:choose>
@@ -910,18 +502,15 @@
                                         <p class="mb-0">${propertyLocation.address}, ${propertyLocation.city}</p>
                                     </div>
                                 </div>
-                            </div>                              <!-- Tin nhắn -->
-                            <div class="messages" id="chat-messages">
-                                <c:forEach var="message" items="${messages}">
-                                    <div class="message ${message.senderId == sessionScope.user.userId ? 'message-sent' : 'message-received'}" data-message-id="${message.messageId}">
+                            </div>
+                              <!-- Tin nhắn -->
+                            <div class="messages" id="messageContainer">                                <c:forEach var="message" items="${messages}">
+                                    <div class="message ${message.senderId == sessionScope.user.userId ? 'message-sent' : 'message-received'}">
                                         <div class="message-content">
                                             ${message.content}
                                             <span class="message-time">
-                                                <fmt:formatDate value="${message.sendDate}" pattern="HH:mm" />
+                                                <fmt:formatDate value="${message.sendDate}" pattern="dd/MM/yyyy HH:mm" />
                                             </span>
-                                            <c:if test="${message.senderId == sessionScope.user.userId}">
-                                                <i class="status-icon fas ${message.readStatus ? 'fa-check-double' : 'fa-check'}"></i>
-                                            </c:if>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -935,15 +524,15 @@
                             </div>
                             
                             <!-- Khu vực nhập tin nhắn -->
-                            <div class="input-area" id="message-form">
-                                <textarea id="message-input" class="message-input" placeholder="Nhập tin nhắn..." rows="1"></textarea>
-                                <button id="send-button" class="send-button" disabled>
+                            <div class="input-area">
+                                <textarea id="messageInput" class="message-input" placeholder="Nhập tin nhắn..." rows="1"></textarea>
+                                <button id="sendButton" class="send-button" disabled>
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
                             
-                            <input type="hidden" id="receiver-id" value="${chatUser.userId}" />
-                            <input type="hidden" id="property-id" value="${property.propertyId}" />
+                            <input type="hidden" id="receiverId" value="${chatUser.userId}" />
+                            <input type="hidden" id="propertyId" value="${property.propertyId}" />
                         </c:when>
                         <c:otherwise>
                             <!-- Hiển thị trạng thái trống -->
@@ -960,13 +549,300 @@
     </main>
 
     <!-- Include footer -->
-    <jsp:include page="/view/common/footer.jsp" />    <!-- JavaScript -->
+    <jsp:include page="/view/common/footer.jsp" />
+
+    <!-- JavaScript -->
     <script src="${pageContext.request.contextPath}/view/guest/asset/js/jquery-3.5.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/view/guest/asset/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Set context path for chat.js
-        window.contextPath = '${pageContext.request.contextPath}';
-    </script>
-    <script src="${pageContext.request.contextPath}/view/guest/asset/js/chat.js"></script>
+      <c:if test="${not empty chatUser}">
+        <script>            // Khởi tạo kết nối WebSocket
+            let socket = null;
+            const messageContainer = document.getElementById("messageContainer");
+            const messageInput = document.getElementById("messageInput");
+            const sendButton = document.getElementById("sendButton");
+            const receiverId = document.getElementById("receiverId").value;
+            const propertyId = document.getElementById("propertyId").value;
+            const currentUserId = <c:out value="${sessionScope.user.userId}"/>;
+            
+            // Grouping similar dates
+            const processedDates = new Set();
+            
+            // Insert date separator if needed
+            function insertDateSeparatorIfNeeded(date) {
+                const dateString = date.toLocaleDateString('vi-VN');
+                if (!processedDates.has(dateString)) {
+                    processedDates.add(dateString);
+                    
+                    const separator = document.createElement("div");
+                    separator.className = "chat-date-separator";
+                    separator.innerHTML = `<span>${dateString}</span>`;
+                    messageContainer.appendChild(separator);
+                }
+            }
+            
+            // Connect đến WebSocket server
+            function connectWebSocket() {
+                // Tạo WebSocket connection
+                const wsUrl = "ws://" + window.location.host + "${pageContext.request.contextPath}/chat/" + currentUserId;
+                socket = new WebSocket(wsUrl);
+                
+                // Xử lý khi mở kết nối
+                socket.onopen = function(event) {
+                    console.log("WebSocket connection established");
+                    // Kích hoạt nút gửi
+                    updateSendButtonState();
+                };
+                
+                // Xử lý khi nhận tin nhắn
+                socket.onmessage = function(event) {
+                    const message = JSON.parse(event.data);
+                    
+                    // Kiểm tra xem tin nhắn có thuộc cuộc trò chuyện hiện tại không
+                    if ((message.senderId == currentUserId && message.receiverId == receiverId) || 
+                        (message.senderId == receiverId && message.receiverId == currentUserId)) {
+                        
+                        addMessageToChat(message, true);
+                    }
+                };
+                
+                // Xử lý khi đóng kết nối
+                socket.onclose = function(event) {
+                    console.log("WebSocket connection closed");
+                    setTimeout(connectWebSocket, 3000); // Thử kết nối lại sau 3s
+                };
+                
+                // Xử lý khi lỗi
+                socket.onerror = function(error) {
+                    console.error("WebSocket error:", error);
+                };
+            }
+            
+            // Thêm tin nhắn vào chat
+            function addMessageToChat(message, fromServer = false) {
+                // Kiểm tra tin nhắn có phải của người hiện tại không
+                const isSentByMe = message.senderId == currentUserId;
+                
+                // Format thời gian
+                const messageDate = fromServer ? new Date(message.sendDate) : new Date();
+                
+                // Add date separator if it's a new date
+                insertDateSeparatorIfNeeded(messageDate);
+                
+                const formattedTime = messageDate.getHours().toString().padStart(2, '0') + ':' + 
+                                    messageDate.getMinutes().toString().padStart(2, '0');
+                
+                // Tạo phần tử tin nhắn mới
+                const messageDiv = document.createElement("div");
+                messageDiv.className = `message ${isSentByMe ? 'message-sent' : 'message-received'}`;
+                
+                // Thêm nội dung tin nhắn
+                let messageContent = `
+                    <div class="message-content">
+                        ${message.content}
+                        <span class="message-time">${formattedTime}`;
+                
+                // Add delivery status for sent messages
+                if (isSentByMe && !fromServer) {
+                    messageContent += `<span class="message-status"> • Đang gửi...</span>`;
+                }
+                
+                messageContent += `</span></div>`;
+                messageDiv.innerHTML = messageContent;
+                
+                // Thêm tin nhắn vào container
+                messageContainer.appendChild(messageDiv);
+                
+                // Cuộn xuống dưới cùng
+                scrollToBottom();
+                
+                // Đánh dấu tin nhắn đã đọc nếu tin nhắn từ người khác
+                if (!isSentByMe && fromServer) {
+                    markMessageAsRead(message.messageId);
+                }
+                
+                // Update sent message status when it's confirmed by server
+                if (fromServer && isSentByMe) {
+                    const pendingMessages = messageContainer.querySelectorAll('.message-sent .message-status');
+                    if (pendingMessages.length > 0) {
+                        // Update the most recent pending message
+                        const lastPendingMessage = pendingMessages[pendingMessages.length - 1];
+                        lastPendingMessage.innerHTML = ' • Đã gửi';
+                        lastPendingMessage.style.opacity = '0.6';
+                    }
+                }
+            }
+            
+            // Hàm gửi tin nhắn
+            function sendMessage() {
+                const content = messageInput.value.trim();
+                
+                if (content) {
+                    // Create message object
+                    const message = {
+                        senderId: currentUserId,
+                        receiverId: parseInt(receiverId),
+                        propertyId: parseInt(propertyId),
+                        content: content
+                    };
+                    
+                    // Add message to chat immediately for better UX
+                    addMessageToChat(message);
+                    
+                    // Reset input
+                    messageInput.value = '';
+                    messageInput.style.height = 'auto';
+                    updateSendButtonState();
+                    
+                    // Send to server if connection is open
+                    if (socket && socket.readyState === WebSocket.OPEN) {
+                        socket.send(JSON.stringify(message));
+                    } else {
+                        // Handle offline case - could store messages and resend later
+                        console.log("WebSocket not connected, message will be sent when reconnected");
+                        connectWebSocket(); // Try to reconnect
+                    }
+                }
+            }            
+            // Hàm đánh dấu tin nhắn đã đọc
+            function markMessageAsRead(messageId) {
+                fetch('${pageContext.request.contextPath}/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=markAsRead&messageId=${messageId}`
+                })
+                .then(response => response.json())
+                .catch(error => console.error('Error marking message as read:', error));
+            }
+            
+            // Cập nhật trạng thái nút gửi
+            function updateSendButtonState() {
+                const content = messageInput.value.trim();
+                sendButton.disabled = !content;
+                
+                // Visual feedback on button state
+                if (!content) {
+                    sendButton.style.opacity = '0.6';
+                } else {
+                    sendButton.style.opacity = '1';
+                }
+            }
+            
+            // Cuộn xuống dưới cùng của khung chat
+            function scrollToBottom() {
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+            
+            // Process existing messages to group by date
+            function processExistingMessages() {
+                const existingMessages = messageContainer.querySelectorAll('.message');
+                if (existingMessages.length === 0) return;
+                
+                // Clear existing processed dates
+                processedDates.clear();
+                
+                // Create temporary fragment to rebuild message container
+                const fragment = document.createDocumentFragment();
+                let currentDate = null;
+                let lastProcessedDate = null;
+                
+                existingMessages.forEach((message) => {
+                    // Extract date from the message
+                    const timeElement = message.querySelector('.message-time');
+                    if (!timeElement) return;
+                    
+                    // Get date from the format "dd/MM/yyyy HH:mm"
+                    const dateTimeStr = timeElement.textContent.trim();
+                    const datePart = dateTimeStr.split(' ')[0];
+                    const timePart = dateTimeStr.split(' ')[1];
+                    
+                    // Update time format to show only HH:mm
+                    timeElement.textContent = timePart;
+                    
+                    if (datePart !== lastProcessedDate) {
+                        // Insert date separator
+                        const separator = document.createElement("div");
+                        separator.className = "chat-date-separator";
+                        separator.innerHTML = `<span>${datePart}</span>`;
+                        
+                        fragment.appendChild(separator);
+                        lastProcessedDate = datePart;
+                        processedDates.add(datePart);
+                    }
+                    
+                    fragment.appendChild(message.cloneNode(true));
+                });
+                
+                // Replace container content
+                messageContainer.innerHTML = '';
+                messageContainer.appendChild(fragment);
+            }
+            
+            // Thiết lập event listeners
+            document.addEventListener('DOMContentLoaded', function() {
+                // Process existing messages
+                processExistingMessages();
+                
+                // Kết nối WebSocket khi trang tải
+                connectWebSocket();
+                
+                // Cuộn xuống dưới cùng khi tải trang
+                setTimeout(scrollToBottom, 100);
+                
+                // Event listener cho nút gửi
+                sendButton.addEventListener('click', sendMessage);
+                
+                // Event listener cho input khi nhấn Enter
+                messageInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+                
+                // Cập nhật trạng thái nút gửi khi nhập tin nhắn
+                messageInput.addEventListener('input', updateSendButtonState);
+                
+                // Auto-resize textarea
+                messageInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(100, this.scrollHeight) + 'px';
+                });
+                
+                // Initial button state
+                updateSendButtonState();
+                
+                // Check online status of the chat user
+                function updateOnlineStatus() {
+                    fetch('${pageContext.request.contextPath}/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `action=checkOnlineStatus&userId=${receiverId}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const userStatus = document.getElementById('userStatus');
+                        if (userStatus) {
+                            if (data.isOnline) {
+                                userStatus.className = 'status-indicator status-online';
+                                userStatus.nextSibling.textContent = 'Online';
+                            } else {
+                                userStatus.className = 'status-indicator status-offline';
+                                userStatus.nextSibling.textContent = 'Offline';
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error checking online status:', error));
+                }
+                
+                // Check online status initially and then every 30 seconds
+                updateOnlineStatus();
+                setInterval(updateOnlineStatus, 30000);
+            });
+        </script>
+    </c:if>
 </body>
 </html>

@@ -1,12 +1,9 @@
 package Controller;
 
-import DAO.BookingDAO;
 import DAO.LocationDAO;
 import DAO.PropertyDAO;
-import Model.Booking;
 import Model.Location;
 import Model.Property;
-import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,8 +15,6 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.sql.Timestamp;
 
 @WebServlet(name = "AddPropertiesServlet", urlPatterns = {"/addProperty"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -33,6 +28,10 @@ public class AddPropertyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("landlordId") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
     }
 
@@ -42,8 +41,12 @@ public class AddPropertyServlet extends HttpServlet {
         try {
             // Get session to retrieve LandlordID
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
-
+            Integer landlordId = (Integer) session.getAttribute("landlordId");
+            if (landlordId == null) {
+                request.setAttribute("error", "You must be logged in as a landlord to add a property.");
+                request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
+                return;
+            }
             // Get parameters from the form
             String title = request.getParameter("title");
             String description = request.getParameter("description");
@@ -59,9 +62,19 @@ public class AddPropertyServlet extends HttpServlet {
             int numberOfBathrooms = Integer.parseInt(request.getParameter("numberOfBathrooms"));
             String availabilityStatus = request.getParameter("availabilityStatus");
             int priorityLevel = Integer.parseInt(request.getParameter("priorityLevel"));
-
-            // Handle image upload
-            String imagePath = handleFileUpload(request);
+// Xử lý ảnh
+//            String image = handleFileUpload(request);
+//            Part filePart = request.getPart("image");
+//            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+//            String uploadPath = getServletContext().getRealPath("/") + "view/guest/asset/img";
+//
+//            File uploadDir = new File(uploadPath);
+//            if (!uploadDir.exists()) {
+//                uploadDir.mkdir();
+//            }
+//
+//            String filePath = uploadPath + File.separator + fileName;
+//            filePart.write(filePath);
 
             // Create and save Location
             Location location = new Location();
@@ -84,62 +97,27 @@ public class AddPropertyServlet extends HttpServlet {
             property.setDescription(description);
             property.setTypeId(typeId); // TypeID from form, assumed to reference PropertyType table
             property.setLocationId(locationId); // Newly created LocationID
-            property.setLandlordId(user.getUserId()); // From session
+            property.setLandlordId(landlordId); // From session
             property.setPrice(price);
             property.setSize(size);
             property.setNumberOfBedrooms(numberOfBedrooms);
             property.setNumberOfBathrooms(numberOfBathrooms);
             property.setAvailabilityStatus(availabilityStatus);
             property.setPriorityLevel(priorityLevel);
-            property.setAvatar(imagePath);
+            property.setAvatar(null);
 
             // Insert the property using PropertyDAO
             PropertyDAO propertyDAO = new PropertyDAO();
-            int propertyId = propertyDAO.addProperty(property);
+            boolean propertySuccess = propertyDAO.insert(property);
 
             // Set response message
-            if (propertyId == -1) {
+            if (propertySuccess) {
+                session.setAttribute("successMessage", "Property added successfully!");
+                response.sendRedirect("landLordHomeServlet"); // Redirect to a page listing properties
+            } else {
                 request.setAttribute("error", "Failed to add property. Please try again.");
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
-                return;
             }
-
-            // Handle Booking creation if booking parameters are present
-            String startDateStr = request.getParameter("startDate");
-            String endDateStr = request.getParameter("endDate");
-            String totalPriceStr = request.getParameter("totalPrice");
-            String depositAmountStr = request.getParameter("depositAmount");
-            String monthlyRentStr = request.getParameter("monthlyRent");
-            String penaltyClause = request.getParameter("penaltyClause");
-            String termsAndConditions = request.getParameter("termsAndConditions");
-
-            if (startDateStr != null && !startDateStr.isEmpty()) {
-                Booking booking = new Booking();
-                booking.setRenterId(0); // Null equivalent for int, indicating no renter yet
-                booking.setPropertyId(propertyId); // Link to newly created property
-                booking.setStartDate(Timestamp.valueOf(startDateStr + " 00:00:00"));
-                booking.setEndDate(Timestamp.valueOf(endDateStr + " 00:00:00"));
-                booking.setTotalPrice(Double.parseDouble(totalPriceStr));
-                booking.setStatus("Pending"); // Default status
-                booking.setDepositAmount(Double.parseDouble(depositAmountStr));
-                booking.setMonthlyRent(Double.parseDouble(monthlyRentStr));
-                booking.setPenaltyClause(penaltyClause);
-                booking.setTermsAndConditions(termsAndConditions);
-                booking.setCreatedAt(new Date()); // Current timestamp
-                booking.setSignedAt(null); // Null as specified
-                booking.setSignedByRenter(false); // 0 equivalent, as specified
-                booking.setSignedByLandlord(false); // Default, landlord hasn't signed yet
-
-                BookingDAO bookingDAO = new BookingDAO();
-                boolean bookingSuccess = bookingDAO.insert(booking);
-                if (!bookingSuccess) {
-                    request.setAttribute("error", "Property added, but failed to create associated booking. Please try again.");
-                    request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
-                    return;
-                }
-            }
-            session.setAttribute("successMessage", "Property added successfully!");
-            response.sendRedirect(request.getContextPath() + "/viewProperties");
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid input format. Please check your inputs.");
             request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
@@ -148,34 +126,26 @@ public class AddPropertyServlet extends HttpServlet {
             request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
         }
     }
+    
+//    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
+//        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+//        File uploadDir = new File(uploadPath);
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdir();
+//        }
+//
+//        String fileName = null;
+//        for (Part part : request.getParts()) {
+//            String submittedFileName = part.getSubmittedFileName();
+//            if (submittedFileName != null && !submittedFileName.isEmpty()) {
+//                fileName = System.currentTimeMillis() + "_" + submittedFileName;
+//                part.write(new File(uploadPath + File.separator + fileName));
+//                break; // Only handle the first file for simplicity
+//            }
+//        }
+//        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
+//    }
 
-    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
-        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-
-        String fileName = null;
-        for (Part part : request.getParts()) {
-            if ("propertyImage".equals(part.getName())) {
-                String submittedFileName = part.getSubmittedFileName();
-                if (submittedFileName != null && !submittedFileName.isEmpty()) {
-                    // Generate unique filename
-                    String fileExtension = "";
-                    int lastDotIndex = submittedFileName.lastIndexOf('.');
-                    if (lastDotIndex > 0) {
-                        fileExtension = submittedFileName.substring(lastDotIndex);
-                    }
-                    fileName = System.currentTimeMillis() + "_" + submittedFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-                    String filePath = uploadPath + File.separator + fileName;
-                    part.write(filePath);
-                    break;
-                }
-            }
-        }
-        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
-    }
     @Override
     public String getServletInfo() {
         return "Add Property Servlet handles property creation with type, location, and landlord details.";

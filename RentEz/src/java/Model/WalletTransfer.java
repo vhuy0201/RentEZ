@@ -1,9 +1,10 @@
 package Model;
+
 public class WalletTransfer {
     private String transCode, timeCode, content;
     private int userID, walletTransferID;
     private boolean isRefunded;
-    private Double amount;
+    private float amount;
     public String getContent() {
         return content;
     }
@@ -20,11 +21,11 @@ public class WalletTransfer {
         this.walletTransferID = walletTransferID;
     }
 
-    public Double getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 

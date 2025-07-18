@@ -1,6 +1,6 @@
 package Controller;
 
-import DAO.UsersDao;
+import DAO.UserDao;
 import Model.User;
 import Util.Common;
 import java.io.IOException;
@@ -36,7 +36,8 @@ public class ProfileServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     */    @Override
+     */
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -46,20 +47,6 @@ public class ProfileServlet extends HttpServlet {
             // Redirect to login page if not logged in
             response.sendRedirect(request.getContextPath() + "/login");
             return;
-        }
-        
-        // Get user from session
-        User currentUser = (User) session.getAttribute("user");
-        
-        // Add rating information if the user is a landlord
-        if ("Landlord".equals(currentUser.getRole())) {
-            try {
-                DAO.InteractionRatingDAO ratingDAO = new DAO.InteractionRatingDAO();
-                java.util.Map<String, Object> ratingStats = ratingDAO.getLandlordRatingStatistics(currentUser.getUserId());
-                request.setAttribute("ratingStats", ratingStats);
-            } catch (Exception e) {
-                System.out.println("Error retrieving rating statistics: " + e.getMessage());
-            }
         }
         
         // Forward to profile page
@@ -89,7 +76,7 @@ public class ProfileServlet extends HttpServlet {
         
         // Get user from session
         User sessionUser = (User) session.getAttribute("user");
-        UsersDao userDao = new UsersDao();
+        UserDao userDao = new UserDao();
         
         // Get action parameter to determine what operation to perform
         String action = request.getParameter("action");
@@ -117,7 +104,7 @@ public class ProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void updateProfile(HttpServletRequest request, HttpServletResponse response, User user, UsersDao userDao, HttpSession session)
+    private void updateProfile(HttpServletRequest request, HttpServletResponse response, User user, UserDao userDao, HttpSession session)
             throws ServletException, IOException {
         // Get updated values from form
         String name = request.getParameter("name");
@@ -197,7 +184,7 @@ public class ProfileServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private void changePassword(HttpServletRequest request, HttpServletResponse response, User user, UsersDao userDao)
+    private void changePassword(HttpServletRequest request, HttpServletResponse response, User user, UserDao userDao)
             throws ServletException, IOException {
         // Get password values from form
         String currentPassword = request.getParameter("currentPassword");

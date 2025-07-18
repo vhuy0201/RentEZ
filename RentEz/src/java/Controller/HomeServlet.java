@@ -7,8 +7,7 @@ package Controller;
 import DAO.PropertyDAO;
 import DAO.PropertyTypeDAO;
 import DAO.LocationDAO;
-import DAO.UsersDao;
-import DAO.UserFavoriteDAO;
+import DAO.UserDao;
 import Model.Property;
 import Model.PropertyType;
 import Model.Location;
@@ -17,14 +16,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.HashMap;
-import java.util.Set;
 
 
 public class HomeServlet extends HttpServlet {
@@ -66,7 +62,7 @@ public class HomeServlet extends HttpServlet {
      */    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UsersDao userDAO = new UsersDao();
+        UserDao userDAO = new UserDao();
         PropertyDAO propertyDAO = new PropertyDAO();
         PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
         LocationDAO locationDAO = new LocationDAO();
@@ -121,25 +117,10 @@ public class HomeServlet extends HttpServlet {
         // Get all property types for search form
         List<PropertyType> allPropertyTypes = propertyTypeDAO.getAll();
         request.setAttribute("allPropertyTypes", allPropertyTypes);
-          // Get all cities for search form
+        
+        // Get all cities for search form
         List<String> allCities = locationDAO.getAllCities();
         request.setAttribute("allCities", allCities);
-
-        // Check user favorites if logged in
-        HttpSession session = request.getSession();
-        User currentUser = (User) session.getAttribute("user");
-        Set<Integer> userFavorites = new HashSet<>();
-        
-        if (currentUser != null) {
-            UserFavoriteDAO favoriteDAO = new UserFavoriteDAO();
-            for (Property property : featuredProperties) {
-                if (favoriteDAO.isFavorited(currentUser.getUserId(), property.getPropertyId())) {
-                    userFavorites.add(property.getPropertyId());
-                }
-            }
-        }
-
-        request.setAttribute("userFavorites", userFavorites);
 
         // Forward to JSP
         request.getRequestDispatcher("view/guest/page/homepage.jsp").forward(request, response);

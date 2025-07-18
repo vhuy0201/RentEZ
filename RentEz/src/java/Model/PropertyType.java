@@ -4,24 +4,6 @@ public class PropertyType {
 
     private int typeId;
     private String typeName;
-    private String description;
-    private boolean status;
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String Description) {
-        this.description = Description;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean Status) {
-        this.status = Status;
-    }
 
     public PropertyType() {
     }

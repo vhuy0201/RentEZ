@@ -1,10 +1,8 @@
 package Controller;
 
-import DAO.UsersDao;
-import DAO.WalletDAO;
+import DAO.UserDao;
 import Model.GoogleAccount;
 import Model.User;
-import Model.Wallet;
 import Util.GoogleLogin;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Handles Google OAuth login flow
@@ -55,20 +52,12 @@ public class GoogleLoginServlet extends HttpServlet {
                 GoogleAccount googleAccount = GoogleLogin.getUserInfo(accessToken);
                 
                 // Check if user with this Google email exists
-                UsersDao userDao = new UsersDao();
+                UserDao userDao = new UserDao();
                 User user = userDao.getByGoogleEmail(googleAccount.getEmail());
                 
                 // If user doesn't exist, create a new user
                 if (user == null) {
                     user = userDao.createFromGoogleAccount(googleAccount);
-                    WalletDAO walletDAO = new WalletDAO();
-                    Wallet newWallet = new Wallet();
-                    newWallet.setUserId(user.getUserId());
-                    newWallet.setBalance(0.0); // Initial balance is 0
-                    newWallet.setLastUpdated(new Date());
-                    
-                    // Save wallet to database
-                    walletDAO.create(newWallet);
                     if (user == null) {
                         // If user creation failed, redirect to login page with error
                         request.setAttribute("error", "Failed to create user account. Please try again.");
@@ -80,31 +69,15 @@ public class GoogleLoginServlet extends HttpServlet {
                 // Set user in session
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                redirectBasedOnRole(response, user);
+                
+                // Redirect to homepage or dashboard after successful login
+                response.sendRedirect(request.getContextPath() + "/");
+                
             } catch (Exception e) {
                 // If any error occurs, redirect to login page with error
                 request.setAttribute("error", "An error occurred during Google authentication: " + e.getMessage());
                 request.getRequestDispatcher("/view/guest/page/login.jsp").forward(request, response);
             }
-        }
-    }
-    private void redirectBasedOnRole(HttpServletResponse response, User user) throws IOException {
-        String role = user.getRole();
-        
-        switch (role.toLowerCase()) {
-            case "landlord":
-                response.sendRedirect("landLordHomeServlet");
-                break;
-            case "renter":
-                response.sendRedirect("view/guest/page/homepage.jsp");
-                break;
-            case "admin":
-                response.sendRedirect("admin/dashboard");
-                break;
-            default:
-                // Default to home page if role is not recognized
-                response.sendRedirect("HomeServlet");
-                break;
         }
     }
 }

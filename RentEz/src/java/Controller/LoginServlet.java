@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import DAO.UsersDao;
+import DAO.UserDao;
 import Model.User;
 import Util.Common;
 import jakarta.servlet.ServletException;
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             // User already logged in, redirect to appropriate dashboard based on role
             User user = (User) session.getAttribute("user");
-            redirectBasedOnRole(response, user);
+            response.sendRedirect("HomeServlet");
         } else {
             // No active session, show login page
             request.getRequestDispatcher("view/guest/page/login.jsp").forward(request, response);
@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String remember = request.getParameter("remember"); // Check if "remember me" is selected
         
-        UsersDao userDao = new UsersDao();
+        UserDao userDao = new UserDao();
         User authenticatedUser = authenticateUser(userDao, email, password);
         
         if (authenticatedUser != null) {
@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
             if (remember != null) {
                 session.setMaxInactiveInterval(7 * 24 * 60 * 60); // 7 days in seconds
             }
-            redirectBasedOnRole(response, authenticatedUser);
+            response.sendRedirect("HomeServlet");
         } else {
             // Authentication failed
             request.setAttribute("error", "Invalid email or password");
@@ -91,11 +91,11 @@ public class LoginServlet extends HttpServlet {
       /**
      * Authenticates user credentials against the database
      * 
-     * @param userDao The UsersDao instance to use for database access
+     * @param userDao The UserDao instance to use for database access
      * @param email The email provided by the user
      * @param password The password provided by the user
      * @return User object if authentication is successful, null otherwise
-     */    private User authenticateUser(UsersDao userDao, String email, String password) {
+     */    private User authenticateUser(UserDao userDao, String email, String password) {
         // Get user by email
         User user = userDao.getByEmail(email);
         
@@ -129,7 +129,7 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("view/guest/page/homepage.jsp");
                 break;
             case "admin":
-                response.sendRedirect("admin/dashboard");
+                response.sendRedirect("view/admin/dashboard.jsp");
                 break;
             default:
                 // Default to home page if role is not recognized

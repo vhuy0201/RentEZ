@@ -158,11 +158,18 @@
         font-weight: 600;
       }    
       
+      /* General button styles fix */
+      .btn {
+        color: #000000 !important; /* Override any white text color */
+      }
       
       .btn-outline-light {
         color: #333 !important;
       }
-</style>
+      
+      .btn-main {
+        color: #000000 !important;
+      }</style>
   </head>  <body class="">
     <div id="root">
       <main class="body-bg">
