@@ -15,6 +15,7 @@ public class Property {
     private String availabilityStatus;
     private int priorityLevel;
     private String avatar;
+    private boolean publicStatus;
     
     // Additional fields for display purposes
     private String address; // For displaying location address from joined queries
@@ -22,9 +23,7 @@ public class Property {
     public Property() {
     }
 
-    public Property(int propertyId, String title, String description, int typeId, int locationId, int landlordId,
-            double price, double size, int numberOfBedrooms, int numberOfBathrooms, String availabilityStatus,
-            int priorityLevel, String avatar) {
+    public Property(int propertyId, String title, String description, int typeId, int locationId, int landlordId, double price, double size, int numberOfBedrooms, int numberOfBathrooms, String availabilityStatus, int priorityLevel, String avatar, boolean publicStatus, String address) {
         this.propertyId = propertyId;
         this.title = title;
         this.description = description;
@@ -38,6 +37,18 @@ public class Property {
         this.availabilityStatus = availabilityStatus;
         this.priorityLevel = priorityLevel;
         this.avatar = avatar;
+        this.publicStatus = publicStatus;
+        this.address = address;
+    }
+
+    
+
+    public boolean isPublicStatus() {
+        return publicStatus;
+    }
+
+    public void setPublicStatus(boolean publicStatus) {
+        this.publicStatus = publicStatus;
     }
 
     // Getters and Setters

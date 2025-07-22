@@ -4,12 +4,14 @@
 <%@ page import="Model.UserTier" %>
 <%@ page import="DAO.UserTierDAO" %>
 <%@ page import="DAO.NotificationDAO" %>
+<%@ page import="DAO.MessageDAO" %>
 
 <%
     // Get the current user from session
     User currentUser = (User) session.getAttribute("user");
     UserTier userTier = null;
     int unreadNotificationCount = 0;
+    int unreadMessageCount = 0;
     
     // If user is logged in, get their membership tier info and notification count
     if (currentUser != null) {
@@ -19,6 +21,9 @@
             
             NotificationDAO notificationDAO = new NotificationDAO();
             unreadNotificationCount = notificationDAO.getUnreadCount(currentUser.getUserId());
+            
+            MessageDAO messageDAO = new MessageDAO();
+            unreadMessageCount = messageDAO.getUnreadMessageCount(currentUser.getUserId());
         } catch (Exception e) {
             System.out.println("Error in header: " + e.getMessage());
         }
@@ -89,6 +94,16 @@
                             </a>
                         </div>
                         
+                        <!-- Message Notification -->
+                        <div class="notification-bell">
+                            <a href="${pageContext.request.contextPath}/chat" class="notification-icon">
+                                <i class="fas fa-comments"></i>
+                                <c:if test="${unreadMessageCount > 0}">
+                                    <span class="notification-badge">${unreadMessageCount}</span>
+                                </c:if>
+                            </a>
+                        </div>
+                        
                         <!-- Show user avatar and dropdown if user is logged in -->
                         <div class="user-dropdown">
                             <div class="user-dropdown__toggle">                                <span class="user-avatar">
@@ -98,7 +113,7 @@
                                                 alt="${sessionScope.user.name}" />
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${pageContext.request.contextPath}/${sessionScope.user.avatar}" 
+                                            <img src="${sessionScope.user.avatar}" 
                                                 onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
                                                 alt="${sessionScope.user.name}" />
                                         </c:otherwise>
@@ -122,7 +137,7 @@
                                             </c:when>
                                         </c:choose>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/chat"><i class="fas fa-comments"></i> Tin nhắn</a></li>                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
                                     <li><a href="${pageContext.request.contextPath}/view-contracts"><i class="fas fa-file-contract"></i> Hợp đồng thuê</a></li>
                                     <li><a href="${pageContext.request.contextPath}/payments"><i class="fas fa-credit-card"></i> Thanh toán</a></li>
                                     <li><a href="${pageContext.request.contextPath}/ratings"><i class="fas fa-star"></i> Đánh giá</a></li>

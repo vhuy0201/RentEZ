@@ -75,6 +75,9 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
                 case "refund":
                     processRefund(request, response);
                     break;
+//                case "export":
+//                    exportPaymentHistory(request, response);
+//                    break;
                 default:
                     response.sendRedirect(request.getContextPath() + "/admin/payment-history");
             }
@@ -88,14 +91,14 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-          
+            // Get filter parameters
             String search = request.getParameter("search");
             String statusFilter = request.getParameter("status");
             String typeFilter = request.getParameter("type");
             String dateFrom = request.getParameter("dateFrom");
             String dateTo = request.getParameter("dateTo");
             
-         
+            // Get pagination parameters
             int page = 1;
             int pageSize = 15;
             try {
@@ -104,18 +107,18 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
                 page = 1;
             }
             
-        
+            // Get filtered payments
             List<Payment> payments = paymentDAO.getFilteredPayments(search, statusFilter, typeFilter, 
                                                                    dateFrom, dateTo, page, pageSize);
             
-            
+            // Map User information to each payment based on PayerId
             for (Payment payment : payments) {
                 User payer = userDAO.getById(payment.getPayerId());
                 if (payer != null) {
                     request.setAttribute("user_" + payment.getPaymentId(), payer);
                 }
                 
-               
+                // If payeeId exists, also map payee information
                 if (payment.getPayeeId() > 0) {
                     User payee = userDAO.getById(payment.getPayeeId());
                     if (payee != null) {
@@ -128,15 +131,15 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
                                                                    dateFrom, dateTo);
             int totalPages = (int) Math.ceil((double) totalPayments / pageSize);
             
-          
+            // Get summary statistics
             double totalAmount = paymentDAO.getTotalAmount(search, statusFilter, typeFilter, dateFrom, dateTo);
             double totalRefunded = paymentDAO.getTotalRefunded(search, statusFilter, typeFilter, dateFrom, dateTo);
             
-           
+            // Get counts by status
             int completedPayments = paymentDAO.getCountByStatus("Completed", search, typeFilter, dateFrom, dateTo);
             int pendingPayments = paymentDAO.getCountByStatus("Pending", search, typeFilter, dateFrom, dateTo);
             
-           
+            // Set attributes
             request.setAttribute("payments", payments);
             request.setAttribute("totalPayments", totalPayments);
             request.setAttribute("currentPage", page);
@@ -163,12 +166,13 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
             Payment payment = paymentDAO.getById(paymentId);
             
             if (payment != null) {
-             
+                // Get payer information
                 User payer = userDAO.getById(payment.getPayerId());
                 if (payer != null) {
                     request.setAttribute("payer", payer);
                 }
                 
+                // If payeeId exists, also get payee information
                 if (payment.getPayeeId() > 0) {
                     User payee = userDAO.getById(payment.getPayeeId());
                     if (payee != null) {
@@ -199,13 +203,13 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
             Payment payment = paymentDAO.getById(paymentId);
             
             if (payment != null) {
-                
+                // Get payer information
                 User payer = userDAO.getById(payment.getPayerId());
                 if (payer != null) {
                     request.setAttribute("payer", payer);
                 }
                 
-                
+                // If payeeId exists, also get payee information
                 if (payment.getPayeeId() > 0) {
                     User payee = userDAO.getById(payment.getPayeeId());
                     if (payee != null) {
