@@ -443,122 +443,252 @@
 
                 <!-- Rental Booking Modal -->
                 <div class="modal fade" id="rentalBookingModal" tabindex="-1" aria-labelledby="rentalBookingModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="rentalBookingModalLabel">Thuê nhà - Thông tin hợp đồng</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content" style="min-height: 80vh;">
+                            <div class="modal-header bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                                <h5 class="modal-title fw-bold" id="rentalBookingModalLabel">
+                                    <i class="fas fa-file-contract me-2"></i>HỢP ĐỒNG THUÊ NHÀ NGUYÊN CĂN
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <form action="${pageContext.request.contextPath}/rental-booking" method="POST">
-                                <div class="modal-body">
+                                <div class="modal-body p-0">
                                     <c:if test="${sessionScope.user == null}">
-                                        <div class="alert alert-warning" role="alert">
+                                        <div class="alert alert-warning m-4" role="alert">
                                             <i class="fa fa-exclamation-triangle me-2"></i>
                                             Vui lòng <a href="${pageContext.request.contextPath}/login" class="alert-link">đăng nhập</a> để tiến hành thuê nhà.
                                         </div>
                                     </c:if>
 
                                     <c:if test="${sessionScope.user != null}">
-                                        <input type="hidden" name="propertyId" value="${property.propertyId}">
-                                        <input type="hidden" name="landlordId" value="${landlord.userId}">
+                                        <!-- Contract Document Style -->
+                                        <div class="contract-document p-4" style="font-family: 'Times New Roman', serif; line-height: 1.8; max-height: 70vh; overflow-y: auto;">
+                                            
+                                            <input type="hidden" name="propertyId" value="${property.propertyId}">
+                                            <input type="hidden" name="landlordId" value="${landlord.userId}">
 
-                                        <!-- Booking Information Section -->
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h6 class="fw-bold text-primary mb-3">
-                                                    <i class="fa fa-info-circle me-2"></i>Thông tin cơ bản
-                                                </h6>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Ngày bắt đầu thuê:</label>
-                                                    <input type="date" class="form-control" id="startDate" name="startDate" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Ngày kết thúc thuê:</label>
-                                                    <input type="date" class="form-control" id="endDate" name="endDate" required>
-                                                </div>
+                                            <!-- Contract Header -->
+                                            <div class="text-center mb-4">
+                                                <p class="fw-bold mb-2">Căn cứ vào khả năng, nhu cầu của hai bên:</p>
+                                                <p>Hôm nay, ngày <span id="currentDate"></span>, chúng tôi gồm có:</p>
                                             </div>
-                                            <div class="col-md-6">
-                                                <h6 class="fw-bold text-success mb-3">
-                                                    <i class="fa fa-money-bill-wave me-2"></i>Thông tin thanh toán
-                                                </h6>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Tiền thuê hàng tháng:</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">₫</span>
-                                                        <input type="text" class="form-control" id="monthlyRentDisplay" 
-                                                               value="<fmt:formatNumber value='${property.price}' type='number' groupingUsed='true'/>" readonly>
-                                                        <input type="hidden" id="monthlyRent" name="monthlyRent" value="${property.price}">
+
+                                            <!-- Party A - Landlord -->
+                                            <div class="mb-4">
+                                                <h6 class="fw-bold text-orange-600 mb-3">BÊN CHO THUÊ NHÀ (Gọi tắt là Bên A):</h6>
+                                                <div class="ms-3 row g-2">
+                                                    <div class="col-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="fw-medium" style="width: 100px;">Ông/Bà:</span>
+                                                            <span class="flex-fill border-bottom border-2 px-2 py-1 bg-light">${landlord.name}</span>
+                                                        </div>
                                                     </div>
-                                                </div>                                                <div class="mb-3">
-                                                    <label class="form-label">Tiền cọc:</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">₫</span>
-                                                        <input type="text" class="form-control" id="depositAmountDisplay" 
-                                                               value="<fmt:formatNumber value='${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : property.price}' type='number' groupingUsed='true'/>" readonly>
-                                                        <input type="hidden" id="depositAmount" name="depositAmount" 
-                                                               value="${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : property.price}">
+                                                    <div class="col-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="fw-medium" style="width: 100px;">Email:</span>
+                                                            <span class="flex-fill border-bottom border-2 px-2 py-1 bg-light">${landlord.email}</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label fw-bold">Tổng tiền cần thanh toán:</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">₫</span>
-                                                        <input type="text" class="form-control fw-bold text-success" id="totalPriceDisplay" readonly>
-                                                        <input type="hidden" id="totalPrice" name="totalPrice">
-                                                    </div>
-                                                    <div class="form-text text-muted">
-                                                        <small>Tổng tiền = Tiền thuê hàng tháng + Tiền cọc</small>
+                                                    <div class="col-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="fw-medium" style="width: 100px;">Điện thoại:</span>
+                                                            <span class="flex-fill border-bottom border-2 px-2 py-1 bg-light">
+                                                                ${not empty landlord.phone ? landlord.phone : '...........................'}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <hr>
-                                        <!-- Terms and Conditions Section -->
-                                        <div class="mb-4">
-                                            <h6 class="fw-bold text-info mb-3">
-                                                <i class="fa fa-file-contract me-2"></i>Điều khoản và điều kiện
-                                            </h6>
-                                            <textarea class="form-control" id="termsAndConditions" name="termsAndConditions" 
-                                                      rows="4" readonly>${propertyBookingTemplate != null ? propertyBookingTemplate.termsAndConditions : 'Chưa có điều khoản và điều kiện được thiết lập.'}</textarea>
-                                        </div>
-
-                                        <!-- Penalty Clause Section -->
-                                        <div class="mb-4">
-                                            <h6 class="fw-bold text-warning mb-3">
-                                                <i class="fa fa-exclamation-triangle me-2"></i>Điều khoản phạt
-                                            </h6>
-                                            <textarea class="form-control" id="penaltyClause" name="penaltyClause" 
-                                                      rows="3" readonly>${propertyBookingTemplate != null ? propertyBookingTemplate.penaltyClause : 'Chưa có điều khoản phạt được thiết lập.'}</textarea>
-                                        </div>
-                                        <!-- Agreement Checkboxes -->
-                                        <div class="mb-3">
-                                            <h6 class="fw-bold text-secondary mb-3">
-                                                <i class="fa fa-signature me-2"></i>Xác nhận ký kết
-                                            </h6>
-
-                                            <!-- Landlord signature status (read-only) -->
-                                            <div class="alert alert-success mb-3" role="alert">
-                                                <i class="fa fa-check-circle me-2"></i>
-                                                <strong>Chủ nhà đã ký kết hợp đồng này</strong>
-                                                <br><small>Các điều khoản và điều kiện đã được chủ nhà xác nhận.</small>
+                                            <!-- Party B - Renter -->
+                                            <div class="mb-4">
+                                                <h6 class="fw-bold text-orange-600 mb-3">BÊN THUÊ NHÀ (Gọi tắt là Bên B):</h6>
+                                                <div class="ms-3 row g-2">
+                                                    <div class="col-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="fw-medium" style="width: 100px;">Ông/Bà:</span>
+                                                            <span class="flex-fill border-bottom border-2 px-2 py-1 bg-light">${sessionScope.user.name}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="fw-medium" style="width: 100px;">Email:</span>
+                                                            <span class="flex-fill border-bottom border-2 px-2 py-1 bg-light">${sessionScope.user.email}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="fw-medium" style="width: 100px;">Điện thoại:</span>
+                                                            <span class="flex-fill border-bottom border-2 px-2 py-1 bg-light">
+                                                                ${not empty sessionScope.user.phone ? sessionScope.user.phone : '...........................'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <!-- Renter signature -->
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" id="signedByRenter" name="signedByRenter" value="true" required>
-                                                <label class="form-check-label fw-bold" for="signedByRenter">
-                                                    <i class="fa fa-user me-2 text-primary"></i>Tôi (người thuê) đồng ý với tất cả điều khoản và ký kết hợp đồng này
-                                                </label>
+                                            <p class="mb-4 text-justify">
+                                                Sau khi thỏa thuận, hai bên đồng ý tham gia và ký kết hợp đồng thuê nhà với các điều khoản sau đây:
+                                            </p>
+
+                                            <!-- Article 1 - Property and Duration -->
+                                            <div class="mb-4">
+                                                <h6 class="fw-bold text-orange-600 mb-3">ĐIỀU 1: DIỆN TÍCH VÀ THỜI GIAN THUÊ</h6>
+                                                <div class="ms-3">
+                                                    <p class="text-justify mb-3">1.1 Bên A đồng ý cho Bên B thuê toàn bộ ngôi nhà <strong>"${property.title}"</strong> 
+                                                    tọa lạc tại địa chỉ: <strong>${location.address}, ${location.city}, ${location.stateProvince}</strong> 
+                                                    với các đặc điểm sau:</p>
+                                                    <div class="ms-4 mb-3">
+                                                        <p class="mb-1">- Diện tích: <strong>${property.size} m²</strong></p>
+                                                        <p class="mb-1">- Loại hình: <strong>${propertyType.typeName}</strong></p>
+                                                        <p class="mb-1">- Số phòng ngủ: <strong>${property.numberOfBedrooms}</strong></p>
+                                                        <p class="mb-1">- Số phòng tắm: <strong>${property.numberOfBathrooms}</strong></p>
+                                                        <p class="mb-1">- Kết cấu: Nhà nguyên căn đầy đủ tiện nghi</p>
+                                                    </div>
+                                                    
+                                                    <!-- Rental Period Selection -->
+                                                    <div class="bg-orange-50 p-3 rounded mb-3 border-start border-4 border-orange-500">
+                                                        <h6 class="fw-bold text-orange-700 mb-3">
+                                                            <i class="fas fa-calendar-alt me-2"></i>Thời gian thuê:
+                                                        </h6>
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-bold">Ngày bắt đầu thuê:</label>
+                                                                <input type="date" class="form-control form-control-lg" id="startDate" name="startDate" required>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-bold">Số tháng thuê:</label>
+                                                                <select class="form-select form-select-lg" id="rentalMonths" name="rentalMonths" required>
+                                                                    <option value="">Chọn số tháng</option>
+                                                                    <option value="1">1 tháng</option>
+                                                                    <option value="2">2 tháng</option>
+                                                                    <option value="3">3 tháng</option>
+                                                                    <option value="6">6 tháng</option>
+                                                                    <option value="12">12 tháng</option>
+                                                                    <option value="24">24 tháng</option>
+                                                                    <option value="36">36 tháng</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-3">
+                                                            <p class="text-justify">1.5 Thời gian cho thuê: Bắt đầu từ ngày: <strong><span id="displayStartDate">__/__/____</span></strong> 
+                                                            và sẽ chấm dứt vào ngày: <strong><span id="displayEndDate">__/__/____</span></strong></p>
+                                                            <input type="hidden" id="endDate" name="endDate">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <!-- Hidden input for landlord signature (always true) -->
-                                            <input type="hidden" name="signedByLandlord" value="true">
-                                        </div>
+                                            <!-- Article 2 - Price and Payment -->
+                                            <div class="mb-4">
+                                                <h6 class="fw-bold text-orange-600 mb-3">ĐIỀU 2: GIÁ THUÊ VÀ PHƯƠNG THỨC THANH TOÁN</h6>
+                                                <div class="ms-3">
+                                                    <div class="bg-green-50 p-3 rounded border-start border-4 border-green-500">
+                                                        <div class="row g-3">
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-bold">Tiền thuê hàng tháng:</label>
+                                                                <div class="input-group input-group-lg">
+                                                                    <span class="input-group-text bg-green-100">₫</span>
+                                                                    <input type="text" class="form-control bg-white" id="monthlyRentDisplay" 
+                                                                           value="<fmt:formatNumber value='${property.price}' type='number' groupingUsed='true'/>" readonly>
+                                                                    <input type="hidden" id="monthlyRent" name="monthlyRent" value="${property.price}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label fw-bold">Tiền đặt cọc:</label>
+                                                                <div class="input-group input-group-lg">
+                                                                    <span class="input-group-text bg-blue-100">₫</span>
+                                                                    <input type="text" class="form-control bg-white" id="depositAmountDisplay" 
+                                                                           value="<fmt:formatNumber value='${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : property.price}' type='number' groupingUsed='true'/>" readonly>
+                                                                    <input type="hidden" id="depositAmount" name="depositAmount" 
+                                                                           value="${propertyBookingTemplate != null ? propertyBookingTemplate.depositAmount : property.price}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-3">
+                                                            <label class="form-label fw-bold text-success">Tổng giá trị hợp đồng:</label>
+                                                            <div class="input-group input-group-lg">
+                                                                <span class="input-group-text bg-success text-white">₫</span>
+                                                                <input type="text" class="form-control fw-bold text-success fs-5" id="totalPriceDisplay" readonly>
+                                                                <input type="hidden" id="totalPrice" name="totalPrice">
+                                                            </div>
+                                                            <div class="form-text text-muted mt-2">
+                                                                <small><i class="fas fa-info-circle me-1"></i>Tổng tiền = Tiền thuê hàng tháng + Tiền đặt cọc</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                        <div class="alert alert-warning" role="alert">
-                                            <i class="fa fa-exclamation-triangle me-2"></i>
-                                            <small><strong>Lưu ý quan trọng:</strong> Bằng việc tick vào ô xác nhận, bạn đồng ý với tất cả các điều khoản và điều kiện của hợp đồng thuê nhà này. Vui lòng đọc kỹ trước khi xác nhận.</small>
+                                            <!-- Article 3 - Terms and Conditions -->
+                                            <div class="mb-4">
+                                                <h6 class="fw-bold text-orange-600 mb-3">ĐIỀU 3: ĐIỀU KHOẢN VÀ ĐIỀU KIỆN</h6>
+                                                <div class="ms-3">
+                                                    <div class="bg-blue-50 p-3 rounded border-start border-4 border-blue-500 mb-3">
+                                                        <label class="form-label fw-bold">3.1 Điều khoản và điều kiện:</label>
+                                                        <textarea class="form-control" id="termsAndConditions" name="termsAndConditions" 
+                                                                  rows="3" readonly>${propertyBookingTemplate != null ? propertyBookingTemplate.termsAndConditions : 'Hai bên cam kết thực hiện đúng và đầy đủ các điều khoản đã thỏa thuận.'}</textarea>
+                                                    </div>
+                                                    
+                                                    <div class="bg-yellow-50 p-3 rounded border-start border-4 border-yellow-500">
+                                                        <label class="form-label fw-bold">3.2 Điều khoản phạt:</label>
+                                                        <textarea class="form-control" id="penaltyClause" name="penaltyClause" 
+                                                                  rows="3" readonly>${propertyBookingTemplate != null ? propertyBookingTemplate.penaltyClause : 'Trong quá trình thực hiện nếu có vướng mắc, hai bên sẽ cùng nhau thỏa thuận giải quyết trên tinh thần hợp tác.'}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Article 4 - Agreement -->
+                                            <div class="mb-4">
+                                                <h6 class="fw-bold text-orange-600 mb-3">ĐIỀU 4: XÁC NHẬN KÝ KẾT</h6>
+                                                <div class="ms-3">
+                                                    <!-- Landlord signature status (read-only) -->
+                                                    <div class="alert alert-success mb-3" role="alert">
+                                                        <i class="fas fa-check-circle me-2"></i>
+                                                        <strong>Chủ nhà đã ký kết hợp đồng này</strong>
+                                                        <br><small>Các điều khoản và điều kiện đã được chủ nhà xác nhận.</small>
+                                                    </div>
+
+                                                    <!-- Renter signature -->
+                                                    <div class="bg-orange-50 p-4 rounded border mb-3">
+                                                        <h6 class="fw-bold text-orange-600 mb-3">
+                                                            <i class="fas fa-signature me-2"></i>Chữ ký người thuê nhà:
+                                                        </h6>
+                                                        
+                                                        <!-- Digital signature canvas -->
+                                                        <div class="signature-container mb-3">
+                                                            <label class="form-label fw-bold mb-2">Vui lòng ký tên của bạn vào khung bên dưới:</label>
+                                                            <div class="signature-canvas-wrapper border rounded p-2 bg-white" style="text-align: center;">
+                                                                <canvas id="signatureCanvas" width="500" height="150" 
+                                                                        style="border: 2px dashed #ddd; cursor: crosshair; max-width: 100%; height: auto;"></canvas>
+                                                                <div class="mt-2">
+                                                                    <button type="button" class="btn btn-outline-secondary btn-sm me-2" onclick="clearSignature()">
+                                                                        <i class="fas fa-eraser me-1"></i>Xóa chữ ký
+                                                                    </button>
+                                                                    <small class="text-muted">Sử dụng chuột hoặc ngón tay để ký tên</small>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" id="signatureData" name="signatureData">
+                                                        </div>
+
+                                                        <!-- Agreement checkbox -->
+                                                        <div class="form-check mb-3">
+                                                            <input class="form-check-input me-3" type="checkbox" id="signedByRenter" name="signedByRenter" value="true" required style="transform: scale(1.5);">
+                                                            <label class="form-check-label fw-bold" for="signedByRenter">
+                                                                <i class="fas fa-user me-2 text-orange-600"></i>Tôi đã ký tên và đồng ý với tất cả điều khoản của hợp đồng thuê nhà này
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Hidden input for landlord signature (always true) -->
+                                                    <input type="hidden" name="signedByLandlord" value="true">
+                                                </div>
+                                            </div>
+
+                                            <div class="alert alert-warning" role="alert">
+                                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                                <small><strong>Lưu ý quan trọng:</strong> Bằng việc tick vào ô xác nhận, bạn đồng ý với tất cả các điều khoản và điều kiện của hợp đồng thuê nhà này. Vui lòng đọc kỹ trước khi xác nhận.</small>
+                                            </div>
                                         </div>
                                     </c:if>
                                 </div>
@@ -585,6 +715,60 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
                 integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" 
         crossorigin="anonymous"></script>
+
+        <!-- Signature Canvas Styles -->
+        <style>
+            .signature-canvas-wrapper {
+                background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+                box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            }
+            
+            #signatureCanvas {
+                border: 2px dashed #dee2e6 !important;
+                background: white;
+                border-radius: 8px;
+                transition: border-color 0.3s ease;
+            }
+            
+            #signatureCanvas:hover {
+                border-color: #ffa500 !important;
+            }
+            
+            #signatureCanvas.active {
+                border-color: #fd7e14 !important;
+                box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+            }
+            
+            .signature-container {
+                position: relative;
+            }
+            
+            .signature-container::after {
+                content: "Chữ ký của bạn";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #6c757d;
+                font-style: italic;
+                pointer-events: none;
+                z-index: 1;
+                opacity: 0.5;
+                font-size: 14px;
+            }
+            
+            .signature-container.has-signature::after {
+                display: none;
+            }
+            
+            /* Responsive canvas */
+            @media (max-width: 768px) {
+                #signatureCanvas {
+                    width: 100% !important;
+                    height: auto !important;
+                }
+            }
+        </style>
 
         <!-- Schedule Viewing Modal Script -->
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/schedule-modal.js"></script>
@@ -640,9 +824,65 @@
                                                     const totalPriceInput = document.getElementById('totalPrice');
                                                     const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
 
+                                                    // Set current date on modal open
+                                                    function setCurrentDate() {
+                                                        const now = new Date();
+                                                        const day = String(now.getDate()).padStart(2, '0');
+                                                        const month = String(now.getMonth() + 1).padStart(2, '0');
+                                                        const year = now.getFullYear();
+                                                        // Hiển thị theo định dạng Việt Nam: dd/mm/yyyy
+                                                        document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
+                                                    }
+                                                    
+                                                    // Calculate end date based on start date and months
+                                                    function calculateEndDate() {
+                                                        const startDateInput = document.getElementById('startDate');
+                                                        const monthsSelect = document.getElementById('rentalMonths');
+                                                        const endDateInput = document.getElementById('endDate');
+                                                        const displayStartDate = document.getElementById('displayStartDate');
+                                                        const displayEndDate = document.getElementById('displayEndDate');
+                                                        
+                                                        if (startDateInput.value && monthsSelect.value) {
+                                                            const startDate = new Date(startDateInput.value);
+                                                            const months = parseInt(monthsSelect.value);
+                                                            
+                                                            // Calculate end date (chính xác ngày cuối cùng của kỳ thuê)
+                                                            const endDate = new Date(startDate);
+                                                            endDate.setMonth(endDate.getMonth() + months);
+                                                            endDate.setDate(endDate.getDate() - 1); // Ngày cuối của kỳ thuê
+                                                            
+                                                            // Format dates theo định dạng Việt Nam (dd/mm/yyyy)
+                                                            const formatDate = (date) => {
+                                                                const day = String(date.getDate()).padStart(2, '0');
+                                                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                                const year = date.getFullYear();
+                                                                return `${day}/${month}/${year}`;
+                                                            };
+                                                            
+                                                            // Update displays
+                                                            displayStartDate.textContent = formatDate(startDate);
+                                                            displayEndDate.textContent = formatDate(endDate);
+                                                            
+                                                            // Set hidden end date input (định dạng yyyy-mm-dd cho form submit)
+                                                            const endDateString = endDate.toISOString().split('T')[0];
+                                                            endDateInput.value = endDateString;
+                                                            
+                                                            // Calculate total price
+                                                            calculateTotalPrice();
+                                                        } else {
+                                                            displayStartDate.textContent = '__/__/____';
+                                                            displayEndDate.textContent = '__/__/____';
+                                                            endDateInput.value = '';
+                                                        }
+                                                    }
+                                                    
                                                     function calculateTotalPrice() {
+                                                        const monthsSelect = document.getElementById('rentalMonths');
                                                         const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
                                                         const depositAmount = parseFloat(depositAmountInput.value) || 0;
+                                                        const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
+                                                        
+                                                        // Tổng giá trị hợp đồng = Tiền thuê hàng tháng + Tiền cọc (không nhân với số tháng)
                                                         const totalPrice = monthlyRent + depositAmount;
                                                         
                                                         // Update hidden field value
@@ -654,37 +894,148 @@
                                                         }
                                                     }
 
-                                                    // Set minimum dates for rental period
-                                                    if (startDateInput && endDateInput) {
-                                                        const today = new Date();
-                                                        const yyyy = today.getFullYear();
-                                                        const mm = String(today.getMonth() + 1).padStart(2, '0');
-                                                        const dd = String(today.getDate()).padStart(2, '0');
-                                                        const todayStr = `${yyyy}-${mm}-${dd}`;
+                                                // Set minimum dates and add event listeners
+                                                if (startDateInput && endDateInput) {
+                                                    const today = new Date();
+                                                    const yyyy = today.getFullYear();
+                                                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                                                    const dd = String(today.getDate()).padStart(2, '0');
+                                                    const todayStr = `${yyyy}-${mm}-${dd}`;
 
-                                                                    startDateInput.min = todayStr;
-                                                                    endDateInput.min = todayStr;
+                                                    startDateInput.min = todayStr;
 
-                                                                    // Update end date minimum when start date changes
-                                                                    startDateInput.addEventListener('change', function () {
-                                                                        endDateInput.min = this.value;
-                                                                        if (endDateInput.value && endDateInput.value < this.value) {
-                                                                            endDateInput.value = '';
-                                                                        }
-                                                                    });
-                                                                }
+                                                    // Add event listeners for date and month changes
+                                                    startDateInput.addEventListener('change', calculateEndDate);
+                                                    
+                                                    const monthsSelect = document.getElementById('rentalMonths');
+                                                    if (monthsSelect) {
+                                                        monthsSelect.addEventListener('change', calculateEndDate);
+                                                    }
+                                                }
 
-                                                                // Calculate total price when modal is shown (initial calculation)
-                                                                // Remove the deposit amount input listener since it's now readonly
-                                                                
-                                                                // Initial calculation when modal opens
-                                                                if (rentalBookingModal) {
-                                                                    rentalBookingModal.addEventListener('shown.bs.modal', function () {
-                                                                        calculateTotalPrice();
-                                                                    });
-                                                                }
+                                                // Initial calculation when modal opens
+                                                if (rentalBookingModal) {
+                                                    rentalBookingModal.addEventListener('shown.bs.modal', function () {
+                                                        setCurrentDate();
+                                                        calculateTotalPrice();
+                                                        
+                                                        // Format display amounts
+                                                        const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
+                                                        const depositAmount = parseFloat(depositAmountInput.value) || 0;
+                                                        
+                                                        const monthlyRentDisplay = document.getElementById('monthlyRentDisplay');
+                                                        const depositAmountDisplay = document.getElementById('depositAmountDisplay');
+                                                        
+                                                        if (monthlyRentDisplay) {
+                                                            monthlyRentDisplay.value = monthlyRent.toLocaleString('vi-VN');
+                                                        }
+                                                        if (depositAmountDisplay) {
+                                                            depositAmountDisplay.value = depositAmount.toLocaleString('vi-VN');
+                                                        }
 
-                                                                // Also calculate on page load
+                                                        // Initialize digital signature
+                                                        initializeSignature();
+                                                    });
+                                                }
+
+                                                // Digital Signature Functions
+                                                let signatureCanvas, signatureCtx, isDrawing = false;
+
+                                                function initializeSignature() {
+                                                    signatureCanvas = document.getElementById('signatureCanvas');
+                                                    if (!signatureCanvas) return;
+
+                                                    signatureCtx = signatureCanvas.getContext('2d');
+                                                    
+                                                    // Set canvas size for better quality
+                                                    const rect = signatureCanvas.getBoundingClientRect();
+                                                    signatureCanvas.width = 500;
+                                                    signatureCanvas.height = 150;
+                                                    
+                                                    // Configure drawing style
+                                                    signatureCtx.strokeStyle = '#000';
+                                                    signatureCtx.lineWidth = 2;
+                                                    signatureCtx.lineCap = 'round';
+                                                    signatureCtx.lineJoin = 'round';
+                                                    
+                                                    // Mouse events
+                                                    signatureCanvas.addEventListener('mousedown', startDrawing);
+                                                    signatureCanvas.addEventListener('mousemove', draw);
+                                                    signatureCanvas.addEventListener('mouseup', stopDrawing);
+                                                    signatureCanvas.addEventListener('mouseout', stopDrawing);
+                                                    
+                                                    // Touch events for mobile
+                                                    signatureCanvas.addEventListener('touchstart', handleTouch);
+                                                    signatureCanvas.addEventListener('touchmove', handleTouch);
+                                                    signatureCanvas.addEventListener('touchend', stopDrawing);
+                                                }
+
+                                                function startDrawing(e) {
+                                                    isDrawing = true;
+                                                    signatureCanvas.classList.add('active');
+                                                    
+                                                    const rect = signatureCanvas.getBoundingClientRect();
+                                                    const scaleX = signatureCanvas.width / rect.width;
+                                                    const scaleY = signatureCanvas.height / rect.height;
+                                                    
+                                                    signatureCtx.beginPath();
+                                                    signatureCtx.moveTo(
+                                                        (e.clientX - rect.left) * scaleX, 
+                                                        (e.clientY - rect.top) * scaleY
+                                                    );
+                                                }
+
+                                                function draw(e) {
+                                                    if (!isDrawing) return;
+                                                    
+                                                    const rect = signatureCanvas.getBoundingClientRect();
+                                                    const scaleX = signatureCanvas.width / rect.width;
+                                                    const scaleY = signatureCanvas.height / rect.height;
+                                                    
+                                                    signatureCtx.lineTo(
+                                                        (e.clientX - rect.left) * scaleX, 
+                                                        (e.clientY - rect.top) * scaleY
+                                                    );
+                                                    signatureCtx.stroke();
+                                                }
+
+                                                function stopDrawing() {
+                                                    if (isDrawing) {
+                                                        isDrawing = false;
+                                                        signatureCanvas.classList.remove('active');
+                                                        
+                                                        // Save signature data
+                                                        const signatureData = signatureCanvas.toDataURL();
+                                                        document.getElementById('signatureData').value = signatureData;
+                                                        
+                                                        // Add visual feedback
+                                                        const container = document.querySelector('.signature-container');
+                                                        container.classList.add('has-signature');
+                                                    }
+                                                }
+
+                                                function handleTouch(e) {
+                                                    e.preventDefault();
+                                                    const touch = e.touches[0];
+                                                    const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                                                                    e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                                                        clientX: touch.clientX,
+                                                        clientY: touch.clientY
+                                                    });
+                                                    signatureCanvas.dispatchEvent(mouseEvent);
+                                                }
+
+                                                function clearSignature() {
+                                                    if (signatureCtx) {
+                                                        signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+                                                        document.getElementById('signatureData').value = '';
+                                                        
+                                                        // Remove visual feedback
+                                                        const container = document.querySelector('.signature-container');
+                                                        container.classList.remove('has-signature');
+                                                        signatureCanvas.classList.remove('active');
+                                                    }
+                                                }                                                                // Also calculate on page load
                                                                 calculateTotalPrice();
 
                                                                 // Rental form validation and submission
@@ -697,32 +1048,31 @@
                                                                     rentalForm.addEventListener('submit', function (event) {
                                                                         let isValid = true;
 
-                                                                        // Validate required fields
-                                                                        const startDate = startDateInput.value;
-                                                                        const endDate = endDateInput.value;
-                                                                        const depositAmount = depositAmountInput.value;
-                                                                        const termsAndConditions = document.getElementById('termsAndConditions').value;
-                                                                        const signedByRenter = document.getElementById('signedByRenter').checked;
+                                                        // Validate required fields
+                                                        const startDate = startDateInput.value;
+                                                        const monthsSelect = document.getElementById('rentalMonths');
+                                                        const months = monthsSelect ? monthsSelect.value : '';
+                                                        const depositAmount = depositAmountInput.value;
+                                                        const signedByRenter = document.getElementById('signedByRenter').checked;
+                                                        const signatureData = document.getElementById('signatureData').value;
 
-                                                                        if (!startDate || !endDate || !depositAmount || depositAmount <= 0) {
-                                                                            event.preventDefault();
-                                                                            showToast('Vui lòng điền đầy đủ thông tin bắt buộc');
-                                                                            isValid = false;
-                                                                        }
+                                                        if (!startDate || !months || !depositAmount || depositAmount <= 0) {
+                                                            event.preventDefault();
+                                                            showToast('Vui lòng điền đầy đủ thông tin bắt buộc');
+                                                            isValid = false;
+                                                        }
 
-                                                                        if (!signedByRenter) {
-                                                                            event.preventDefault();
-                                                                            showToast('Bạn cần xác nhận đồng ý với hợp đồng thuê nhà');
-                                                                            isValid = false;
-                                                                        }
+                                                        if (!signatureData || signatureData.trim() === '') {
+                                                            event.preventDefault();
+                                                            showToast('Vui lòng ký tên vào khung chữ ký');
+                                                            isValid = false;
+                                                        }
 
-                                                                        if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
-                                                                            event.preventDefault();
-                                                                            showToast('Ngày kết thúc phải sau ngày bắt đầu');
-                                                                            isValid = false;
-                                                                        }
-
-                                                                        if (!isValid) {
+                                                        if (!signedByRenter) {
+                                                            event.preventDefault();
+                                                            showToast('Bạn cần xác nhận đồng ý với hợp đồng thuê nhà');
+                                                            isValid = false;
+                                                        }                                                                        if (!isValid) {
                                                                             return false;
                                                                         }
 
@@ -743,6 +1093,10 @@
                                                                         if (rentalForm)
                                                                             rentalForm.reset();
                                                                         calculateTotalPrice();
+                                                                        
+                                                                        // Clear signature
+                                                                        clearSignature();
+                                                                        
                                                                         if (rentalSubmitBtn)
                                                                             rentalSubmitBtn.disabled = false;
                                                                         if (rentalSpinner)
