@@ -417,7 +417,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <span class="text-muted">Xin chào, <strong class="text-dark">${sessionScope.user.name}</strong></span>
-                            <a href="#" class="btn btn-main">
+                            <a href="${pageContext.request.contextPath}/payments" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>
                         </div>
@@ -509,7 +509,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
-                                        <a href="#" class="btn btn-link p-0 text-gradient fw-semibold text-decoration-none small">
+                                        <a href="${pageContext.request.contextPath}/payments" class="btn btn-link p-0 text-gradient fw-semibold text-decoration-none small">
                                             <i class="fas fa-credit-card me-1"></i>Nạp tiền
                                         </a>
                                     </div>
