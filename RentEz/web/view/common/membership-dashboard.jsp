@@ -108,7 +108,7 @@
                                 </div>
                                 <div>
                                     <h3 class='text-2xl font-bold text-gray-900'>${currentTier.tierName}</h3>
-                                    <p class='text-gray-600 my-2 current-tier-description' data-description='${currentTier.description}'></p>
+                                    <p class='text-gray-600 my-2'>${currentTier.description}</p>
                                     <div class="inline-flex items-center bg-yellow-50 text-yellow-800 text-sm px-4 py-2 rounded-full mt-2 shadow-sm">
                                         <i class='fas fa-clock mr-2'></i>
                                         Hết hạn: <fmt:formatDate value='${currentUserTier.endDate}' pattern='dd/MM/yyyy'/>
@@ -172,7 +172,7 @@
                         </div>
 
                         <h3 class='text-center text-2xl font-bold text-gray-900 mb-3'>${tier.tierName}</h3>
-                        <p class='text-center text-gray-500 mb-8 px-4 tier-description' data-description='${tier.description}'></p>
+                        <p class='text-center text-gray-500 mb-8 px-4'>${tier.description}</p>
 
                         <div class='text-center mb-8 py-4 px-6 rounded-2xl bg-gray-50'>
                             <p class='text-4xl font-extrabold 
@@ -262,35 +262,6 @@
         <!-- JavaScript xử lý modal -->
         <script>
             let currentTierPrice = 0;
-            
-            // Function to format descriptions with line breaks at periods
-            function formatDescription(text) {
-                if (!text) return '';
-                
-                // Split by periods and filter out empty strings
-                const sentences = text.split('.').filter(sentence => sentence.trim().length > 0);
-                
-                // Join sentences with periods and line breaks
-                return sentences.map(sentence => sentence.trim()).join('.<br>') + (sentences.length > 0 ? '.' : '');
-            }
-            
-            // Initialize descriptions when page loads
-            document.addEventListener('DOMContentLoaded', function() {
-                // Format tier descriptions in cards
-                const tierDescriptions = document.querySelectorAll('.tier-description');
-                tierDescriptions.forEach(element => {
-                    const description = element.getAttribute('data-description');
-                    element.innerHTML = formatDescription(description);
-                });
-                
-                // Format current tier description
-                const currentTierDescription = document.querySelector('.current-tier-description');
-                if (currentTierDescription) {
-                    const description = currentTierDescription.getAttribute('data-description');
-                    currentTierDescription.innerHTML = formatDescription(description);
-                }
-            });
-            
             function openPurchaseModal(tierId, tierName, price) {
                 document.getElementById('purchaseTierId').value = tierId;
                 document.getElementById('purchaseTierName').textContent = tierName;

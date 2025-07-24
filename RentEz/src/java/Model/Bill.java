@@ -16,7 +16,6 @@ public class Bill {
     // Additional properties for display purposes
     private List<BillDetail> billDetails;
     private Property property;
-    private String renterName;
 
     // Constructors
     public Bill() {
@@ -108,13 +107,5 @@ public class Bill {
 
     public void setProperty(Property property) {
         this.property = property;
-    }
-    
-    public String getRenterName() {
-        return renterName;
-    }
-    
-    public void setRenterName(String renterName) {
-        this.renterName = renterName;
     }
 }

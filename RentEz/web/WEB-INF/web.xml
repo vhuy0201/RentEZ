@@ -64,7 +64,10 @@
         <servlet-name>RentalBookingServlet</servlet-name>
         <servlet-class>Controller.RentalBookingServlet</servlet-class>
     </servlet>
-    <!-- ViewContractsServlet removed - replaced by BookingServlet -->    <servlet>
+    <servlet>
+        <servlet-name>ViewContractsServlet</servlet-name>
+        <servlet-class>Controller.ViewContractsServlet</servlet-class>
+    </servlet>    <servlet>
         <servlet-name>PaymentServlet</servlet-name>
         <servlet-class>Controller.PaymentServlet</servlet-class>
     </servlet>
@@ -80,39 +83,6 @@
     <servlet>
         <servlet-name>AdminTierServlet</servlet-name>
         <servlet-class>Controller.AdminTierServlet</servlet-class>
-    </servlet>
-    <!-- Admin Management Servlets -->
-    <servlet>
-        <servlet-name>AdminDashboardServlet</servlet-name>
-        <servlet-class>Controller.AdminDashboardServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminUserServlet</servlet-name>
-        <servlet-class>Controller.AdminUserServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminPropertyTypeServlet</servlet-name>
-        <servlet-class>Controller.AdminPropertyTypeServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminServiceFeeServlet</servlet-name>
-        <servlet-class>Controller.AdminServiceFeeServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminPaymentHistoryServlet</servlet-name>
-        <servlet-class>Controller.AdminPaymentHistoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>AdminBookingServlet</servlet-name>
-        <servlet-class>Controller.AdminBookingServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ImageServlet</servlet-name>
-        <servlet-class>Controller.ImageServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>BillManagementServlet</servlet-name>
-        <servlet-class>Controller.BillManagementServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -179,7 +149,10 @@
         <servlet-name>RentalBookingServlet</servlet-name>
         <url-pattern>/rental-booking</url-pattern>
     </servlet-mapping>
-    <!-- ViewContractsServlet mapping removed - replaced by BookingServlet -->    <servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewContractsServlet</servlet-name>
+        <url-pattern>/view-contracts</url-pattern>
+    </servlet-mapping>    <servlet-mapping>
         <servlet-name>PaymentServlet</servlet-name>
         <url-pattern>/payments</url-pattern>
         <url-pattern>/payment-action</url-pattern>
@@ -195,44 +168,6 @@
         <servlet-name>AdminTierServlet</servlet-name>
         <url-pattern>/admin/tiers</url-pattern>
         <url-pattern>/admin/tier-action</url-pattern>
-    </servlet-mapping>
-    <!-- Admin Management Servlet Mappings -->
-    <servlet-mapping>
-        <servlet-name>AdminDashboardServlet</servlet-name>
-        <url-pattern>/admin/dashboard</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminUserServlet</servlet-name>
-        <url-pattern>/admin/users</url-pattern>
-        <url-pattern>/admin/user-action</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminPropertyTypeServlet</servlet-name>
-        <url-pattern>/admin/property-types</url-pattern>
-        <url-pattern>/admin/property-type-action</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminServiceFeeServlet</servlet-name>
-        <url-pattern>/admin/service-fees</url-pattern>
-        <url-pattern>/admin/service-fee-action</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminPaymentHistoryServlet</servlet-name>
-        <url-pattern>/admin/payment-history</url-pattern>
-        <url-pattern>/admin/payment-action</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminBookingServlet</servlet-name>
-        <url-pattern>/admin/bookings</url-pattern>
-        <url-pattern>/admin/booking-detail</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ImageServlet</servlet-name>
-        <url-pattern>/uploads/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>BillManagementServlet</servlet-name>
-        <url-pattern>/billManagement</url-pattern>
     </servlet-mapping>
     
     <welcome-file-list>

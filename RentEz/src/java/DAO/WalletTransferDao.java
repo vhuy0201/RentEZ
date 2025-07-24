@@ -1,4 +1,5 @@
 package DAO;
+
 import Connection.DBConnection;
 import Model.WalletTransfer;
 import java.sql.*;
@@ -6,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 public class WalletTransferDao {
 
     public List<WalletTransfer> getTransfersByUserId(int userID) {

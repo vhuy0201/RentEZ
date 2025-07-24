@@ -117,7 +117,7 @@
                                                     action="${pageContext.request.contextPath}/search"
                                                     >
                                                     <div class="row gy-sm-4 gy-3">
-                                                        <div class="col-lg-2 col-sm-6 col-xs-6">                              <input
+                                                        <div class="col-lg-3 col-sm-6 col-xs-6">                              <input
                                                                 type="text"
                                                                 placeholder="Nhập từ khóa tìm kiếm"
                                                                 name="searchKeyword"
@@ -126,7 +126,7 @@
                                                                 value=""
                                                                 />
                                                         </div>
-                                                        <div class="col-lg-2 col-sm-6 col-xs-6">
+                                                        <div class="col-lg-3 col-sm-6 col-xs-6">
                                                             <div class="select-has-icon icon-black">                                <select
                                                                     class="select common-input"
                                                                     name="roomType"
@@ -140,7 +140,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-2 col-sm-6 col-xs-6">
+                                                        <div class="col-lg-3 col-sm-6 col-xs-6">
                                                                 <div class="select-has-icon icon-black">                                
                                                                     <select
                                                                         class="select common-input"
@@ -153,27 +153,7 @@
                                                                     </select>
                                                                 </div>
                                                         </div>
-                                                        <div class="col-lg-2 col-sm-6 col-xs-6">
-                                                            <input
-                                                                type="number"
-                                                                placeholder="Giá tối thiểu"
-                                                                name="minPrice"
-                                                                class="common-input"
-                                                                min="0"
-                                                                step="100000"
-                                                                />
-                                                        </div>
-                                                        <div class="col-lg-2 col-sm-6 col-xs-6">
-                                                            <input
-                                                                type="number"
-                                                                placeholder="Giá tối đa"
-                                                                name="maxPrice"
-                                                                class="common-input"
-                                                                min="0"
-                                                                step="100000"
-                                                                />
-                                                        </div>
-                                                        <div class="col-lg-2 col-sm-6 col-xs-6">                              
+                                                        <div class="col-lg-3 col-sm-6 col-xs-6">                              
                                                             <button type="submit" class="btn btn-main w-100">
                                                                 Tìm phòng
                                                             </button>
@@ -297,7 +277,7 @@
                                             <a class="link" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
                                                 <c:choose>
                                                     <c:when test="${not empty property.avatar}">
-                                                        <img src="${property.avatar}" 
+                                                        <img src="${pageContext.request.contextPath}/${property.avatar}" 
                                                              alt="${property.title}" class="cover-img" />
                                                     </c:when>
                                                     <c:otherwise>

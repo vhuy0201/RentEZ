@@ -1,7 +1,7 @@
 package Controller;
 
 import DAO.MessageDAO;
-import DAO.UsersDao;
+import DAO.UserDao;
 import DAO.PropertyDAO;
 import DAO.NotificationDAO;
 import Model.Message;
@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class MessageServlet extends HttpServlet {
     
     private final MessageDAO messageDAO = new MessageDAO();
-    private final UsersDao userDAO = new UsersDao();
+    private final UserDao userDAO = new UserDao();
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private final NotificationDAO notificationDAO = new NotificationDAO();
 

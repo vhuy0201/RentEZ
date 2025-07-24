@@ -2,7 +2,7 @@ package Controller;
 
 import DAO.InteractionRatingDAO;
 import DAO.NotificationDAO;
-import DAO.UsersDao;
+import DAO.UserDao;
 import Model.InteractionRating;
 import Model.Notification;
 import Model.User;
@@ -26,7 +26,7 @@ import org.json.JSONObject;
 public class InteractionRatingServlet extends HttpServlet {
 
     private final InteractionRatingDAO ratingDAO = new InteractionRatingDAO();
-    private final UsersDao userDAO = new UsersDao();
+    private final UserDao userDAO = new UserDao();
 
     /**
      * Handles the HTTP GET method - displays rating pages and AJAX requests

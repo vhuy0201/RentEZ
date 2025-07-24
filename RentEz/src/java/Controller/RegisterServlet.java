@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import DAO.UsersDao;
+import DAO.UserDao;
 import DAO.WalletDAO;
 import Model.User;
 import Model.Wallet;
@@ -76,7 +76,7 @@ public class RegisterServlet extends HttpServlet {
         }
         
         // Check if email already exists
-        UsersDao userDao = new UsersDao();
+        UserDao userDao = new UserDao();
         User existingUser = userDao.getByEmail(email);
         if (existingUser != null) {
             isValid = false;
@@ -134,12 +134,6 @@ public class RegisterServlet extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs /**
-     * Handle email verification code submission
-     * 
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     private void verifyEmail(HttpServletRequest request, HttpServletResponse response) 
@@ -168,7 +162,7 @@ public class RegisterServlet extends HttpServlet {
         if (storedCode.equals(submittedCode)) {
             try {
                 // Insert user into database
-                UsersDao userDao = new UsersDao();
+                UserDao userDao = new UserDao();
                 boolean result = userDao.insert(tempUser);
                 
                 if (result) {

@@ -1,210 +1,233 @@
 package DAO;
 
+import Connection.DBConnection;
+import Model.Message;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import Model.Message;
-import Connection.DBConnection;
+import java.util.Map;
 
 public class MessageDAO {
-    
-    public List<Message> getMessagesBetweenUsers(int user1Id, int user2Id, int propertyId) {
+
+    public Message save(Message message) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "INSERT INTO Message (SenderID, ReceiverID, PropertyID, Content, SendDate, ReadStatus, IsNegotiation) "
+                + "VALUES (?, ?, ?, ?, GETDATE(), ?, ?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, message.getSenderId());
+            pstmt.setInt(2, message.getReceiverId());
+            pstmt.setInt(3, message.getPropertyId());
+            pstmt.setString(4, message.getContent());
+            pstmt.setBoolean(5, message.isReadStatus());
+            pstmt.setBoolean(6, message.isNegotiation());
+            
+            int rows = pstmt.executeUpdate();
+            
+            // Get the generated ID
+            if (rows > 0) {
+                ResultSet generatedKeys = pstmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    message.setMessageId(generatedKeys.getInt(1));
+                }
+            }
+            
+            conn.close();
+            return message;
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return message;
+        }
+    }
+
+    public Message getById(int messageId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM Message WHERE MessageID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, messageId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                Message message = new Message();
+                message.setMessageId(rs.getInt("MessageID"));
+                message.setSenderId(rs.getInt("SenderID"));
+                message.setReceiverId(rs.getInt("ReceiverID"));
+                message.setPropertyId(rs.getInt("PropertyID"));
+                message.setContent(rs.getString("Content"));
+                message.setSendDate(rs.getTimestamp("SendDate"));
+                message.setReadStatus(rs.getBoolean("ReadStatus"));
+                message.setNegotiation(rs.getBoolean("IsNegotiation"));
+                
+                conn.close();
+                return message;
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return null;
+    }
+
+    public boolean markAsRead(int messageId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "UPDATE Message SET ReadStatus = 1 WHERE MessageID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, messageId);
+            int rows = pstmt.executeUpdate();
+            conn.close();
+            return rows > 0;
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return false;
+        }
+    }
+
+    public boolean delete(int messageId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "DELETE FROM Message WHERE MessageID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, messageId);
+            int rows = pstmt.executeUpdate();
+            conn.close();
+            return rows > 0;
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+            return false;
+        }
+    }
+
+    // Get messages between two users for a specific property
+    public List<Message> getConversation(int user1Id, int user2Id, int propertyId) {
+        Connection conn = DBConnection.getConnection();
         List<Message> messages = new ArrayList<>();
-        String sql = "SELECT * FROM Messages WHERE " +
-                    "((senderId = ? AND receiverId = ?) OR (senderId = ? AND receiverId = ?)) " +
-                    "AND propertyId = ? ORDER BY sendDate ASC";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM Message WHERE ((SenderID = ? AND ReceiverID = ?) OR " +
+                     "(SenderID = ? AND ReceiverID = ?)) AND PropertyID = ? ORDER BY SendDate";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, user1Id);
+            pstmt.setInt(2, user2Id);
+            pstmt.setInt(3, user2Id);
+            pstmt.setInt(4, user1Id);
+            pstmt.setInt(5, propertyId);
             
-            stmt.setInt(1, user1Id);
-            stmt.setInt(2, user2Id);
-            stmt.setInt(3, user2Id);
-            stmt.setInt(4, user1Id);
-            stmt.setInt(5, propertyId);
-            
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Message message = new Message();
-                message.setMessageId(rs.getInt("messageId"));
-                message.setSenderId(rs.getInt("senderId"));
-                message.setReceiverId(rs.getInt("receiverId"));
-                message.setPropertyId(rs.getInt("propertyId"));
-                message.setContent(rs.getString("content"));
-                message.setSendDate(rs.getTimestamp("sendDate"));
-                message.setReadStatus(rs.getBoolean("readStatus"));
-                message.setNegotiation(rs.getBoolean("isNegotiation"));
+                message.setMessageId(rs.getInt("MessageID"));
+                message.setSenderId(rs.getInt("SenderID"));
+                message.setReceiverId(rs.getInt("ReceiverID"));
+                message.setPropertyId(rs.getInt("PropertyID"));
+                message.setContent(rs.getString("Content"));
+                message.setSendDate(rs.getTimestamp("SendDate"));
+                message.setReadStatus(rs.getBoolean("ReadStatus"));
+                message.setNegotiation(rs.getBoolean("IsNegotiation"));
                 messages.add(message);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
-        
         return messages;
     }
     
-    public List<Message> getConversationsByUserId(int userId) {
-        List<Message> conversations = new ArrayList<>();
-        String sql = "WITH LastMessages AS ( " +
-                    "SELECT *, " +
-                    "ROW_NUMBER() OVER (PARTITION BY " +
-                    "CASE WHEN senderId < receiverId THEN CAST(senderId AS VARCHAR) + '-' + CAST(receiverId AS VARCHAR) + '-' + CAST(propertyId AS VARCHAR) " +
-                    "ELSE CAST(receiverId AS VARCHAR) + '-' + CAST(senderId AS VARCHAR) + '-' + CAST(propertyId AS VARCHAR) END " +
-                    "ORDER BY sendDate DESC) as rn " +
-                    "FROM Messages WHERE senderId = ? OR receiverId = ? " +
-                    ") " +
-                    "SELECT * FROM LastMessages WHERE rn = 1 ORDER BY sendDate DESC";
+    // Get recent conversations for a user (latest message per conversation)
+    public List<Message> getRecentConversations(int userId) {
+        Connection conn = DBConnection.getConnection();
+       List<Message> conversations = new ArrayList<>();
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "WITH RankedMessages AS (" +
+                    "SELECT *, ROW_NUMBER() OVER(PARTITION BY CASE " +
+                    "   WHEN SenderID = ? THEN ReceiverID " +
+                    "   WHEN ReceiverID = ? THEN SenderID END, PropertyID " +
+                    "   ORDER BY SendDate DESC) as RowNum " +
+                    "FROM Message " +
+                    "WHERE SenderID = ? OR ReceiverID = ?) " +
+                    "SELECT * FROM RankedMessages WHERE RowNum = 1 ORDER BY SendDate DESC";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, userId);
+            pstmt.setInt(3, userId);
+            pstmt.setInt(4, userId);
             
-            stmt.setInt(1, userId);
-            stmt.setInt(2, userId);
-            
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Message message = new Message();
-                message.setMessageId(rs.getInt("messageId"));
-                message.setSenderId(rs.getInt("senderId"));
-                message.setReceiverId(rs.getInt("receiverId"));
-                message.setPropertyId(rs.getInt("propertyId"));
-                message.setContent(rs.getString("content"));
-                message.setSendDate(rs.getTimestamp("sendDate"));
-                message.setReadStatus(rs.getBoolean("readStatus"));
-                message.setNegotiation(rs.getBoolean("isNegotiation"));
-                conversations.add(message);
+                message.setMessageId(rs.getInt("MessageID"));
+                message.setSenderId(rs.getInt("SenderID"));
+                message.setReceiverId(rs.getInt("ReceiverID"));
+                message.setPropertyId(rs.getInt("PropertyID"));
+                message.setContent(rs.getString("Content"));
+                message.setSendDate(rs.getTimestamp("SendDate"));
+                message.setReadStatus(rs.getBoolean("ReadStatus"));
+                message.setNegotiation(rs.getBoolean("IsNegotiation"));
+                
+                // Use other user's ID as the key (for conversations)
+                int otherUserId = message.getSenderId() == userId ? message.getReceiverId() : message.getSenderId();
+                conversations.add(otherUserId, message);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
-        
         return conversations;
     }
     
-    public boolean sendMessage(Message message) {
-        String sql = "INSERT INTO Messages (senderId, receiverId, propertyId, content, sendDate, readStatus, isNegotiation) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, message.getSenderId());
-            stmt.setInt(2, message.getReceiverId());
-            stmt.setInt(3, message.getPropertyId());
-            stmt.setString(4, message.getContent());
-            stmt.setTimestamp(5, new Timestamp(message.getSendDate().getTime()));
-            stmt.setBoolean(6, message.isReadStatus());
-            stmt.setBoolean(7, message.isNegotiation());
-            
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean markAsRead(int messageId) {
-        String sql = "UPDATE Messages SET readStatus = 1 WHERE messageId = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, messageId);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean markConversationAsRead(int userId, int otherUserId, int propertyId) {
-        String sql = "UPDATE Messages SET readStatus = 1 WHERE receiverId = ? AND senderId = ? AND propertyId = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, userId);
-            stmt.setInt(2, otherUserId);
-            stmt.setInt(3, propertyId);
-            return stmt.executeUpdate() >= 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public int getUnreadMessageCount(int userId) {
-        String sql = "SELECT COUNT(*) FROM Messages WHERE receiverId = ? AND readStatus = 0";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, userId);
-            ResultSet rs = stmt.executeQuery();
+    // Count unread messages for a user
+    public int getUnreadCount(int userId) {
+        Connection conn = DBConnection.getConnection();
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM Message WHERE ReceiverID = ? AND ReadStatus = 0";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1);
+                count = rs.getInt(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
-        
-        return 0;
+        return count;
     }
     
-    public Message getMessageById(int messageId) {
-        String sql = "SELECT * FROM Messages WHERE messageId = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, messageId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Message message = new Message();
-                message.setMessageId(rs.getInt("messageId"));
-                message.setSenderId(rs.getInt("senderId"));
-                message.setReceiverId(rs.getInt("receiverId"));
-                message.setPropertyId(rs.getInt("propertyId"));
-                message.setContent(rs.getString("content"));
-                message.setSendDate(rs.getTimestamp("sendDate"));
-                message.setReadStatus(rs.getBoolean("readStatus"));
-                message.setNegotiation(rs.getBoolean("isNegotiation"));
-                return message;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
-        return null;
-    }
-    
-    public List<Message> getRecentMessages(int userId, int limit) {
+    // Get negotiation messages for a property between two users
+    public List<Message> getNegotiationMessages(int user1Id, int user2Id, int propertyId) {
+        Connection conn = DBConnection.getConnection();
         List<Message> messages = new ArrayList<>();
-        String sql = "SELECT TOP (?) * FROM Messages WHERE receiverId = ? AND readStatus = 0 ORDER BY sendDate DESC";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM Message WHERE ((SenderID = ? AND ReceiverID = ?) OR " +
+                     "(SenderID = ? AND ReceiverID = ?)) AND PropertyID = ? AND IsNegotiation = 1 " +
+                     "ORDER BY SendDate";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, user1Id);
+            pstmt.setInt(2, user2Id);
+            pstmt.setInt(3, user2Id);
+            pstmt.setInt(4, user1Id);
+            pstmt.setInt(5, propertyId);
             
-            stmt.setInt(1, limit);
-            stmt.setInt(2, userId);
-            
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Message message = new Message();
-                message.setMessageId(rs.getInt("messageId"));
-                message.setSenderId(rs.getInt("senderId"));
-                message.setReceiverId(rs.getInt("receiverId"));
-                message.setPropertyId(rs.getInt("propertyId"));
-                message.setContent(rs.getString("content"));
-                message.setSendDate(rs.getTimestamp("sendDate"));
-                message.setReadStatus(rs.getBoolean("readStatus"));
-                message.setNegotiation(rs.getBoolean("isNegotiation"));
+                message.setMessageId(rs.getInt("MessageID"));
+                message.setSenderId(rs.getInt("SenderID"));
+                message.setReceiverId(rs.getInt("ReceiverID"));
+                message.setPropertyId(rs.getInt("PropertyID"));
+                message.setContent(rs.getString("Content"));
+                message.setSendDate(rs.getTimestamp("SendDate"));
+                message.setReadStatus(rs.getBoolean("ReadStatus"));
+                message.setNegotiation(rs.getBoolean("IsNegotiation"));
                 messages.add(message);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
-        
         return messages;
     }
 }
