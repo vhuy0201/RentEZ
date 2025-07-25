@@ -289,7 +289,7 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Bất động sản mới nhất</h3>
-                            <a href="${pageContext.request.contextPath}/admin/properties" 
+                            <a href="${pageContext.request.contextPath}/admin/posts" 
                                class="text-primary-600 hover:text-primary-700 text-sm font-medium">
                                 Xem tất cả →
                             </a>

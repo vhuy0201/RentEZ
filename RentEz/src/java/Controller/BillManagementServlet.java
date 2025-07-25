@@ -178,7 +178,7 @@ public class BillManagementServlet extends HttpServlet {
         }
 
         request.setAttribute("bill", bill);
-        request.getRequestDispatcher("/view/landlord/page/billDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/landlord/page/bill-details.jsp").forward(request, response);
     }
 
     private void showCreateBillForm(HttpServletRequest request, HttpServletResponse response, int landlordId)
@@ -203,6 +203,10 @@ public class BillManagementServlet extends HttpServlet {
             bill.setBillDetails(billDetails);
             // Populate additional details
             populateBillDetails(bill);
+            
+            // Get booking information for monthly rent
+            Booking booking = bookingDAO.getByPropertyAndRenter(bill.getPropertyId(), bill.getRenterId());
+            request.setAttribute("booking", booking);
         }
 
         request.setAttribute("bill", bill);
@@ -300,11 +304,15 @@ public class BillManagementServlet extends HttpServlet {
             // Delete existing bill details
             billDetailDAO.deleteByBillId(billId);
 
-            // Calculate total amount from details
+            // Get booking information for monthly rent
+            Booking booking = bookingDAO.getByPropertyAndRenter(bill.getPropertyId(), bill.getRenterId());
+            double monthlyRent = booking != null ? booking.getMonthlyRent() : 0;
+
+            // Calculate total amount from details + monthly rent
             String[] categoryIds = request.getParameterValues("categoryId");
             String[] usageValues = request.getParameterValues("usageValue");
 
-            double totalAmount = 0;
+            double totalAmount = monthlyRent; // Start with monthly rent
             if (categoryIds != null) {
                 for (int i = 0; i < categoryIds.length; i++) {
                     if (!categoryIds[i].isEmpty() && !usageValues[i].isEmpty()) {

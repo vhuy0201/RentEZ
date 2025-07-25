@@ -9,66 +9,72 @@
             </div>
             <h1 class="text-xl font-bold">RentEz Admin</h1>
         </div>
-        
-        <nav class="space-y-2">
+
+        <nav class="space-y-2" style="max-height: calc(100vh - 220px); overflow-y: auto;">
             <a href="${pageContext.request.contextPath}/admin/dashboard" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors 
                ${pageContext.request.requestURI.contains('dashboard') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-chart-line mr-3"></i>
                 Dashboard
             </a>
-            
+
             <a href="${pageContext.request.contextPath}/admin/users" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
                ${pageContext.request.requestURI.contains('user') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-users mr-3"></i>
                 Quản lý người dùng
             </a>
-            
+
             <a href="${pageContext.request.contextPath}/admin/property-types" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
                ${pageContext.request.requestURI.contains('property-type') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-building mr-3"></i>
                 Quản lý loại phòng
             </a>
-            
-            <a href="${pageContext.request.contextPath}/admin/service-fees" 
+
+            <a href="${pageContext.request.contextPath}/admin/posts" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
-               ${pageContext.request.requestURI.contains('service-fee') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
-                <i class="fas fa-calculator mr-3"></i>
-                Quản lý phí dịch vụ
+               ${pageContext.request.requestURI.contains('posts') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
+                <i class="fas fa-newspaper mr-3"></i>
+                Quản lý đăng bài
             </a>
-            
+
             <a href="${pageContext.request.contextPath}/admin/tiers" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
                ${pageContext.request.requestURI.contains('tier') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-crown mr-3"></i>
                 Quản lý gói thành viên
             </a>
-            
+
             <a href="${pageContext.request.contextPath}/admin/payment-history" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
                ${pageContext.request.requestURI.contains('payment') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-credit-card mr-3"></i>
                 Lịch sử thanh toán
             </a>
-            
+
             <a href="${pageContext.request.contextPath}/admin/bookings" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
                ${pageContext.request.requestURI.contains('booking') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-file-contract mr-3"></i>
                 Quản lý đặt thuê
             </a>
-            
-            <a href="${pageContext.request.contextPath}/admin/support" 
+            <a href="${pageContext.request.contextPath}/ReportServlet?action=getUserReports" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
-               ${pageContext.request.requestURI.contains('support') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
-                <i class="fas fa-headset mr-3"></i>
-                Hỗ trợ & Phản hồi
+               ${pageContext.request.requestURI.contains('booking') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
+                <i class="fas fa-users mr-3"></i>
+                Báo cáo người dùng
             </a>
+
+<!--            <a href="${pageContext.request.contextPath}/admin/contact-messages" 
+   class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
+            ${pageContext.request.requestURI.contains('support') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
+             <i class="fas fa-headset mr-3"></i>
+             Hỗ trợ & Phản hồi
+         </a>-->
         </nav>
     </div>
-    
+
     <!-- User info at bottom -->
     <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white border-opacity-20">
         <div class="flex items-center">

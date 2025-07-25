@@ -32,6 +32,25 @@ public class SearchServlet extends HttpServlet {
         String searchKeyword = request.getParameter("searchKeyword");
         String roomType = request.getParameter("roomType");
         String location = request.getParameter("location");
+        String minPriceStr = request.getParameter("minPrice");
+        String maxPriceStr = request.getParameter("maxPrice");
+        
+        // Xử lý tham số giá
+        Double minPrice = null;
+        Double maxPrice = null;
+        
+        try {
+            if (minPriceStr != null && !minPriceStr.trim().isEmpty()) {
+                minPrice = Double.parseDouble(minPriceStr);
+            }
+            if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
+                maxPrice = Double.parseDouble(maxPriceStr);
+            }
+        } catch (NumberFormatException e) {
+            // Nếu có lỗi parse số, bỏ qua filter giá
+            minPrice = null;
+            maxPrice = null;
+        }
         
         // Khởi tạo các DAO
         PropertyDAO propertyDAO = new PropertyDAO();
@@ -39,7 +58,7 @@ public class SearchServlet extends HttpServlet {
         PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
         
         // Tìm kiếm các phòng thỏa mãn điều kiện
-        List<Property> searchResults = propertyDAO.searchProperties(searchKeyword, location, roomType);
+        List<Property> searchResults = propertyDAO.searchProperties(searchKeyword, location, roomType, minPrice, maxPrice);
         
         // Lấy thông tin về locations để hiển thị địa chỉ
         Map<Integer, Location> locations = new HashMap<>();
@@ -80,6 +99,8 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("searchKeyword", searchKeyword);
         request.setAttribute("selectedRoomType", roomType);
         request.setAttribute("selectedLocation", location);
+        request.setAttribute("selectedMinPrice", minPrice);
+        request.setAttribute("selectedMaxPrice", maxPrice);
         request.setAttribute("resultCount", searchResults.size());
         request.setAttribute("userFavorites", userFavorites);
         

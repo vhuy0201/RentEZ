@@ -412,14 +412,6 @@
                                         )</small>
                                 </span>
                             </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="paymentMethod" value="bank_transfer" id="bankTransfer" class="form-radio text-orange-500" />
-                                <span class="ml-2 cursor-pointer"><i class="fas fa-university mr-2"></i>Chuyển khoản ngân hàng</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="paymentMethod" value="credit_card" id="creditCard" class="form-radio text-orange-500" />
-                                <span class="ml-2 cursor-pointer"><i class="fas fa-credit-card mr-2"></i>Thẻ tín dụng</span>
-                            </label>
                         </div>
                     </div>
 
@@ -465,17 +457,8 @@
                                 <span class="ml-2 cursor-pointer"><i class="fas fa-university mr-2"></i>Chuyển khoản ngân hàng</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="method" value="credit_card" id="addFundsCreditCard"
-                                       class="form-radio text-orange-500" />
-                                <span class="ml-2 cursor-pointer"><i class="fas fa-credit-card mr-2"></i>Thẻ tín dụng</span>
-                            </label>
-                            <label class="inline-flex items-center">
                                 <input type="radio" name="method" value="vnpay" id="addFundsVNPay" class="form-radio text-orange-500" />
                                 <span class="ml-2 cursor-pointer"><i class="fas fa-wallet mr-2"></i>Ví VNPay</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="method" value="momo" id="addFundsMomo" class="form-radio text-orange-500" />
-                                <span class="ml-2 cursor-pointer"><i class="fas fa-mobile-alt mr-2"></i>Ví MoMo</span>
                             </label>
                         </div>
                     </div>
@@ -676,6 +659,12 @@
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 });
+            }
+
+            // View bill details function
+            function viewBillDetails(billId) {
+                // Redirect to bill details page
+                window.location.href = '${pageContext.request.contextPath}/bill-details?id=' + billId;
             }
         </script>
 

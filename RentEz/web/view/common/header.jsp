@@ -4,12 +4,14 @@
 <%@ page import="Model.UserTier" %>
 <%@ page import="DAO.UserTierDAO" %>
 <%@ page import="DAO.NotificationDAO" %>
+<%@ page import="DAO.MessageDAO" %>
 
 <%
     // Get the current user from session
     User currentUser = (User) session.getAttribute("user");
     UserTier userTier = null;
     int unreadNotificationCount = 0;
+    int unreadMessageCount = 0;
     
     // If user is logged in, get their membership tier info and notification count
     if (currentUser != null) {
@@ -19,29 +21,32 @@
             
             NotificationDAO notificationDAO = new NotificationDAO();
             unreadNotificationCount = notificationDAO.getUnreadCount(currentUser.getUserId());
+            
+            MessageDAO messageDAO = new MessageDAO();
+            unreadMessageCount = messageDAO.getUnreadMessageCount(currentUser.getUserId());
         } catch (Exception e) {
             System.out.println("Error in header: " + e.getMessage());
         }
     }
 %>
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ sơ người dùng - RentEz</title>
-     <link
-      rel="shortcut icon"
-      href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png"
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hồ sơ người dùng - RentEz</title>
+<link
+    rel="shortcut icon"
+    href="https://cityscape.wowtheme7.com/assets/images/logo/favicon.png"
     />
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/bootstrap.min.css" />
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css" />
-    <!-- Line awesome -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css" />
-    <!-- Main stylesheet -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css" />
-    
-    <!-- Vietnamese Fonts -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css" />
+<!-- Bootstrap -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/bootstrap.min.css" />
+<!-- Font awesome -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css" />
+<!-- Line awesome -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css" />
+<!-- Main stylesheet -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css" />
+
+<!-- Vietnamese Fonts -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/vietnamese-fonts.css" />
 
 <header class="header">
     <div class="container container-two">
@@ -66,10 +71,10 @@
                         </li>
                     </c:if>
                     <li class="nav-menu__item">
-                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/about">Giới thiệu</a>
+                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/view/guest/page/about.jsp">Giới thiệu</a>
                     </li>
                     <li class="nav-menu__item">
-                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/contact">Liên hệ</a>
+                        <a class="nav-menu__link" href="${pageContext.request.contextPath}/view/guest/page/contact.jsp">Liên hệ</a>
                     </li>
                 </ul>
             </div>
@@ -88,19 +93,29 @@
                                 </c:if>
                             </a>
                         </div>
-                        
+
+                        <!-- Message Notification -->
+                        <div class="notification-bell">
+                            <a href="${pageContext.request.contextPath}/MessageServlet?action=getLandLord" class="notification-icon">
+                                <i class="fas fa-comments"></i>
+                                <c:if test="${unreadMessageCount > 0}">
+                                    <span class="notification-badge">${unreadMessageCount}</span>
+                                </c:if>
+                            </a>
+                        </div>
+
                         <!-- Show user avatar and dropdown if user is logged in -->
                         <div class="user-dropdown">
                             <div class="user-dropdown__toggle">                                <span class="user-avatar">
                                     <c:choose>
                                         <c:when test="${empty sessionScope.user.avatar}">
                                             <img src="${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png" 
-                                                alt="${sessionScope.user.name}" />
+                                                 alt="${sessionScope.user.name}" />
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${pageContext.request.contextPath}/${sessionScope.user.avatar}" 
-                                                onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
-                                                alt="${sessionScope.user.name}" />
+                                            <img src="${sessionScope.user.avatar}" 
+                                                 onerror="this.src='${pageContext.request.contextPath}/view/guest/asset/img/default-avatar.png'" 
+                                                 alt="${sessionScope.user.name}" />
                                         </c:otherwise>
                                     </c:choose>
 
@@ -108,12 +123,10 @@
                                 <span class="user-name">${sessionScope.user.name}</span>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
-                            <div class="user-dropdown__menu">                                <!-- Membership package info box -->                                <div class="membership-box">
-                                    <h4>Gói thành viên</h4>
-                                    <p>Tiết kiệm đến 39% so với đăng tin riêng lẻ</p>
-                                    <a href="${pageContext.request.contextPath}/membership" class="text-link">Tìm hiểu thêm</a>
-                                </div>
-                                  <!-- User menu items -->                                <ul class="user-menu">                                  <li>
+                            <div class="user-dropdown__menu">
+                                <!-- User menu items -->                                
+                                <ul class="user-menu">                                  
+                                    <li>
                                         <c:choose>
                                             <c:when test="${sessionScope.user.role == 'Landlord'}">
                                                 <a href="${pageContext.request.contextPath}/landLordHomeServlet">
@@ -122,11 +135,24 @@
                                             </c:when>
                                         </c:choose>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/messages"><i class="fas fa-comments"></i> Tin nhắn</a></li>                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
+                                    <li><a href="${pageContext.request.contextPath}/MessageServlet?action=getLandLord"><i class="fas fa-comments"></i> Tin nhắn</a></li>                                    <li><a href="${pageContext.request.contextPath}/schedules"><i class="fas fa-calendar-alt"></i> Lịch xem nhà</a></li>
                                     <li><a href="${pageContext.request.contextPath}/view-contracts"><i class="fas fa-file-contract"></i> Hợp đồng thuê</a></li>
                                     <li><a href="${pageContext.request.contextPath}/payments"><i class="fas fa-credit-card"></i> Thanh toán</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/ratings"><i class="fas fa-star"></i> Đánh giá</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a></li>
+                                    <li>
+                                        <c:choose>
+                                            <c:when test="${sessionScope.user.role == 'Landlord'}">
+                                                <a href="${pageContext.request.contextPath}/ratings"><i class="fas fa-star"></i> Đánh giá</a>
+                                            </c:when>
+                                        </c:choose>
+                                    </li>
+                                    <li>
+                                        <c:choose>
+                                            <c:when test="${sessionScope.user.role == 'Landlord'}">
+                                                <a href="${pageContext.request.contextPath}/membership"><i class="fas fa-crown"></i> Gói thành viên</a>
+                                            </c:when>
+                                        </c:choose>
+
+                                    </li>
                                     <li><a href="${pageContext.request.contextPath}/profile"><i class="fas fa-user-edit"></i> Chỉnh sửa hồ sơ</a></li>
                                     <li><a href="${pageContext.request.contextPath}/change-password"><i class="fas fa-key"></i> Đổi mật khẩu</a></li>
                                     <li class="divider"></li>
@@ -149,13 +175,13 @@
     :root {
         --gradient-one: linear-gradient(135deg, #ffaa00 0%, #ffcb66 100%);
     }
-    
+
     /* Notification Bell Styles */
     .notification-bell {
         margin-right: 15px;
         position: relative;
     }
-    
+
     .notification-icon {
         display: flex;
         align-items: center;
@@ -166,16 +192,16 @@
         background-color: rgba(255, 255, 255, 0.1);
         transition: all 0.3s;
     }
-    
+
     .notification-icon:hover {
         background-color: rgba(255, 255, 255, 0.2);
     }
-    
+
     .notification-icon i {
         font-size: 18px;
         color: currentColor;
     }
-    
+
     .notification-badge {
         position: absolute;
         top: -5px;
@@ -192,11 +218,17 @@
         font-weight: bold;
         animation: pulse 2s infinite;
     }
-    
+
     @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+        }
     }
 
     /* User dropdown styles */
@@ -344,7 +376,7 @@
         fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
         document.head.appendChild(fontAwesome);
     }
-    
+
     // Set global context path for notifications.js
     window.contextPath = '${pageContext.request.contextPath}';// Enhanced dropdown behavior 
     document.addEventListener('DOMContentLoaded', function () {
@@ -376,7 +408,8 @@
                     dropdownMenu.style.visibility = 'hidden';
                     dropdownMenu.style.opacity = '0';
                 }
-            });        }
+            });
+        }
     });
 </script>
 

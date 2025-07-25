@@ -916,7 +916,7 @@
                                             <div class="current-image mt-3">
                                                 <label class="form-label">Hình ảnh hiện tại:</label>
                                                 <div class="current-image-preview">
-                                                    <img src="${pageContext.request.contextPath}/image?path=${property.avatar}" alt="Current Property Image" class="current-property-image">
+                                                    <img src="${property.avatar}" alt="Current Property Image" class="current-property-image">
                                                 </div>
                                                 <small class="text-muted">Chọn ảnh mới để thay thế ảnh hiện tại</small>
                                             </div>

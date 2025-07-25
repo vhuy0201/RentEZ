@@ -5,6 +5,7 @@ import DAO.PropertyDAO;
 import Model.Location;
 import Model.Property;
 import Model.User;
+import Service.CloudinaryService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "EditPropertyServlet", urlPatterns = {"/editProperty"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -71,6 +74,7 @@ public class EditPropertyServlet extends HttpServlet {
             return;
         }
 
+        
         // Đưa dữ liệu vào request để hiển thị trên form
         request.setAttribute("property", property);
         request.setAttribute("location", location);
@@ -221,14 +225,13 @@ public class EditPropertyServlet extends HttpServlet {
             property.setAvailabilityStatus(availabilityStatus);
             property.setPriorityLevel(priorityLevel);
             
-            // Handle image upload - keep existing image if no new image is uploaded
-            String imagePath = handleFileUpload(request);
-            if (imagePath != null) {
-                property.setAvatar(imagePath);
-            } else {
-                property.setAvatar(existingProperty.getAvatar()); // Keep existing avatar
-            }
+            // Handle avatar upload - keep existing image if no new image is uploaded
+            String avatarPath = handleAvatarUpload(request, existingProperty);
+            property.setAvatar(avatarPath);
 
+            // Handle additional property images
+            List<String> newImageUrls = handleMultipleImageUpload(request);
+            
             boolean propertySuccess = propertyDAO.update(property);
             if (propertySuccess) {
                 session.setAttribute("successMessage", "Cập nhật bất động sản thành công!");
@@ -256,32 +259,131 @@ public class EditPropertyServlet extends HttpServlet {
         }
     }
 
-    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
-        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-
-        String fileName = null;
-        for (Part part : request.getParts()) {
-            if ("propertyImage".equals(part.getName())) {
-                String submittedFileName = part.getSubmittedFileName();
-                if (submittedFileName != null && !submittedFileName.isEmpty()) {
-                    // Generate unique filename
-                    String fileExtension = "";
-                    int lastDotIndex = submittedFileName.lastIndexOf('.');
-                    if (lastDotIndex > 0) {
-                        fileExtension = submittedFileName.substring(lastDotIndex);
+    /**
+     * Handle avatar upload for property (thumbnail image)
+     */
+    private String handleAvatarUpload(HttpServletRequest request, Property existingProperty) throws IOException, ServletException {
+        try {
+            CloudinaryService cloudinaryService = CloudinaryService.getInstance();
+            
+            // Check if Cloudinary is configured
+            if (!cloudinaryService.isConfigured()) {
+                System.err.println("Cloudinary is not configured properly");
+                return existingProperty.getAvatar(); // Keep existing avatar
+            }
+            
+            for (Part part : request.getParts()) {
+                if ("propertyAvatar".equals(part.getName())) {
+                    String submittedFileName = part.getSubmittedFileName();
+                    if (submittedFileName != null && !submittedFileName.isEmpty()) {
+                        try {
+                            // Delete old image from Cloudinary if exists
+                            if (existingProperty.getAvatar() != null && 
+                                !existingProperty.getAvatar().isEmpty() && 
+                                existingProperty.getAvatar().contains("cloudinary.com")) {
+                                String oldPublicId = cloudinaryService.extractPublicId(existingProperty.getAvatar());
+                                if (oldPublicId != null) {
+                                    cloudinaryService.deleteImage(oldPublicId);
+                                }
+                            }
+                            
+                            // Upload new avatar to Cloudinary
+                            String cloudinaryUrl = cloudinaryService.uploadImage(part.getInputStream(), submittedFileName, "rentez/property-avatars");
+                            return cloudinaryUrl;
+                        } catch (Exception e) {
+                            System.err.println("Error uploading avatar to Cloudinary: " + e.getMessage());
+                            return existingProperty.getAvatar(); // Keep existing avatar on error
+                        }
                     }
-                    fileName = System.currentTimeMillis() + "_" + submittedFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-                    String filePath = uploadPath + File.separator + fileName;
-                    part.write(filePath);
-                    break;
                 }
             }
+            
+            // No new avatar uploaded, keep existing
+            return existingProperty.getAvatar();
+            
+        } catch (Exception e) {
+            System.err.println("Error in handleAvatarUpload: " + e.getMessage());
+            return existingProperty.getAvatar(); // Keep existing avatar on error
         }
-        return fileName != null ? UPLOAD_DIR + "/" + fileName : null;
+    }
+
+    /**
+     * Handle multiple property images upload
+     */
+    private List<String> handleMultipleImageUpload(HttpServletRequest request) throws IOException, ServletException {
+        List<String> imageUrls = new ArrayList<>();
+        try {
+            CloudinaryService cloudinaryService = CloudinaryService.getInstance();
+            
+            // Check if Cloudinary is configured
+            if (!cloudinaryService.isConfigured()) {
+                System.err.println("Cloudinary is not configured properly");
+                return imageUrls;
+            }
+            
+            for (Part part : request.getParts()) {
+                if ("propertyImages".equals(part.getName())) {
+                    String submittedFileName = part.getSubmittedFileName();
+                    if (submittedFileName != null && !submittedFileName.isEmpty()) {
+                        try {
+                            // Upload to Cloudinary
+                            String cloudinaryUrl = cloudinaryService.uploadPropertyImage(part.getInputStream(), submittedFileName);
+                            imageUrls.add(cloudinaryUrl);
+                        } catch (Exception e) {
+                            System.err.println("Error uploading property image to Cloudinary: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error in handleMultipleImageUpload: " + e.getMessage());
+        }
+        return imageUrls;
+    }
+
+    private String handleFileUpload(HttpServletRequest request, Property existingProperty) throws IOException, ServletException {
+        try {
+            CloudinaryService cloudinaryService = CloudinaryService.getInstance();
+            
+            // Check if Cloudinary is configured
+            if (!cloudinaryService.isConfigured()) {
+                System.err.println("Cloudinary is not configured properly");
+                return existingProperty.getAvatar(); // Keep existing avatar
+            }
+            
+            for (Part part : request.getParts()) {
+                if ("propertyImage".equals(part.getName())) {
+                    String submittedFileName = part.getSubmittedFileName();
+                    if (submittedFileName != null && !submittedFileName.isEmpty()) {
+                        try {
+                            // Delete old image from Cloudinary if exists
+                            if (existingProperty.getAvatar() != null && 
+                                !existingProperty.getAvatar().isEmpty() && 
+                                existingProperty.getAvatar().contains("cloudinary.com")) {
+                                String oldPublicId = cloudinaryService.extractPublicId(existingProperty.getAvatar());
+                                if (oldPublicId != null) {
+                                    cloudinaryService.deleteImage(oldPublicId);
+                                }
+                            }
+                            
+                            // Upload new image to Cloudinary
+                            String cloudinaryUrl = cloudinaryService.uploadPropertyImage(part.getInputStream(), submittedFileName);
+                            return cloudinaryUrl;
+                        } catch (Exception e) {
+                            System.err.println("Error uploading to Cloudinary: " + e.getMessage());
+                            return existingProperty.getAvatar(); // Keep existing avatar on error
+                        }
+                    }
+                }
+            }
+            
+            // No new image uploaded, keep existing
+            return existingProperty.getAvatar();
+            
+        } catch (Exception e) {
+            System.err.println("Error in handleFileUpload: " + e.getMessage());
+            return existingProperty.getAvatar(); // Keep existing avatar on error
+        }
     }
 
     @Override

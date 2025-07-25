@@ -183,7 +183,7 @@ public class PaymentServlet extends HttpServlet {
             } else if ("Landlord".equals(currentUser.getRole())) {
                 // For landlords - get bills for their properties
                 bills = billDAO.getBillsForLandlord(currentUser.getUserId());
-                recentPayments = paymentDAO.getPaymentsByPayeeId(currentUser.getUserId());
+                recentPayments = paymentDAO.getPaymentsByPayerId(currentUser.getUserId());
             }
 
             // Separate paid and unpaid bills
@@ -392,7 +392,8 @@ public class PaymentServlet extends HttpServlet {
             WalletTransferDao walletTransferDAO = new WalletTransferDao();
             PropertyDAO propertyDAO = new PropertyDAO();
             UsersDao userDAO = new UsersDao();
-
+            
+            
             // Get data
             Bill bill = billDAO.getById(billId);
             Wallet userWallet = walletDAO.getWalletByUserId(currentUser.getUserId());
@@ -400,6 +401,23 @@ public class PaymentServlet extends HttpServlet {
             User landlord = userDAO.getById(property.getLandlordId());
             Wallet landlordWallet = walletDAO.getWalletByUserId(landlord.getUserId());
             
+            // KIỂM TRA SỐ DƯ - Nếu thanh toán bằng ví điện tử
+            if ("wallet".equals(paymentMethod)) {
+                if (userWallet == null) {
+                    response.sendRedirect(request.getContextPath() + "/payments?error="
+                            + URLEncoder.encode("Không tìm thấy ví của bạn!", "UTF-8"));
+                    return;
+                }
+                
+                if (userWallet.getBalance() < bill.getTotalAmount()) {
+                    double shortfall = bill.getTotalAmount() - userWallet.getBalance();
+                    response.sendRedirect(request.getContextPath() + "/payments?error="
+                            + URLEncoder.encode("Số dư không đủ! Bạn thiếu " 
+                            + String.format("%,.0f", shortfall) 
+                            + " VND để thanh toán hóa đơn này. Vui lòng nạp thêm tiền vào ví.", "UTF-8"));
+                    return;
+                }
+            }
             // Create wallet transfer records
             WalletTransfer renterTransfer = new WalletTransfer();
             renterTransfer.setAmount(-bill.getTotalAmount()); // Negative for outgoing

@@ -802,4 +802,77 @@ public class BookingDAO {
         }
         return stats;
     }
+    
+    /**
+     * Check if a renter has ever rented a property from a specific landlord
+     * @param renterId ID of the renter
+     * @param landlordId ID of the landlord
+     * @return true if the renter has rented from the landlord, false otherwise
+     */
+    public boolean hasRenterBookedFromLandlord(int renterId, int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Booking b " +
+                    "JOIN Property p ON b.PropertyID = p.PropertyID " +
+                    "WHERE b.RenterID = ? AND p.LandlordID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, renterId);
+            pstmt.setInt(2, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                conn.close();
+                return count > 0;
+            }
+            
+            conn.close();
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error checking renter-landlord booking relationship: " + e);
+            return false;
+        }
+    }
+    
+    /**
+     * Get booking by property ID (for repost functionality)
+     */
+    public Booking getBookingByPropertyId(int propertyId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT TOP 1 * FROM Booking WHERE PropertyID = ? ORDER BY CreatedAt DESC";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, propertyId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                Booking booking = new Booking();
+                booking.setBookingId(rs.getInt("BookingID"));
+                booking.setRenterId(rs.getInt("RenterID"));
+                booking.setPropertyId(rs.getInt("PropertyID"));
+                booking.setStartDate(rs.getTimestamp("StartDate"));
+                booking.setEndDate(rs.getTimestamp("EndDate"));
+                booking.setTotalPrice(rs.getDouble("TotalPrice"));
+                booking.setStatus(rs.getString("Status"));
+                booking.setDepositAmount(rs.getDouble("DepositAmount"));
+                booking.setMonthlyRent(rs.getDouble("MonthlyRent"));
+                booking.setPenaltyClause(rs.getString("PenaltyClause"));
+                booking.setTermsAndConditions(rs.getString("TermsAndConditions"));
+                booking.setCreatedAt(rs.getTimestamp("CreatedAt"));
+                booking.setSignedAt(rs.getTimestamp("SignedAt"));
+                booking.setSignedByRenter(rs.getBoolean("SignedByRenter"));
+                booking.setSignedByLandlord(rs.getBoolean("SignedByLandlord"));
+                
+                conn.close();
+                return booking;
+            }
+            
+            conn.close();
+            return null;
+        } catch (Exception e) {
+            System.out.println("Error getting booking by property ID: " + e);
+            return null;
+        }
+    }
 }

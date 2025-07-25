@@ -420,7 +420,7 @@
                 border-radius: 1rem;
                 padding: 2rem;
                 width: 90%;
-                max-width: 600px;
+                max-width: 1000px;
                 box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
                 position: relative;
             }
@@ -449,6 +449,16 @@
 
             .modal-body {
                 padding: 1.5rem;
+            }
+
+            .form-footer .btn {
+                padding: 0.5rem 1.2rem !important;
+                font-size: 1rem !important;
+                border-radius: 0.5rem !important;
+                margin-right: 0.5rem;
+            }
+            .form-footer .btn:last-child {
+                margin-right: 0;
             }
         </style>
     </head>
@@ -533,6 +543,9 @@
                         </div>
                         <div class="form-body">
                             <form action="addProperty" method="post" enctype="multipart/form-data" id="propertyForm">
+                                <input type="hidden" id="aiGenImage1" name="aiGenImage1" value="">
+                                <input type="hidden" id="aiGenImage2" name="aiGenImage2" value="">
+                                <input type="hidden" id="aiGenImage3" name="aiGenImage3" value="">
                                 <!-- Basic Information Section -->
                                 <div class="form-section">
                                     <div class="form-section-title">
@@ -559,13 +572,9 @@
                                             <label for="typeId" class="form-label">Loại bất động sản <span class="text-danger">*</span></label>
                                             <select id="typeId" name="typeId" class="form-select" required>
                                                 <option value="">-- Chọn loại bất động sản --</option>
-                                                <option value="1">Căn hộ/Chung cư</option>
-                                                <option value="2">Nhà riêng</option>
-                                                <option value="3">Biệt thự</option>
-                                                <option value="4">Nhà mặt phố</option>
-                                                <option value="5">Đất nền</option>
-                                                <option value="6">Văn phòng</option>
-                                                <option value="7">Phòng trọ</option>
+                                                <c:forEach var="propertyType" items="${propertyTypes}">
+                                                    <option value="${propertyType.typeId}">${propertyType.typeName}</option>
+                                                </c:forEach>
                                             </select>
                                         </div>
 
@@ -678,17 +687,44 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
-                                            <label for="propertyImage" class="form-label">Tải lên hình ảnh <span class="text-danger">*</span></label>
-                                            <div class="image-upload" onclick="document.getElementById('propertyImage').click()">
+                                            <label for="avatarImage" class="form-label">Ảnh đại diện <span class="text-danger">*</span></label>
+                                            <small class="text-muted d-block mb-2">Ảnh này sẽ hiển thị làm thumbnail cho bất động sản</small>
+                                            <div class="image-upload" onclick="document.getElementById('avatarImage').click()">
                                                 <div class="image-upload-icon">
                                                     <i class="fas fa-cloud-upload-alt"></i>
                                                 </div>
                                                 <h5>Kéo thả hoặc nhấp để chọn ảnh</h5>
-                                                <p class="text-muted mb-0">Hỗ trợ: JPG, PNG, GIF (tối đa 10MB)</p>
-                                                <input type="file" id="propertyImage" name="propertyImage" accept="image/*" style="display: none;" required onchange="previewImage(this)">
+                                                <p class="text-muted mb-0">Hỗ trợ: JPG, PNG (tối đa 5MB)</p>
+                                                <input type="file" id="avatarImage" name="avatarImage" accept="image/*" style="display: none;" required onchange="previewImage(this)">
                                             </div>
                                             <div id="imagePreview" class="mt-3" style="display: none;">
                                                 <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e65100;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- System Fee Warning -->
+                                <div class="alert alert-warning mt-4" style="border-left: 4px solid #ff9800; background: linear-gradient(135deg, #fff8e1 0%, #fff3c4 100%);">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <i class="fas fa-exclamation-triangle" style="color: #ff9800; font-size: 1.5em;"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-2" style="color: #e65100; font-weight: 600;">
+                                                <i class="fas fa-info-circle me-2"></i>Thông báo về phí hệ thống
+                                            </h6>
+                                            <p class="mb-2 text-dark">
+                                                <strong>Hệ thống sẽ tự động thu phí dịch vụ 10% trên tổng giá trị giao dịch</strong> 
+                                                khi có người thuê đặt cọc bất động sản của bạn.
+                                            </p>
+                                            <div class="small text-muted">
+                                                <i class="fas fa-calculator me-1"></i>
+                                                Ví dụ: Nếu tổng giá là 10,000,000 ₫, phí hệ thống sẽ là 1,000,000 ₫
+                                            </div>
+                                            <div class="small text-muted mt-1">
+                                                <i class="fas fa-shield-alt me-1"></i>
+                                                Phí này được sử dụng để duy trì và phát triển nền tảng, bảo đảm giao dịch an toàn
                                             </div>
                                         </div>
                                     </div>
@@ -699,10 +735,23 @@
                                     <button type="button" class="btn btn-outline" onclick="openBookingModal()">
                                         <i class="fas fa-calendar-plus me-2"></i>Tạo chính sách thuê nhà
                                     </button>
+                                    <button type="button" class="btn btn-outline" id="aiOptimizeBtn">
+                                        <i class="fas fa-magic me-2"></i>Tối ưu tiêu đề & mô tả AI
+                                    </button>
+                                    <button type="button" class="btn btn-outline" id="aiEnhanceImgBtn">
+                                        <i class="fas fa-brush me-2"></i>Làm đẹp ảnh đại diện AI
+                                    </button>
                                     <button type="submit" class="btn btn-main">
                                         <i class="fas fa-check me-2"></i>Đăng tin
                                     </button>
                                 </div>
+                                <div class="mt-4 d-flex flex-column align-center">
+                                    <button type="button" class="btn btn-outline" id="aiGenSingleImageBtn">
+                                        <i class="fas fa-image me-2"></i>Gen thêm những ảnh liên quan bằng AI
+                                    </button>
+                                    <div id="ai-gen-single-image-preview" class="mt-2"></div>
+                                </div>
+                                <div id="ai-message" class="mt-3"></div>
                             </form>
                         </div>
                     </div>
@@ -727,35 +776,27 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="startDate" class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
-                                            <input type="date" id="startDate" name="startDate" class="form-control" required onchange="calculateTotalPrice()">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="endDate" class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
-                                            <input type="date" id="endDate" name="endDate" class="form-control" required onchange="calculateTotalPrice()">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="totalPrice" class="form-label">Tổng giá (VNĐ) <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Tự động tính toán" readonly>
-                                                <span class="input-group-text">VNĐ</span>
-                                            </div>
-                                            <small class="text-muted">Tự động tính toán dựa trên giá thuê hàng tháng và thời gian thuê</small>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="depositAmount" class="form-label">Số tiền đặt cọc (VNĐ) <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="number" id="depositAmount" name="depositAmount" step="1000" class="form-control" placeholder="Nhập số tiền cọc" required>
-                                                <span class="input-group-text">VNĐ</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
                                             <label for="monthlyRent" class="form-label">Tiền thuê hàng tháng (VNĐ) <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <input type="number" id="monthlyRent" name="monthlyRent" step="1000" class="form-control" placeholder="Nhập tiền thuê" required readonly>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
-                                            <small class="text-muted">Tự động lấy từ giá ở phần chi tiết bất động sản</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="depositAmount" class="form-label">Số tiền đặt cọc (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="depositAmount" name="depositAmount" step="1000" class="form-control" placeholder="Nhập số tiền cọc" required onchange="calculateTotalPrice()">
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="totalPrice" class="form-label">Tổng giá (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Tự động tính toán" readonly>
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                            <small class="text-muted">Tự động tính toán: Tiền đặt cọc + Tiền thuê hàng tháng</small>
+                                            <div id="systemFeeDisplay"></div>
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label for="penaltyClause" class="form-label">Điều khoản phạt</label>
@@ -784,6 +825,174 @@
 
         <jsp:include page="/view/common/footer.jsp" />
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
+        <script src="https://esm.run/@google/generative-ai"></script>
+        <script type="module">
+                                            import { GoogleGenAI, Modality } from "https://esm.run/@google/genai";
+
+                                            const ai = new GoogleGenAI({apiKey: "AIzaSyARZh7ZkALP9zrvJ5l99vAFfILIQWtHU0k"});
+
+                                            document.getElementById('aiGenSingleImageBtn').onclick = async function () {
+                                                const prompt = document.getElementById('title').value.trim();
+                                                const previewDiv = document.getElementById('ai-gen-single-image-preview');
+                                                previewDiv.innerHTML = '';
+                                                if (!prompt) {
+                                                    previewDiv.innerHTML = '<div class="alert alert-danger">Vui lòng nhập mô tả để sinh ảnh!</div>';
+                                                    return;
+                                                }
+                                                previewDiv.innerHTML = '<div class="alert alert-info">Đang sinh ảnh AI, vui lòng chờ...</div>';
+                                                const images = [];
+                                                const urls = [];
+                                                for (let i = 0; i < 3; i++) {
+                                                    try {
+                                                        const response = await ai.models.generateContent({
+                                                            model: "gemini-2.0-flash-preview-image-generation",
+                                                            contents: [{role: "user", parts: [{text: prompt}]}],
+                                                            config: {
+                                                                responseModalities: [Modality.TEXT, Modality.IMAGE],
+                                                            },
+                                                        });
+                                                        let found = false;
+                                                        for (const part of response.candidates[0].content.parts) {
+                                                            if (part.inlineData) {
+                                                                const imageData = part.inlineData.data;
+                                                                const imageUrl = "data:image/png;base64," + imageData;
+                                                                images.push(imageUrl);
+                                                                found = true;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!found) {
+                                                            images.push(null);
+                                                        }
+                                                    } catch (e) {
+                                                        images.push(null);
+                                                    }
+                                                }
+
+                                                 // Gửi từng ảnh lên servlet để lấy url cloudinary
+                                                previewDiv.innerHTML = '<div class="alert alert-info">Đang upload ảnh lên Cloudinary...</div>';
+                                                for (let i = 0; i < images.length; i++) {
+                                                    if (images[i]) {
+                                                        try {
+                                                            const res = await fetch('${pageContext.request.contextPath}/upload-ai-image', {
+                                                                method: 'POST',
+                                                                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                                                body: 'imageData=' + encodeURIComponent(images[i])
+                                                            });
+                                                            const data = await res.json();
+                                                            if (data.url) {
+                                                                urls[i] = data.url;
+                                                            } else {
+                                                                urls[i] = null;
+                                                            }
+                                                        } catch (e) {
+                                                            urls[i] = null;
+                                                        }
+                                                    } else {
+                                                        urls[i] = null;
+                                                    }
+                                                }
+
+                                                // Hiển thị 3 ảnh
+                                                previewDiv.innerHTML = '';
+                                                let hasImage = false;
+                                                urls.forEach((img, idx) => {
+                                                    if (img) {
+                                                        hasImage = true;
+                                                        previewDiv.innerHTML += `
+                                                            <div style="display:inline-block;margin-right:12px;text-align:center;">
+                                                                <img src="` + img + `" alt="AI Image #` + (idx + 1) + `" style="max-width:180px;max-height:180px;border-radius:8px;border:2px solid #e65100;display:block;margin-bottom:8px;">
+                                                                <a href="` + img + `" download="ai-image-` + (idx + 1) + `.png" class="btn btn-outline btn-sm" target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fas fa-download me-2"></i>Tải ảnh #` + (idx + 1) + `
+                                                                </a>
+                                                            </div>
+                                                        `;
+                                                    } else {
+                                                        previewDiv.innerHTML += `<div style="display:inline-block;margin-right:12px;"><div class="alert alert-warning">Không nhận được ảnh #${idx+1}</div></div>`;
+                                                    }
+                                                });
+                                                document.getElementById('aiGenImage1').value = urls[0] || "";
+                                                document.getElementById('aiGenImage2').value = urls[1] || "";
+                                                document.getElementById('aiGenImage3').value = urls[2] || "";
+                                                if (!hasImage) {
+                                                    previewDiv.innerHTML = '<div class="alert alert-warning">Không nhận được ảnh nào từ AI!</div>';
+                                                }
+                                            };
+        </script>
+        <script>
+            document.getElementById('aiOptimizeBtn').onclick = async function () {
+                const title = document.getElementById('title').value;
+                const description = document.getElementById('description').value;
+                const typeIdSelect = document.getElementById('typeId');
+                const propertyTypeName = typeIdSelect.options[typeIdSelect.selectedIndex]?.text;
+                const price = document.getElementById('price').value;
+                const size = document.getElementById('size').value;
+                const bedrooms = document.getElementById('numberOfBedrooms').value;
+                const bathrooms = document.getElementById('numberOfBathrooms').value;
+
+                if (!title || !description || !propertyTypeName || !price || !size || !bedrooms || !bathrooms) {
+                    showAIMessage('Vui lòng nhập đầy đủ thông tin trước khi tối ưu!', true);
+                    return;
+                }
+
+                showAIMessage('Đang tối ưu tiêu đề và mô tả bằng AI...', false);
+
+                try {
+                    const res = await fetch('${pageContext.request.contextPath}/aiOptimizeProperty', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            title, description, propertyTypeName, price, size, bedrooms, bathrooms
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.title && data.content) {
+                        document.getElementById('title').value = data.title;
+                        document.getElementById('description').value = data.content;
+                        showAIMessage('Đã tối ưu thành công!', false);
+                    } else {
+                        showAIMessage('Không nhận được kết quả từ AI.', true);
+                    }
+                } catch (e) {
+                    showAIMessage('Có lỗi khi gọi AI: ' + e, true);
+                }
+            };
+
+            document.getElementById('aiEnhanceImgBtn').onclick = async function () {
+                const input = document.getElementById('avatarImage');
+                if (!input.files.length) {
+                    showAIMessage('Vui lòng chọn ảnh đại diện trước!', true);
+                    return;
+                }
+                showAIMessage('Đang làm đẹp ảnh bằng AI...', false);
+
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('avatarImage', file);
+                formData.append('description', document.getElementById('description').value);
+
+                try {
+                    const res = await fetch('${pageContext.request.contextPath}/aiEnhanceImage', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (!res.ok)
+                        throw new Error('Lỗi khi gửi ảnh lên server');
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('previewImg').src = url;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    showAIMessage('Đã làm đẹp ảnh thành công!', false);
+                } catch (e) {
+                    showAIMessage('Có lỗi khi làm đẹp ảnh: ' + e, true);
+                }
+            };
+
+            function showAIMessage(msg, isError) {
+                const el = document.getElementById('ai-message');
+                el.innerHTML = '<div class="alert ' + (isError ? 'alert-danger' : 'alert-info') + '">' + msg + '</div>';
+            }
+        </script>
         <script>
             // Modal control functions
             function openBookingModal() {
@@ -804,7 +1013,7 @@
                 const file = input.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         document.getElementById('previewImg').src = e.target.result;
                         document.getElementById('imagePreview').style.display = 'block';
                     };
@@ -812,30 +1021,39 @@
                 }
             }
 
-            // Calculate total price based on monthly rent and duration
+            // Calculate total price based on deposit amount and monthly rent
             function calculateTotalPrice() {
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
+                const depositAmount = document.getElementById('depositAmount').value;
                 const monthlyRent = document.getElementById('monthlyRent').value;
 
-                if (startDate && endDate && monthlyRent) {
-                    const start = new Date(startDate);
-                    const end = new Date(endDate);
-                    
-                    // Calculate difference in months
-                    const diffTime = Math.abs(end - start);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    const diffMonths = Math.ceil(diffDays / 30); // Approximate months
-                    
-                    if (diffMonths > 0) {
-                        const totalPrice = monthlyRent * diffMonths;
-                        document.getElementById('totalPrice').value = totalPrice;
-                    }
+                if (depositAmount && monthlyRent) {
+                    const totalPrice = parseInt(depositAmount) + parseInt(monthlyRent);
+                    document.getElementById('totalPrice').value = totalPrice;
+
+                    // Hiển thị phí hệ thống
+                    updateSystemFeeDisplay(totalPrice);
+                }
+            }
+
+            // Update system fee display
+            function updateSystemFeeDisplay(totalPrice) {
+                const systemFee = totalPrice * 0.10;
+                const systemFeeElement = document.getElementById('systemFeeDisplay');
+                if (systemFeeElement) {
+                    const formattedFee = new Intl.NumberFormat('vi-VN').format(systemFee);
+                    systemFeeElement.innerHTML =
+                            '<div class="alert alert-info mt-2" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3;">' +
+                            '<small>' +
+                            '<i class="fas fa-calculator me-1"></i>' +
+                            '<strong>Phí hệ thống (10%):</strong> ' +
+                            '<span class="text-primary fw-bold">' + formattedFee + ' ₫</span>' +
+                            '</small>' +
+                            '</div>';
                 }
             }
 
             // Auto-update monthly rent when property price changes
-            document.getElementById('price').addEventListener('input', function() {
+            document.getElementById('price').addEventListener('input', function () {
                 const monthlyRentField = document.getElementById('monthlyRent');
                 if (monthlyRentField) {
                     monthlyRentField.value = this.value;
@@ -845,19 +1063,17 @@
             // Submit property form with booking data
             function submitWithBooking() {
                 // Validate required fields
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
                 const totalPrice = document.getElementById('totalPrice').value;
                 const depositAmount = document.getElementById('depositAmount').value;
-                
-                if (!startDate || !endDate || !totalPrice || !depositAmount) {
+
+                if (!totalPrice || !depositAmount) {
                     alert('Vui lòng điền đầy đủ thông tin chính sách thuê nhà!');
                     return;
                 }
 
                 const propertyForm = document.getElementById('propertyForm');
-                const bookingFields = ['startDate', 'endDate', 'totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
-                
+                const bookingFields = ['totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
+
                 bookingFields.forEach(field => {
                     const input = document.getElementById(field);
                     const hiddenInput = document.createElement('input');
@@ -866,7 +1082,7 @@
                     hiddenInput.value = input.value;
                     propertyForm.appendChild(hiddenInput);
                 });
-                
+
                 propertyForm.submit();
             }
 
@@ -878,27 +1094,27 @@
             }
 
             // Validate form before submission
-            document.getElementById('propertyForm').addEventListener('submit', function(e) {
-                const imageInput = document.getElementById('propertyImage');
-                if (!imageInput.files.length) {
+            document.getElementById('propertyForm').addEventListener('submit', function (e) {
+                const avatarInput = document.getElementById('avatarImage');
+                if (!avatarInput.files.length) {
                     e.preventDefault();
-                    alert('Vui lòng chọn ít nhất một hình ảnh cho bất động sản!');
+                    alert('Vui lòng chọn ảnh đại diện cho bất động sản!');
                     return false;
                 }
 
-                // Validate file size (10MB max)
-                const file = imageInput.files[0];
-                if (file.size > 10 * 1024 * 1024) {
+                // Validate file size (5MB max)
+                const file = avatarInput.files[0];
+                if (file.size > 5 * 1024 * 1024) {
                     e.preventDefault();
-                    alert('Kích thước file ảnh không được vượt quá 10MB!');
+                    alert('Kích thước ảnh đại diện không được vượt quá 5MB!');
                     return false;
                 }
 
                 // Validate file type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
                 if (!allowedTypes.includes(file.type)) {
                     e.preventDefault();
-                    alert('Chỉ chấp nhận file ảnh định dạng JPG, PNG, GIF!');
+                    alert('Ảnh đại diện chỉ chấp nhận file JPG, PNG!');
                     return false;
                 }
             });

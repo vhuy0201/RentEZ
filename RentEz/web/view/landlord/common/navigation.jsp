@@ -7,7 +7,7 @@
         <!-- User Profile Section -->
         <div class="text-center user-info">
             <div class="account-avatar mx-auto mb-3">T</div>
-            <div class="fw-bold fs-5 mb-2">Dũng Trần</div>
+            <div class="fw-bold fs-5 mb-2">${sessionScope.user.name}</div>
             <div class="user-points">
                 <i class="fas fa-star me-2"></i>0 điểm
             </div>
@@ -23,9 +23,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link ${pageContext.request.requestURI.contains('account-dashboard') ? 'active' : ''}" 
-                       href="${pageContext.request.contextPath}/account-dashboard">
+                    <a class="nav-link ${pageContext.request.requestURI.contains('landLordHomeServlet') ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/landLordHomeServlet">
                         <i class="fas fa-tachometer-alt"></i>Tổng quan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/MessageServlet?action=getUsers">
+                        <i class="fas fa-comments"></i>Chat
                     </a>
                 </li>
                 <li class="nav-item">
@@ -58,6 +63,12 @@
                         <i class="fas fa-file-contract"></i>Quản lý hợp đồng
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link ${pageContext.request.requestURI.contains('service-fee') ? 'active' : ''}" 
+                       href="${pageContext.request.contextPath}/landlord/page/service-fees">
+                        <i class="fas fa-calculator"></i>Quản lý danh mục phí
+                    </a>
+                </li>
 <!--                <li class="nav-item">
                     <a class="nav-link ${pageContext.request.requestURI.contains('financialManagement') ? 'active' : ''}" 
                        href="${pageContext.request.contextPath}/financialManagement">
@@ -69,6 +80,7 @@
                         <i class="fas fa-cog"></i>Cài đặt tài khoản
                     </a>
                 </li>
+                
             </ul>
         </nav>
         
