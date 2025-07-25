@@ -111,7 +111,7 @@ public class BillDetailDAO {
         List<BillDetail> billDetails = new ArrayList<>();
         String sql = "SELECT bd.*, fc.Name as CategoryName, fc.UnitPrice, fc.Unit "
                 + "FROM BillDetail bd "
-                + "LEFT JOIN FeeCategory fc ON bd.CategoryID = fc.CategoryID "
+                + "LEFT JOIN Category fc ON bd.CategoryID = fc.CategoryID "
                 + "WHERE bd.BillID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);

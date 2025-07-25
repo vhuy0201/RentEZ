@@ -73,6 +73,55 @@
                 max-width: 500px;
                 margin: 0 auto;
             }
+            
+            /* Price input styling */
+            .price-input-group {
+                position: relative;
+            }
+            
+            .price-input-group input[type="number"] {
+                padding-right: 35px;
+            }
+            
+            .price-input-group::after {
+                content: "₫";
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #6c757d;
+                font-weight: 500;
+                pointer-events: none;
+                z-index: 2;
+            }
+            
+            .price-input-group input:focus::after {
+                color: #007bff;
+            }
+            
+            /* Validation styling */
+            input[name="minPrice"]:invalid,
+            input[name="maxPrice"]:invalid {
+                border-color: #dc3545 !important;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+            }
+            
+            /* Price formatting tooltip */
+            input[name="minPrice"][title],
+            input[name="maxPrice"][title] {
+                position: relative;
+            }
+            
+            /* Responsive adjustments for price inputs */
+            @media (max-width: 768px) {
+                .property-filter .row > div {
+                    margin-bottom: 15px;
+                }
+                
+                .property-filter input[type="number"] {
+                    font-size: 14px;
+                }
+            }
         </style>
     </head>
     <body class="">
@@ -115,71 +164,26 @@
                 </section>
                 <section class="property bg-gray-100 padding-y-120">
                     <div class="container container-two">
-                        <div class="property-filter">              <form action="${pageContext.request.contextPath}/search">
-                                <div class="row gy-4">
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                        <div class="position-relative">
-                                            <input
-                                                type="text"
-                                                class="common-input common-input--withLeftIcon pill text-gray-800"
-                                                placeholder="Từ khóa tìm kiếm"
-                                                name="searchKeyword"
-                                                value="${searchKeyword}"
-                                                /><span class="input-icon input-icon--left text-gradient"
-                                                ><i class="fas fa-search"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                        <div class="select-has-icon">                                            <select
-                                                name="roomType"
-                                                class="form-select common-input common-input--withLeftIcon pill text-gray-800"
-                                                >
-                                                <option value="all" ${selectedRoomType == 'all' || empty selectedRoomType ? 'selected' : ''}>Tất cả loại phòng</option>
-                                                <c:forEach items="${allPropertyTypes}" var="type">
-                                                    <option value="${type.typeName}" ${selectedRoomType == type.typeName ? 'selected' : ''}>${type.typeName}</option>
-                                                </c:forEach>
-                                            </select><span class="input-icon input-icon--left text-gradient"
-                                                           ><i class="fas fa-home"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                        <div class="select-has-icon">                                            <select
-                                                name="location"
-                                                class="form-select common-input common-input--withLeftIcon pill text-gray-800"
-                                                >
-                                                <option value="all" ${selectedLocation == 'all' || empty selectedLocation ? 'selected' : ''}>Tất cả khu vực</option>
-                                                <c:forEach items="${allCities}" var="city">
-                                                    <option value="${city}" ${selectedLocation == city ? 'selected' : ''}>${city}</option>
-                                                </c:forEach>
-                                            </select><span class="input-icon input-icon--left text-gradient"
-                                                           ><i class="fas fa-map-marker-alt"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                        <button type="submit" class="btn btn-main w-100">Tìm kiếm</button>
-                                    </div>
+                        <div class="property-filter__bottom flx-between gap-2 mb-4">
+                            <span class="property-filter__text font-18 text-gray-800"
+                                  >Tìm thấy ${resultCount} kết quả</span
+                            >
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="list-grid d-flex align-items-center gap-2 me-4">
                                 </div>
-                            </form>              <div class="property-filter__bottom flx-between gap-2">
-                                <span class="property-filter__text font-18 text-gray-800"
-                                      >Tìm thấy ${resultCount} kết quả</span
-                                >
                                 <div class="d-flex align-items-center gap-2">
-                                    <div class="list-grid d-flex align-items-center gap-2 me-4">
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="property-filter__text font-18 text-gray-800">
-                                            Sắp xếp:
-                                        </span>
-                                        <div class="select-has-icon data-sort">
-                                            <select
-                                                class="form-select common-input pill text-gray-800 px-3 py-2"
-                                                >
-                                                <option value="All">Tất cả</option>
-                                                <option value="Newest">Mới nhất</option>
-                                                <option value="High Price">Giá cao đến thấp</option>
-                                                <option value="Low Price">Giá thấp đến cao</option>
-                                            </select>
-                                        </div>
+                                    <span class="property-filter__text font-18 text-gray-800">
+                                        Sắp xếp:
+                                    </span>
+                                    <div class="select-has-icon data-sort">
+                                        <select
+                                            class="form-select common-input pill text-gray-800 px-3 py-2"
+                                            >
+                                            <option value="All">Tất cả</option>
+                                            <option value="Newest">Mới nhất</option>
+                                            <option value="High Price">Giá cao đến thấp</option>
+                                            <option value="Low Price">Giá thấp đến cao</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -301,69 +305,153 @@
                             <div class="col-lg-4 ps-lg-5">                <div class="search-sidebar">
                                     <form
                                         action="${pageContext.request.contextPath}/search"
-                                        method="post"
-                                        >                                        <div class="search-sidebar__item">
-                                            <h6 class="search-sidebar__title mb-4">Loại phòng</h6>
+                                        method="get"
+                                        >
+                                        <!-- Từ khóa tìm kiếm -->
+                                        <div class="search-sidebar__item">
+                                            <h6 class="search-sidebar__title mb-4">
+                                                <i class="fas fa-search me-2 text-gradient"></i>Từ khóa tìm kiếm
+                                            </h6>
+                                            <div class="position-relative">
+                                                <input
+                                                    type="text"
+                                                    class="common-input text-gray-800"
+                                                    placeholder="Nhập từ khóa..."
+                                                    name="searchKeyword"
+                                                    value="${searchKeyword}"
+                                                    />
+                                            </div>
+                                        </div>
+                                        <div class="search-sidebar__item">
+                                            <h6 class="search-sidebar__title mb-4">
+                                                <i class="fas fa-home me-2 text-gradient"></i>Loại phòng
+                                            </h6>
+                                            <div class="common-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="roomType"
+                                                    id="roomType_all"
+                                                    value="all"
+                                                    ${selectedRoomType == 'all' || empty selectedRoomType ? 'checked' : ''}
+                                                    />
+                                                <label class="form-check-label" for="roomType_all">
+                                                    Tất cả loại phòng
+                                                </label>
+                                            </div>
                                             <c:forEach items="${allPropertyTypes}" var="type">
                                                 <div class="common-check">
                                                     <input
                                                         class="form-check-input"
-                                                        type="checkbox"
-                                                        id="${type.typeId}"
+                                                        type="radio"
                                                         name="roomType"
+                                                        id="roomType_${type.typeId}"
                                                         value="${type.typeName}"
                                                         ${selectedRoomType == type.typeName ? 'checked' : ''}
-                                                        /><label class="form-check-label" for="${type.typeId}"
-                                                        >${type.typeName}</label
-                                                    >
+                                                        />
+                                                    <label class="form-check-label" for="roomType_${type.typeId}">
+                                                        ${type.typeName}
+                                                    </label>
                                                 </div>
                                             </c:forEach>
                                         </div>
                                         <div class="search-sidebar__item">
-                                            <h6 class="search-sidebar__title mb-4">Khu vực</h6>
+                                            <h6 class="search-sidebar__title mb-4">
+                                                <i class="fas fa-map-marker-alt me-2 text-gradient"></i>Khu vực
+                                            </h6>
+                                            <div class="common-radio">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="location"
+                                                    id="location_all"
+                                                    value="all"
+                                                    ${selectedLocation == 'all' || empty selectedLocation ? 'checked' : ''}
+                                                    />
+                                                <label class="form-check-label" for="location_all">
+                                                    Tất cả khu vực
+                                                </label>
+                                            </div>
                                             <c:forEach items="${allCities}" var="city" varStatus="status">
                                                 <div class="common-radio">
                                                     <input
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="location"
-                                                        id="city_${status.index}"
+                                                        id="location_${status.index}"
                                                         value="${city}"
                                                         ${selectedLocation == city ? 'checked' : ''}
-                                                        /><label class="form-check-label" for="city_${status.index}"
-                                                        >${city}</label
-                                                    >
+                                                        />
+                                                    <label class="form-check-label" for="location_${status.index}">
+                                                        ${city}
+                                                    </label>
                                                 </div>
                                             </c:forEach>
                                         </div>
                                         <div class="search-sidebar__item">
-                                            <h6 class="search-sidebar__title mb-4">Mức giá</h6>
+                                            <h6 class="search-sidebar__title mb-4">
+                                                <i class="fas fa-money-bill-wave me-2 text-gradient"></i>Mức giá tùy chỉnh
+                                            </h6>
+                                            <div class="row g-3">
+                                                <div class="col-6">
+                                                    <label class="form-label small text-muted">Giá từ (VNĐ)</label>
+                                                    <input
+                                                        type="number"
+                                                        class="form-control common-input"
+                                                        placeholder="1,000,000"
+                                                        name="minPrice"
+                                                        value="${selectedMinPrice != null ? selectedMinPrice : ''}"
+                                                        min="0"
+                                                        step="100000"
+                                                        />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label small text-muted">Giá đến (VNĐ)</label>
+                                                    <input
+                                                        type="number"
+                                                        class="form-control common-input"
+                                                        placeholder="5,000,000"
+                                                        name="maxPrice"
+                                                        value="${selectedMaxPrice != null ? selectedMaxPrice : ''}"
+                                                        min="0"
+                                                        step="100000"
+                                                        />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="search-sidebar__item">
+                                            <h6 class="search-sidebar__title mb-4">
+                                                <i class="fas fa-filter me-2 text-gradient"></i>Lọc nhanh theo giá
+                                            </h6>
                                             <div class="common-check">
                                                 <input
-                                                    class="form-check-input"
+                                                    class="form-check-input price-filter"
                                                     type="checkbox"
                                                     id="lowPrice"
-                                                    value="low"
+                                                    data-min="0"
+                                                    data-max="2000000"
                                                     /><label class="form-check-label" for="lowPrice"
                                                     >Dưới 2 triệu/tháng</label
                                                 >
                                             </div>
                                             <div class="common-check">
                                                 <input
-                                                    class="form-check-input"
+                                                    class="form-check-input price-filter"
                                                     type="checkbox"
                                                     id="midPrice"
-                                                    value="medium"
+                                                    data-min="2000000"
+                                                    data-max="5000000"
                                                     /><label class="form-check-label" for="midPrice"
                                                     >2 - 5 triệu/tháng</label
                                                 >
                                             </div>
                                             <div class="common-check">
                                                 <input
-                                                    class="form-check-input"
+                                                    class="form-check-input price-filter"
                                                     type="checkbox"
                                                     id="highPrice"
-                                                    value="high"
+                                                    data-min="5000000"
+                                                    data-max=""
                                                     /><label class="form-check-label" for="highPrice"
                                                     >Trên 5 triệu/tháng</label
                                                 >
@@ -371,7 +459,12 @@
                                         </div>
 
                                         <div class="search-sidebar__item">
-                                            <button type="submit" class="btn btn-main w-100">Áp dụng bộ lọc</button>
+                                            <button type="submit" class="btn btn-main w-100 mb-3">
+                                                <i class="fas fa-search me-2"></i>Tìm kiếm
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary w-100" onclick="clearFilters()">
+                                                <i class="fas fa-times me-2"></i>Xóa bộ lọc
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -382,7 +475,7 @@
                                     <li class="page-item active">
                                         <a
                                             class="page-link"
-                                            href="${pageContext.request.contextPath}/search?page=1&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}"
+                                            href="${pageContext.request.contextPath}/search?page=1&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}&minPrice=${selectedMinPrice}&maxPrice=${selectedMaxPrice}"
                                             >1</a
                                         >
                                     </li>
@@ -390,7 +483,7 @@
                                         <li class="page-item">
                                             <a
                                                 class="page-link"
-                                                href="${pageContext.request.contextPath}/search?page=2&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}"
+                                                href="${pageContext.request.contextPath}/search?page=2&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}&minPrice=${selectedMinPrice}&maxPrice=${selectedMaxPrice}"
                                                 >2</a
                                             >
                                         </li>
@@ -399,7 +492,7 @@
                                         <li class="page-item">
                                             <a
                                                 class="page-link"
-                                                href="${pageContext.request.contextPath}/search?page=3&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}"
+                                                href="${pageContext.request.contextPath}/search?page=3&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}&minPrice=${selectedMinPrice}&maxPrice=${selectedMaxPrice}"
                                                 >3</a
                                             >
                                         </li>
@@ -408,7 +501,7 @@
                                         <li class="page-item">
                                             <a
                                                 class="page-link"
-                                                href="${pageContext.request.contextPath}/search?page=4&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}"
+                                                href="${pageContext.request.contextPath}/search?page=4&searchKeyword=${searchKeyword}&roomType=${selectedRoomType}&location=${selectedLocation}&minPrice=${selectedMinPrice}&maxPrice=${selectedMaxPrice}"
                                                 >4</a
                                             >
                                         </li>
@@ -467,6 +560,75 @@
                 if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
                     window.location.href = '${pageContext.request.contextPath}/login?redirect=' + 
                                          encodeURIComponent(window.location.href);
+                }
+            }
+
+            // Price validation and formatting
+            document.addEventListener('DOMContentLoaded', function() {
+                const minPriceInput = document.querySelector('input[name="minPrice"]');
+                const maxPriceInput = document.querySelector('input[name="maxPrice"]');
+                
+                // Validate price inputs
+                function validatePrices() {
+                    const minPrice = parseFloat(minPriceInput.value) || 0;
+                    const maxPrice = parseFloat(maxPriceInput.value) || 0;
+                    
+                    if (minPrice > 0 && maxPrice > 0 && minPrice > maxPrice) {
+                        maxPriceInput.setCustomValidity('Giá tối đa phải lớn hơn giá tối thiểu');
+                        minPriceInput.setCustomValidity('Giá tối thiểu phải nhỏ hơn giá tối đa');
+                    } else {
+                        maxPriceInput.setCustomValidity('');
+                        minPriceInput.setCustomValidity('');
+                    }
+                }
+                
+                if (minPriceInput && maxPriceInput) {
+                    minPriceInput.addEventListener('change', validatePrices);
+                    maxPriceInput.addEventListener('change', validatePrices);
+                    
+                    // Format price display with thousands separator
+                    function formatPrice(input) {
+                        let value = input.value.replace(/\D/g, '');
+                        if (value) {
+                            // Add thousands separator for display in placeholder
+                            const formattedValue = new Intl.NumberFormat('vi-VN').format(parseInt(value));
+                            input.setAttribute('title', formattedValue + ' ₫');
+                        }
+                    }
+                    
+                    minPriceInput.addEventListener('input', function() { formatPrice(this); });
+                    maxPriceInput.addEventListener('input', function() { formatPrice(this); });
+                }
+
+                // Price filter checkboxes functionality
+                const priceFilters = document.querySelectorAll('.price-filter');
+                priceFilters.forEach(filter => {
+                    filter.addEventListener('change', function() {
+                        if (this.checked) {
+                            // Uncheck other price filters
+                            priceFilters.forEach(other => {
+                                if (other !== this) other.checked = false;
+                            });
+                            
+                            // Set min and max price inputs
+                            const minPrice = this.getAttribute('data-min');
+                            const maxPrice = this.getAttribute('data-max');
+                            
+                            if (minPriceInput) minPriceInput.value = minPrice;
+                            if (maxPriceInput && maxPrice) maxPriceInput.value = maxPrice;
+                        }
+                    });
+                });
+            });
+
+            // Clear filters function
+            function clearFilters() {
+                const form = document.querySelector('.search-sidebar form');
+                if (form) {
+                    // Reset all form inputs
+                    form.reset();
+                    // Redirect to search page without parameters
+                    window.location.href = '${pageContext.request.contextPath}/search';
                 }
             }
         </script>

@@ -84,7 +84,7 @@ public class PropertyTypeDAO {
     public List<PropertyType> getAll() {
         List<PropertyType> propertyTypes = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT * FROM PropertyType WHERE Status = 1"; // Chỉ lấy các loại phòng đang hoạt động
+        String sql = "SELECT * FROM PropertyType ORDER BY TypeName"; // Lấy tất cả và sắp xếp theo tên
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -99,6 +99,31 @@ public class PropertyTypeDAO {
             conn.close();
         } catch (Exception e) {
             System.out.println("Error in getAll PropertyType: " + e);
+        }
+        return propertyTypes;
+    }
+    
+    /**
+     * Get only active property types
+     */
+    public List<PropertyType> getAllActive() {
+        List<PropertyType> propertyTypes = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT * FROM PropertyType WHERE Status = 1 ORDER BY TypeName";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                PropertyType propertyType = new PropertyType();
+                propertyType.setTypeId(rs.getInt("TypeID"));
+                propertyType.setTypeName(rs.getString("TypeName"));
+                propertyType.setDescription(rs.getString("Description"));
+                propertyType.setStatus(rs.getBoolean("Status"));
+                propertyTypes.add(propertyType);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error in getAllActive PropertyType: " + e);
         }
         return propertyTypes;
     }

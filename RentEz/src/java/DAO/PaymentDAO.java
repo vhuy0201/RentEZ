@@ -739,4 +739,315 @@ public class PaymentDAO {
         
         return 0;
     }
+    
+    // =============== LANDLORD SPECIFIC METHODS ===============
+    
+    /**
+     * Get total revenue for a specific landlord (payee)
+     */
+    public double getTotalRevenueByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT SUM(Amount) FROM Payment WHERE PayeeID = ? AND Status = 'Completed' AND IsRefunded = 0";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                double total = rs.getDouble(1);
+                conn.close();
+                return total;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0.0;
+    }
+    
+    /**
+     * Get monthly revenue for a specific landlord
+     */
+    public double getMonthlyRevenueByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT SUM(Amount) FROM Payment WHERE PayeeID = ? AND YEAR(PaymentDate) = YEAR(GETDATE()) AND MONTH(PaymentDate) = MONTH(GETDATE()) AND Status = 'Completed' AND IsRefunded = 0";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                double total = rs.getDouble(1);
+                conn.close();
+                return total;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0.0;
+    }
+    
+    /**
+     * Get quarterly revenue for a specific landlord
+     */
+    public double getQuarterlyRevenueByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT SUM(Amount) FROM Payment WHERE PayeeID = ? AND YEAR(PaymentDate) = YEAR(GETDATE()) AND DATEPART(quarter, PaymentDate) = DATEPART(quarter, GETDATE()) AND Status = 'Completed' AND IsRefunded = 0";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                double total = rs.getDouble(1);
+                conn.close();
+                return total;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0.0;
+    }
+    
+    /**
+     * Get yearly revenue for a specific landlord
+     */
+    public double getYearlyRevenueByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT SUM(Amount) FROM Payment WHERE PayeeID = ? AND YEAR(PaymentDate) = YEAR(GETDATE()) AND Status = 'Completed' AND IsRefunded = 0";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                double total = rs.getDouble(1);
+                conn.close();
+                return total;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0.0;
+    }
+    
+    /**
+     * Get monthly revenue statistics for a specific landlord (for chart)
+     */
+    public List<Double> getMonthlyRevenueStatsByLandlord(int landlordId, int months) {
+        List<Double> monthlyStats = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        
+        // Get current date
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        
+        String sql = "SELECT " +
+                    "YEAR(PaymentDate) as Year, " +
+                    "MONTH(PaymentDate) as Month, " +
+                    "SUM(Amount) as Revenue " +
+                    "FROM Payment " +
+                    "WHERE PayeeID = ? " +
+                    "AND PaymentDate >= DATEADD(month, -?, GETDATE()) " +
+                    "AND Status = 'Completed' AND IsRefunded = 0 " +
+                    "GROUP BY YEAR(PaymentDate), MONTH(PaymentDate) " +
+                    "ORDER BY YEAR(PaymentDate), MONTH(PaymentDate)";
+                    
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            pstmt.setInt(2, months);
+            ResultSet rs = pstmt.executeQuery();
+            
+            // Initialize array with zeros for all months
+            Double[] revenueArray = new Double[months];
+            for (int i = 0; i < months; i++) {
+                revenueArray[i] = 0.0;
+            }
+            
+            // Fill actual data
+            while (rs.next()) {
+                int year = rs.getInt("Year");
+                int month = rs.getInt("Month");
+                double revenue = rs.getDouble("Revenue");
+                
+                // Calculate the index in our array
+                java.util.Calendar currentCal = java.util.Calendar.getInstance();
+                java.util.Calendar dateCal = java.util.Calendar.getInstance();
+                dateCal.set(year, month - 1, 1); // month is 0-indexed in Calendar
+                
+                int monthsFromNow = (currentCal.get(java.util.Calendar.YEAR) - dateCal.get(java.util.Calendar.YEAR)) * 12 
+                                  + currentCal.get(java.util.Calendar.MONTH) - dateCal.get(java.util.Calendar.MONTH);
+                
+                int index = months - 1 - monthsFromNow;
+                if (index >= 0 && index < months) {
+                    revenueArray[index] = revenue;
+                }
+            }
+            
+            // Convert array to list
+            for (Double revenue : revenueArray) {
+                monthlyStats.add(revenue);
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Fill with zeros if error
+            for (int i = 0; i < months; i++) {
+                monthlyStats.add(0.0);
+            }
+        }
+        
+        return monthlyStats;
+    }
+    
+    /**
+     * Get recent payments for a specific landlord
+     */
+    public List<Payment> getRecentPaymentsByLandlord(int landlordId, int limit) {
+        List<Payment> payments = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT TOP (?) p.*, u.Name as PayerName " +
+                    "FROM Payment p " +
+                    "LEFT JOIN [User] u ON p.PayerID = u.UserID " +
+                    "WHERE p.PayeeID = ? " +
+                    "ORDER BY p.PaymentDate DESC";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                Payment payment = extractPaymentFromResultSet(rs);
+                payments.add(payment);
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return payments;
+    }
+    
+    /**
+     * Get total number of transactions for a landlord
+     */
+    public int getTotalTransactionsByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Payment WHERE PayeeID = ?";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                conn.close();
+                return count;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * Get completed transactions count for a landlord
+     */
+    public int getCompletedTransactionsByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Payment WHERE PayeeID = ? AND Status = 'Completed'";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                conn.close();
+                return count;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * Get pending transactions count for a landlord
+     */
+    public int getPendingTransactionsByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT COUNT(*) FROM Payment WHERE PayeeID = ? AND Status = 'Pending'";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                conn.close();
+                return count;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * Get average transaction amount for a landlord
+     */
+    public double getAverageTransactionByLandlord(int landlordId) {
+        Connection conn = DBConnection.getConnection();
+        String sql = "SELECT AVG(Amount) FROM Payment WHERE PayeeID = ? AND Status = 'Completed'";
+        
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, landlordId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                double avg = rs.getDouble(1);
+                conn.close();
+                return avg;
+            }
+            
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0.0;
+    }
 }

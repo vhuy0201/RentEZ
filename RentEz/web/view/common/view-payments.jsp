@@ -660,6 +660,12 @@
                     submitBtn.disabled = false;
                 });
             }
+
+            // View bill details function
+            function viewBillDetails(billId) {
+                // Redirect to bill details page
+                window.location.href = '${pageContext.request.contextPath}/bill-details?id=' + billId;
+            }
         </script>
 
     </body>

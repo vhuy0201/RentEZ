@@ -420,7 +420,7 @@
                 border-radius: 1rem;
                 padding: 2rem;
                 width: 90%;
-                max-width: 600px;
+                max-width: 1000px;
                 box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
                 position: relative;
             }
@@ -468,7 +468,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
-                            <a href="${pageContext.request.contextPath}/payments" class="btn btn-main">
+                            <a href="#" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>
                         </div>
@@ -559,13 +559,9 @@
                                             <label for="typeId" class="form-label">Loại bất động sản <span class="text-danger">*</span></label>
                                             <select id="typeId" name="typeId" class="form-select" required>
                                                 <option value="">-- Chọn loại bất động sản --</option>
-                                                <option value="1">Căn hộ/Chung cư</option>
-                                                <option value="2">Nhà riêng</option>
-                                                <option value="3">Biệt thự</option>
-                                                <option value="4">Nhà mặt phố</option>
-                                                <option value="5">Đất nền</option>
-                                                <option value="6">Văn phòng</option>
-                                                <option value="7">Phòng trọ</option>
+                                                <c:forEach var="propertyType" items="${propertyTypes}">
+                                                    <option value="${propertyType.typeId}">${propertyType.typeName}</option>
+                                                </c:forEach>
                                             </select>
                                         </div>
 
@@ -678,17 +674,44 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
-                                            <label for="propertyImage" class="form-label">Tải lên hình ảnh <span class="text-danger">*</span></label>
-                                            <div class="image-upload" onclick="document.getElementById('propertyImage').click()">
+                                            <label for="avatarImage" class="form-label">Ảnh đại diện <span class="text-danger">*</span></label>
+                                            <small class="text-muted d-block mb-2">Ảnh này sẽ hiển thị làm thumbnail cho bất động sản</small>
+                                            <div class="image-upload" onclick="document.getElementById('avatarImage').click()">
                                                 <div class="image-upload-icon">
                                                     <i class="fas fa-cloud-upload-alt"></i>
                                                 </div>
                                                 <h5>Kéo thả hoặc nhấp để chọn ảnh</h5>
-                                                <p class="text-muted mb-0">Hỗ trợ: JPG, PNG, GIF (tối đa 10MB)</p>
-                                                <input type="file" id="propertyImage" name="propertyImage" accept="image/*" style="display: none;" required onchange="previewImage(this)">
+                                                <p class="text-muted mb-0">Hỗ trợ: JPG, PNG (tối đa 5MB)</p>
+                                                <input type="file" id="avatarImage" name="avatarImage" accept="image/*" style="display: none;" required onchange="previewImage(this)">
                                             </div>
                                             <div id="imagePreview" class="mt-3" style="display: none;">
                                                 <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e65100;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- System Fee Warning -->
+                                <div class="alert alert-warning mt-4" style="border-left: 4px solid #ff9800; background: linear-gradient(135deg, #fff8e1 0%, #fff3c4 100%);">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <i class="fas fa-exclamation-triangle" style="color: #ff9800; font-size: 1.5em;"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-2" style="color: #e65100; font-weight: 600;">
+                                                <i class="fas fa-info-circle me-2"></i>Thông báo về phí hệ thống
+                                            </h6>
+                                            <p class="mb-2 text-dark">
+                                                <strong>Hệ thống sẽ tự động thu phí dịch vụ 10% trên tổng giá trị giao dịch</strong> 
+                                                khi có người thuê đặt cọc bất động sản của bạn.
+                                            </p>
+                                            <div class="small text-muted">
+                                                <i class="fas fa-calculator me-1"></i>
+                                                Ví dụ: Nếu tổng giá là 10,000,000 ₫, phí hệ thống sẽ là 1,000,000 ₫
+                                            </div>
+                                            <div class="small text-muted mt-1">
+                                                <i class="fas fa-shield-alt me-1"></i>
+                                                Phí này được sử dụng để duy trì và phát triển nền tảng, bảo đảm giao dịch an toàn
                                             </div>
                                         </div>
                                     </div>
@@ -727,35 +750,27 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="startDate" class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
-                                            <input type="date" id="startDate" name="startDate" class="form-control" required onchange="calculateTotalPrice()">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="endDate" class="form-label">Ngày kết thúc <span class="text-danger">*</span></label>
-                                            <input type="date" id="endDate" name="endDate" class="form-control" required onchange="calculateTotalPrice()">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="totalPrice" class="form-label">Tổng giá (VNĐ) <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Tự động tính toán" readonly>
-                                                <span class="input-group-text">VNĐ</span>
-                                            </div>
-                                            <small class="text-muted">Tự động tính toán dựa trên giá thuê hàng tháng và thời gian thuê</small>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="depositAmount" class="form-label">Số tiền đặt cọc (VNĐ) <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="number" id="depositAmount" name="depositAmount" step="1000" class="form-control" placeholder="Nhập số tiền cọc" required>
-                                                <span class="input-group-text">VNĐ</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
                                             <label for="monthlyRent" class="form-label">Tiền thuê hàng tháng (VNĐ) <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <input type="number" id="monthlyRent" name="monthlyRent" step="1000" class="form-control" placeholder="Nhập tiền thuê" required readonly>
                                                 <span class="input-group-text">VNĐ</span>
                                             </div>
-                                            <small class="text-muted">Tự động lấy từ giá ở phần chi tiết bất động sản</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="depositAmount" class="form-label">Số tiền đặt cọc (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="depositAmount" name="depositAmount" step="1000" class="form-control" placeholder="Nhập số tiền cọc" required onchange="calculateTotalPrice()">
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <label for="totalPrice" class="form-label">Tổng giá (VNĐ) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="number" id="totalPrice" name="totalPrice" step="1000" class="form-control" placeholder="Tự động tính toán" readonly>
+                                                <span class="input-group-text">VNĐ</span>
+                                            </div>
+                                            <small class="text-muted">Tự động tính toán: Tiền đặt cọc + Tiền thuê hàng tháng</small>
+                                            <div id="systemFeeDisplay"></div>
                                         </div>
                                         <div class="col-md-12 mb-3">
                                             <label for="penaltyClause" class="form-label">Điều khoản phạt</label>
@@ -812,25 +827,34 @@
                 }
             }
 
-            // Calculate total price based on monthly rent and duration
+            // Calculate total price based on deposit amount and monthly rent
             function calculateTotalPrice() {
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
+                const depositAmount = document.getElementById('depositAmount').value;
                 const monthlyRent = document.getElementById('monthlyRent').value;
 
-                if (startDate && endDate && monthlyRent) {
-                    const start = new Date(startDate);
-                    const end = new Date(endDate);
+                if (depositAmount && monthlyRent) {
+                    const totalPrice = parseInt(depositAmount) + parseInt(monthlyRent);
+                    document.getElementById('totalPrice').value = totalPrice;
                     
-                    // Calculate difference in months
-                    const diffTime = Math.abs(end - start);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    const diffMonths = Math.ceil(diffDays / 30); // Approximate months
-                    
-                    if (diffMonths > 0) {
-                        const totalPrice = monthlyRent * diffMonths;
-                        document.getElementById('totalPrice').value = totalPrice;
-                    }
+                    // Hiển thị phí hệ thống
+                    updateSystemFeeDisplay(totalPrice);
+                }
+            }
+            
+            // Update system fee display
+            function updateSystemFeeDisplay(totalPrice) {
+                const systemFee = totalPrice * 0.10;
+                const systemFeeElement = document.getElementById('systemFeeDisplay');
+                if (systemFeeElement) {
+                    const formattedFee = new Intl.NumberFormat('vi-VN').format(systemFee);
+                    systemFeeElement.innerHTML = 
+                        '<div class="alert alert-info mt-2" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3;">' +
+                            '<small>' +
+                                '<i class="fas fa-calculator me-1"></i>' +
+                                '<strong>Phí hệ thống (10%):</strong> ' +
+                                '<span class="text-primary fw-bold">' + formattedFee + ' ₫</span>' +
+                            '</small>' +
+                        '</div>';
                 }
             }
 
@@ -845,18 +869,16 @@
             // Submit property form with booking data
             function submitWithBooking() {
                 // Validate required fields
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
                 const totalPrice = document.getElementById('totalPrice').value;
                 const depositAmount = document.getElementById('depositAmount').value;
                 
-                if (!startDate || !endDate || !totalPrice || !depositAmount) {
+                if (!totalPrice || !depositAmount) {
                     alert('Vui lòng điền đầy đủ thông tin chính sách thuê nhà!');
                     return;
                 }
 
                 const propertyForm = document.getElementById('propertyForm');
-                const bookingFields = ['startDate', 'endDate', 'totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
+                const bookingFields = ['totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
                 
                 bookingFields.forEach(field => {
                     const input = document.getElementById(field);
@@ -879,26 +901,26 @@
 
             // Validate form before submission
             document.getElementById('propertyForm').addEventListener('submit', function(e) {
-                const imageInput = document.getElementById('propertyImage');
-                if (!imageInput.files.length) {
+                const avatarInput = document.getElementById('avatarImage');
+                if (!avatarInput.files.length) {
                     e.preventDefault();
-                    alert('Vui lòng chọn ít nhất một hình ảnh cho bất động sản!');
+                    alert('Vui lòng chọn ảnh đại diện cho bất động sản!');
                     return false;
                 }
 
-                // Validate file size (10MB max)
-                const file = imageInput.files[0];
-                if (file.size > 10 * 1024 * 1024) {
+                // Validate file size (5MB max)
+                const file = avatarInput.files[0];
+                if (file.size > 5 * 1024 * 1024) {
                     e.preventDefault();
-                    alert('Kích thước file ảnh không được vượt quá 10MB!');
+                    alert('Kích thước ảnh đại diện không được vượt quá 5MB!');
                     return false;
                 }
 
                 // Validate file type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
                 if (!allowedTypes.includes(file.type)) {
                     e.preventDefault();
-                    alert('Chỉ chấp nhận file ảnh định dạng JPG, PNG, GIF!');
+                    alert('Ảnh đại diện chỉ chấp nhận file JPG, PNG!');
                     return false;
                 }
             });

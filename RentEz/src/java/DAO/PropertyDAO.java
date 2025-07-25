@@ -164,6 +164,7 @@ public class PropertyDAO {
                 property.setAvailabilityStatus(rs.getString("AvailabilityStatus"));
                 property.setPriorityLevel(rs.getInt("PriorityLevel"));
                 property.setAvatar(rs.getString("Avatar"));
+                property.setPublicStatus(rs.getBoolean("PublicStatus"));
                 properties.add(property);
             }
           conn.close();
@@ -346,6 +347,7 @@ public class PropertyDAO {
                 property.setAvailabilityStatus(rs.getString("AvailabilityStatus"));
                 property.setPriorityLevel(rs.getInt("PriorityLevel"));
                 property.setAvatar(rs.getString("Avatar"));
+                property.setPublicStatus(rs.getBoolean("PublicStatus"));
                 properties.add(property);
             }
             conn.close();
@@ -358,7 +360,7 @@ public class PropertyDAO {
     public int getRentedPropertiesCount() {
         int count = 0;
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Rented' OR AvailabilityStatus = 'Occupied'";
+        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Rented'";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -375,7 +377,7 @@ public class PropertyDAO {
     public int getAvailablePropertiesCount() {
         int count = 0;
         Connection conn = DBConnection.getConnection();
-        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Available' OR AvailabilityStatus = 'Vacant'";
+        String sql = "SELECT COUNT(*) FROM Property WHERE AvailabilityStatus = 'Available'";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();

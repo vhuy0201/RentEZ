@@ -220,12 +220,6 @@
                                                 </form>
                                             </c:if>
                                             
-                                            <c:if test="${not empty notification.referenceId}">
-                                                <a href="${pageContext.request.contextPath}/notifications?action=redirect&notificationId=${notification.notificationId}" 
-                                                   class="btn btn-sm btn-link" title="Xem chi tiết">
-                                                    <i class="fas fa-external-link-alt"></i>
-                                                </a>
-                                            </c:if>
                                             
                                             <form action="${pageContext.request.contextPath}/notifications" method="post" style="display:inline;">
                                                 <input type="hidden" name="action" value="delete">

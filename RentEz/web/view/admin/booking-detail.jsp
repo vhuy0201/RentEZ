@@ -241,7 +241,7 @@
                                         <p class="mt-1 text-gray-900">${bookingDTO.property.numberOfBedrooms}</p>
                                     </div>
                                     <div class="mt-4">
-                                        <a href="${pageContext.request.contextPath}/admin/property?id=${bookingDTO.property.propertyId}" 
+                                        <a href="${pageContext.request.contextPath}/property-detail?id=${bookingDTO.property.propertyId}" 
                                            class="inline-flex items-center px-4 py-2 border border-primary-500 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">
                                             <i class="fas fa-external-link-alt mr-2"></i>
                                             Xem chi tiết bất động sản
@@ -272,7 +272,7 @@
                                         <p class="mt-1 text-gray-900">${bookingDTO.renter.phone}</p>
                                     </div>
                                     <div class="mt-4">
-                                        <a href="${pageContext.request.contextPath}/admin/user?id=${bookingDTO.renter.userId}" 
+                                        <a href="${pageContext.request.contextPath}/user-detail?userId=${bookingDTO.renter.userId}" 
                                            class="inline-flex items-center px-4 py-2 border border-primary-500 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">
                                             <i class="fas fa-user mr-2"></i>
                                             Xem hồ sơ người thuê
@@ -303,7 +303,7 @@
                                         <p class="mt-1 text-gray-900">${bookingDTO.landlord.phone}</p>
                                     </div>
                                     <div class="mt-4">
-                                        <a href="${pageContext.request.contextPath}/admin/user?id=${bookingDTO.landlord.userId}" 
+                                        <a href="${pageContext.request.contextPath}/user-detail?userId=${bookingDTO.landlord.userId}" 
                                            class="inline-flex items-center px-4 py-2 border border-primary-500 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">
                                             <i class="fas fa-user mr-2"></i>
                                             Xem hồ sơ chủ nhà

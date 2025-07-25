@@ -53,45 +53,71 @@
             <main class="p-6">
                 <!-- Search and Filter -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <div>
+                    <h5 class="text-lg font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-filter mr-2 text-primary-600"></i>Tìm kiếm và lọc
+                    </h5>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                        <!-- Search Input -->
+                        <div class="lg:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
                             <div class="relative">
-                                <input type="text" id="searchInput" placeholder="Mã giao dịch, người dùng..."
-                                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                <input type="text" id="searchInput" placeholder="Mã giao dịch, tên người dùng, email..."
+                                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
                                 <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                             </div>
                         </div>
+                        
+                        <!-- Status Filter -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái</label>
-                            <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                            <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
                                 <option value="">Tất cả trạng thái</option>
-                                <option value="completed">Thành công</option>
-                                <option value="pending">Đang xử lý</option>
-                                <option value="failed">Thất bại</option>
-                                <option value="refunded">Đã hoàn tiền</option>
+                                <option value="Completed">Thành công</option>
+                                <option value="Pending">Đang xử lý</option>
+                                <option value="Failed">Thất bại</option>
+                                <option value="Paid">Đã thanh toán</option>
                             </select>
                         </div>
+                        
+                        <!-- Payment Method Filter -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Phương thức</label>
-                            <select id="methodFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                            <select id="methodFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
                                 <option value="">Tất cả phương thức</option>
-                                <option value="vnpay">VNPay</option>
-                                <option value="momo">MoMo</option>
-                                <option value="bank_transfer">Chuyển khoản</option>
-                                <option value="cash">Tiền mặt</option>
+                                <option value="VNPay">VNPay</option>
+                                <option value="MoMo">MoMo</option>
+                                <option value="Banking">Chuyển khoản ngân hàng</option>
+                                <option value="Cash">Tiền mặt</option>
+                                <option value="Credit Card">Thẻ tín dụng</option>
                             </select>
                         </div>
+                        
+                        <!-- Date From -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Từ ngày</label>
-                            <input type="date" id="fromDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                            <input type="date" id="fromDate" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
                         </div>
-                        <div class="flex items-end">
-                            <button onclick="applyFilters()" 
-                                    class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                                <i class="fas fa-filter mr-2"></i>Lọc
-                            </button>
+                        
+                        <!-- Date To -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Đến ngày</label>
+                            <input type="date" id="toDate" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors">
                         </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap gap-3 mt-4 pt-4 border-t border-gray-200">
+                        <button type="button" onclick="applyFilters()" 
+                                class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 transition-all duration-200 flex items-center">
+                            <i class="fas fa-filter mr-2"></i>Áp dụng lọc
+                        </button>
+                        <button type="button" onclick="clearFilters()" 
+                                class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-gray-500 transition-all duration-200 flex items-center">
+                            <i class="fas fa-times mr-2"></i>Xóa bộ lọc
+                        </button>
                     </div>
                 </div>
 
@@ -124,6 +150,15 @@
                                 <p id="pendingPaymentsDisplay" class="text-2xl font-bold">${pendingPayments}</p>
                             </div>
                             <i class="fas fa-clock text-3xl text-yellow-200"></i>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-red-100">Thất bại</p>
+                                <p id="failedPaymentsDisplay" class="text-2xl font-bold">${failedPayments > 0 ? failedPayments : 0}</p>
+                            </div>
+                            <i class="fas fa-times-circle text-3xl text-red-200"></i>
                         </div>
                     </div>
                 </div>
@@ -233,37 +268,6 @@
         </div>
     </div>
 
-    <!-- Payment Detail Modal -->
-    <div id="paymentDetailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
-        <div class="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-xl bg-white">
-            <div class="mt-3">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Chi tiết giao dịch</h3>
-                    <button onclick="closePaymentDetailModal()" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                
-                <div id="paymentDetailContent" class="space-y-4">
-                    <!-- Payment details will be loaded here -->
-                    <div class="flex justify-center items-center py-8 hidden" id="paymentDetailLoader">
-                        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
-                    </div>
-                </div>
-                
-                <div class="mt-6 flex justify-end space-x-3">
-                    <button onclick="closePaymentDetailModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
-                        Đóng
-                    </button>
-                    <button id="printPaymentBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-print mr-2"></i>In hóa đơn
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <script>
         // Global variables
         let allPayments = [];
@@ -304,20 +308,24 @@
             displayPayments();
             
             // Set up event listeners for filters
-            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 500));
             document.getElementById('statusFilter').addEventListener('change', applyFilters);
             document.getElementById('methodFilter').addEventListener('change', applyFilters);
             document.getElementById('fromDate').addEventListener('change', applyFilters);
+            document.getElementById('toDate').addEventListener('change', applyFilters);
             
-            // Set up today's date minus 30 days as default for the date filter
+            // Set up today's date as default for the "to" date and 30 days ago for "from" date
             const today = new Date();
             const thirtyDaysAgo = new Date();
             thirtyDaysAgo.setDate(today.getDate() - 30);
             
-            const dateInput = document.getElementById('fromDate');
-            dateInput.value = formatDateForInput(thirtyDaysAgo);
+            const fromDateInput = document.getElementById('fromDate');
+            const toDateInput = document.getElementById('toDate');
             
-            // Apply filters initially
+            fromDateInput.value = formatDateForInput(thirtyDaysAgo);
+            toDateInput.value = formatDateForInput(today);
+            
+            // Apply filters initially with default date range
             applyFilters();
         });
         
@@ -328,18 +336,39 @@
             return `${year}-${month}-${day}`;
         }
         
+        // Debounce function for search input
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
         function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
             const status = document.getElementById('statusFilter').value;
             const method = document.getElementById('methodFilter').value;
             const dateFrom = document.getElementById('fromDate').value;
+            const dateTo = document.getElementById('toDate').value;
             
             // Filter the payments
             filteredPayments = allPayments.filter(payment => {
-                // Search filter
-                if (search && !payment.transCode.toLowerCase().includes(search) && 
-                    !document.querySelector(`[data-payer-id="${payment.payerId}"]`).textContent.toLowerCase().includes(search)) {
-                    return false;
+                // Search filter - search in transaction code, user name, and email
+                if (search) {
+                    const userElement = document.querySelector(`[data-payer-id="${payment.payerId}"]`);
+                    const userText = userElement ? userElement.textContent.toLowerCase() : '';
+                    const transCodeMatch = payment.transCode.toLowerCase().includes(search);
+                    const userInfoMatch = userText.includes(search);
+                    const paymentIdMatch = payment.id.toString().includes(search);
+                    
+                    if (!transCodeMatch && !userInfoMatch && !paymentIdMatch) {
+                        return false;
+                    }
                 }
                 
                 // Status filter
@@ -352,11 +381,23 @@
                     return false;
                 }
                 
-                // Date filter
+                // Date from filter
                 if (dateFrom) {
                     const fromDate = new Date(dateFrom);
+                    fromDate.setHours(0, 0, 0, 0);
                     const paymentDate = new Date(payment.date);
+                    paymentDate.setHours(0, 0, 0, 0);
                     if (paymentDate < fromDate) {
+                        return false;
+                    }
+                }
+                
+                // Date to filter
+                if (dateTo) {
+                    const toDate = new Date(dateTo);
+                    toDate.setHours(23, 59, 59, 999);
+                    const paymentDate = new Date(payment.date);
+                    if (paymentDate > toDate) {
                         return false;
                     }
                 }
@@ -371,6 +412,131 @@
             updatePagination();
             displayPayments();
             updateStatistics();
+            
+            // Show filter results message
+            showFilterResults();
+        }
+        
+        function clearFilters() {
+            // Clear all filter inputs
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('methodFilter').value = '';
+            document.getElementById('fromDate').value = '';
+            document.getElementById('toDate').value = '';
+            
+            // Reset filtered payments to show all
+            filteredPayments = [...allPayments];
+            currentPage = 1;
+            
+            // Update display
+            updatePagination();
+            displayPayments();
+            updateStatistics();
+            
+            // Show success message
+            showNotification('Đã xóa tất cả bộ lọc', 'success');
+        }
+        
+        function exportPayments() {
+            if (filteredPayments.length === 0) {
+                showNotification('Không có dữ liệu để xuất', 'warning');
+                return;
+            }
+            
+            // Create CSV content
+            let csvContent = "Mã giao dịch,Người dùng,Số tiền,Phương thức,Trạng thái,Ngày tạo\n";
+            
+            filteredPayments.forEach(payment => {
+                const userElement = document.querySelector(`[data-payer-id="${payment.payerId}"]`);
+                const userName = userElement ? userElement.querySelector('.text-sm.font-medium').textContent : 'N/A';
+                const amount = new Intl.NumberFormat('vi-VN').format(payment.amount);
+                const date = new Date(payment.date).toLocaleDateString('vi-VN');
+                
+                csvContent += `"#${payment.id}","${userName}","${amount}","${payment.method}","${payment.status}","${date}"\n`;
+            });
+            
+            // Download CSV
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `payment_history.csv`;
+            link.click();
+            
+            showNotification('Đã xuất dữ liệu thành công', 'success');
+        }
+        
+        function refreshData() {
+            showNotification('Đang làm mới dữ liệu...', 'info');
+            
+            // Reload the page to get fresh data
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+        
+        function showFilterResults() {
+            const total = allPayments.length;
+            const filtered = filteredPayments.length;
+            
+            if (filtered < total) {
+                showNotification(`Đã lọc ${filtered} / ${total} giao dịch`, 'info');
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification-toast');
+            existingNotifications.forEach(n => n.remove());
+            
+            // Create notification
+            const notification = document.createElement('div');
+            notification.className = `notification-toast fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            // Set colors based on type
+            let bgColor, textColor, icon;
+            switch (type) {
+                case 'success':
+                    bgColor = 'bg-green-500';
+                    textColor = 'text-white';
+                    icon = 'fas fa-check-circle';
+                    break;
+                case 'warning':
+                    bgColor = 'bg-yellow-500';
+                    textColor = 'text-white';
+                    icon = 'fas fa-exclamation-triangle';
+                    break;
+                case 'error':
+                    bgColor = 'bg-red-500';
+                    textColor = 'text-white';
+                    icon = 'fas fa-times-circle';
+                    break;
+                default:
+                    bgColor = 'bg-blue-500';
+                    textColor = 'text-white';
+                    icon = 'fas fa-info-circle';
+            }
+            
+            notification.className += ` ${bgColor} ${textColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="${icon} mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
         
         function displayPayments() {
@@ -466,89 +632,52 @@
             let failed = 0;
             
             filteredPayments.forEach(payment => {
-                // Add to total revenue
-                totalRevenue += payment.amount;
+                // Add to total revenue only for completed payments
+                if (payment.status === 'Completed' || payment.status === 'Paid') {
+                    totalRevenue += payment.amount;
+                }
                 
                 // Count by status
                 if (payment.status === 'Completed') {
                     completed++;
                 } else if (payment.status === 'Pending') {
                     pending++;
-                } else if (payment.status === 'Paid') {
+                } else if (payment.status === 'Failed') {
                     failed++;
                 }
             });
             
             // Update the display
-            document.getElementById('totalRevenueDisplay').textContent = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
-                maximumFractionDigits: 0
-            }).format(totalRevenue);
+            const totalRevenueElement = document.getElementById('totalRevenueDisplay');
+            if (totalRevenueElement) {
+                totalRevenueElement.textContent = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    maximumFractionDigits: 0
+                }).format(totalRevenue);
+            }
             
-            document.getElementById('completedPaymentsDisplay').textContent = completed;
-            document.getElementById('pendingPaymentsDisplay').textContent = pending;
-            document.getElementById('failedPaymentsDisplay').textContent = failed;
+            const completedElement = document.getElementById('completedPaymentsDisplay');
+            if (completedElement) {
+                completedElement.textContent = completed;
+            }
+            
+            const pendingElement = document.getElementById('pendingPaymentsDisplay');
+            if (pendingElement) {
+                pendingElement.textContent = pending;
+            }
+            
+            // Update failed payments display if exists
+            const failedElement = document.getElementById('failedPaymentsDisplay');
+            if (failedElement) {
+                failedElement.textContent = failed;
+            }
         }
        
         
         function viewPaymentDetail(paymentId) {
-            // Show the modal first with loading state
-            const modal = document.getElementById('paymentDetailModal');
-            const contentArea = document.getElementById('paymentDetailContent');
-            const loader = document.getElementById('paymentDetailLoader');
-            
-            // Clear previous content and show loader
-            contentArea.innerHTML = '';
-            contentArea.appendChild(loader);
-            loader.classList.remove('hidden');
-            modal.classList.remove('hidden');
-            
-            // Load payment details via AJAX
-            fetch('${pageContext.request.contextPath}/admin/payment-action?action=view-detail&paymentId=' + paymentId)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(html => {
-                    // Hide loader and show content
-                    loader.classList.add('hidden');
-                    
-                    if (html.trim().length === 0) {
-                        contentArea.innerHTML = `
-                            <div class="flex flex-col items-center justify-center p-6 text-center">
-                                <i class="fas fa-exclamation-circle text-yellow-500 text-5xl mb-4"></i>
-                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Không tìm thấy chi tiết</h3>
-                                <p class="text-gray-600">Không thể tải thông tin chi tiết của giao dịch này.</p>
-                            </div>
-                        `;
-                    } else {
-                        contentArea.innerHTML = html;
-                    }
-                    
-                    // Setup print button functionality
-                    document.getElementById('printPaymentBtn').onclick = () => printPaymentDetails(paymentId);
-                })
-                .catch(error => {
-                    console.error('Error fetching payment details:', error);
-                    loader.classList.add('hidden');
-                    contentArea.innerHTML = `
-                        <div class="flex flex-col items-center justify-center p-6 text-center">
-                            <i class="fas fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Đã xảy ra lỗi</h3>
-                            <p class="text-gray-600">Không thể tải thông tin chi tiết. Vui lòng thử lại sau.</p>
-                        </div>
-                    `;
-                });
-        }
-        
-        function closePaymentDetailModal() {
-            document.getElementById('paymentDetailModal').classList.add('hidden');
-            // Clear content when closing
-            document.getElementById('paymentDetailContent').innerHTML = '';
-            document.getElementById('paymentDetailLoader').classList.remove('hidden');
+            // Redirect to payment detail page instead of opening modal
+            window.location.href = '${pageContext.request.contextPath}/admin/payment-action?action=view-detail&paymentId=' + paymentId;
         }
         
         function printPaymentDetails(paymentId) {
@@ -569,28 +698,7 @@
                 console.log('Refunding payment:', paymentId);
             }
         }
-        
-        function openDeleteModal(paymentId, transactionId) {
-            document.getElementById('deleteId').value = paymentId;
-            document.getElementById('deleteName').innerText = transactionId;
-            document.getElementById('deleteModal').classList.remove('hidden');
-        }
-        
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden');
-        }
-        
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const paymentDetailModal = document.getElementById('paymentDetailModal');
-            const deleteModal = document.getElementById('deleteModal');
-            
-            if (event.target === paymentDetailModal) {
-                closePaymentDetailModal();
-            } else if (event.target === deleteModal) {
-                closeDeleteModal();
-            }
-        }
+    </script>
     </script>
 </body>
 </html>

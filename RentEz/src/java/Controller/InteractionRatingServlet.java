@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.BookingDAO;
 import DAO.InteractionRatingDAO;
 import DAO.NotificationDAO;
 import DAO.UsersDao;
@@ -27,6 +28,7 @@ public class InteractionRatingServlet extends HttpServlet {
 
     private final InteractionRatingDAO ratingDAO = new InteractionRatingDAO();
     private final UsersDao userDAO = new UsersDao();
+    private final BookingDAO bookingDAO = new BookingDAO();
 
     /**
      * Handles the HTTP GET method - displays rating pages and AJAX requests
@@ -64,7 +66,10 @@ public class InteractionRatingServlet extends HttpServlet {
             // Check if current user can rate this landlord (i.e., is a renter and hasn't rated before)
             boolean canRate = false;
             if ("Renter".equals(currentUser.getRole())) {
-                canRate = !ratingDAO.hasRated(currentUser.getUserId(), landlordId);
+                // Check if renter has rented from this landlord and hasn't rated before
+                boolean hasRented = bookingDAO.hasRenterBookedFromLandlord(currentUser.getUserId(), landlordId);
+                boolean hasNotRated = !ratingDAO.hasRated(currentUser.getUserId(), landlordId);
+                canRate = hasRented && hasNotRated;
             }
             request.setAttribute("canRate", canRate);
             
@@ -160,6 +165,13 @@ public class InteractionRatingServlet extends HttpServlet {
                 // Check if renter has already rated this landlord
                 if (ratingDAO.hasRated(currentUser.getUserId(), landlordId)) {
                     request.setAttribute("error", "You have already rated this landlord");
+                    response.sendRedirect(request.getContextPath() + "/ratings?action=viewLandlordRatings&landlordId=" + landlordId);
+                    return;
+                }
+                
+                // Check if renter has actually rented from this landlord
+                if (!bookingDAO.hasRenterBookedFromLandlord(currentUser.getUserId(), landlordId)) {
+                    request.setAttribute("error", "You can only rate landlords from whom you have rented properties");
                     response.sendRedirect(request.getContextPath() + "/ratings?action=viewLandlordRatings&landlordId=" + landlordId);
                     return;
                 }

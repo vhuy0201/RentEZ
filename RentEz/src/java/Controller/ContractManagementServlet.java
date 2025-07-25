@@ -2,7 +2,7 @@ package Controller;
 
 import DAO.BookingDAO;
 import DAO.PropertyDAO;
-import DAO.UserDao;
+import DAO.UsersDao;
 import DAO.NotificationDAO;
 import Model.Booking;
 import Model.Property;
@@ -222,7 +222,7 @@ public class ContractManagementServlet extends HttpServlet {
     private void createRenewalNotifications(Booking renewalBooking, User actionUser) {
         try {
             NotificationDAO notificationDAO = new NotificationDAO();
-            UserDao userDAO = new UserDao();
+            UsersDao userDAO = new UsersDao();
             PropertyDAO propertyDAO = new PropertyDAO();
 
             Property property = propertyDAO.getById(renewalBooking.getPropertyId());
@@ -266,7 +266,7 @@ public class ContractManagementServlet extends HttpServlet {
     private void createCancellationNotifications(Booking booking, User actionUser, String reason) {
         try {
             NotificationDAO notificationDAO = new NotificationDAO();
-            UserDao userDAO = new UserDao();
+            UsersDao userDAO = new UsersDao();
             PropertyDAO propertyDAO = new PropertyDAO();
 
             Property property = propertyDAO.getById(booking.getPropertyId());

@@ -64,6 +64,36 @@
 
             <!-- Content -->
             <main class="p-6">
+                <!-- Search and Filter -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tìm kiếm</label>
+                            <div class="relative">
+                                <input type="text" id="searchInput" placeholder="Tên gói, mô tả..."
+                                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Độ ưu tiên</label>
+                            <select id="priorityFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                                <option value="">Tất cả độ ưu tiên</option>
+                                <option value="1">1 - Cao nhất (VIP)</option>
+                                <option value="2">2 - Cao (Premium)</option>
+                                <option value="3">3 - Trung bình (Basic)</option>
+                                <option value="99">99 - Thấp nhất (Free)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="applyFilters()" 
+                                    class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                                <i class="fas fa-filter mr-2"></i>Lọc
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Success/Error Messages -->
                 <c:if test="${param.success != null}">
                     <div class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
@@ -252,6 +282,217 @@
     </div>
 
     <script>
+        // Store original data for filtering
+        let originalTiers = [];
+        let filteredTiers = [];
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store original card data
+            storeOriginalData();
+            
+            // Initialize filters from URL params
+            initializeFiltersFromURL();
+            
+            // Add event listeners for real-time filtering
+            setupEventListeners();
+        });
+        
+        function storeOriginalData() {
+            const tierCards = document.querySelectorAll('.grid .bg-white.rounded-xl.shadow-sm');
+            originalTiers = [];
+            
+            tierCards.forEach(card => {
+                if (card.querySelector('h3')) { // Skip quick actions card
+                    const tier = {
+                        element: card,
+                        name: card.querySelector('h3').textContent.trim(),
+                        description: card.querySelector('p.text-sm.text-gray-600') ? card.querySelector('p.text-sm.text-gray-600').textContent.trim() : '',
+                        priority: getPriorityFromElement(card),
+                        price: getPriceFromElement(card)
+                    };
+                    originalTiers.push(tier);
+                }
+            });
+            filteredTiers = [...originalTiers];
+        }
+        
+        function getPriorityFromElement(card) {
+            const prioritySpan = card.querySelector('.px-3.py-1.text-xs');
+            if (prioritySpan) {
+                const text = prioritySpan.textContent.trim();
+                const match = text.match(/Độ ưu tiên (\d+)/);
+                return match ? match[1] : '';
+            }
+            return '';
+        }
+        
+        function getPriceFromElement(card) {
+            const priceElement = card.querySelector('.text-2xl.font-bold');
+            return priceElement ? priceElement.textContent.trim() : '';
+        }
+        
+        function setupEventListeners() {
+            // Search input - real-time filtering
+            document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+            
+            // Priority filter
+            document.getElementById('priorityFilter').addEventListener('change', applyFilters);
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            
+            // Filter tiers
+            filteredTiers = originalTiers.filter(tier => {
+                // Search filter
+                if (searchTerm && !matchesSearch(tier, searchTerm)) {
+                    return false;
+                }
+                
+                // Priority filter
+                if (priorityFilter && tier.priority !== priorityFilter) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Update display
+            updateDisplay();
+            
+            // Update URL (optional)
+            updateURL(searchTerm, priorityFilter);
+        }
+        
+        function matchesSearch(tier, searchTerm) {
+            return (
+                tier.name.toLowerCase().includes(searchTerm) ||
+                tier.description.toLowerCase().includes(searchTerm) ||
+                tier.price.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        function updateDisplay() {
+            const gridContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+            
+            // Hide all original cards
+            originalTiers.forEach(tier => {
+                tier.element.style.display = 'none';
+            });
+            
+            // Show filtered cards
+            if (filteredTiers.length > 0) {
+                filteredTiers.forEach(tier => {
+                    tier.element.style.display = '';
+                });
+                
+                // Hide empty state if it exists
+                const emptyState = gridContainer.querySelector('.empty-state');
+                if (emptyState) {
+                    emptyState.style.display = 'none';
+                }
+            } else {
+                // Show empty state
+                showEmptyState(gridContainer);
+            }
+            
+            // Show filter info if filters are active
+            showFilterInfo();
+        }
+        
+        function showEmptyState(container) {
+            // Remove existing empty state
+            const existingEmpty = container.querySelector('.empty-state');
+            if (existingEmpty) {
+                existingEmpty.remove();
+            }
+            
+            // Create new empty state
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'empty-state col-span-full flex flex-col items-center justify-center p-12 text-gray-500';
+            emptyDiv.innerHTML = `
+                <i class="fas fa-crown mb-3 text-4xl text-gray-400"></i>
+                <p class="text-lg font-medium">Không tìm thấy gói thành viên nào</p>
+                <p class="text-sm text-gray-400 mt-1">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+            `;
+            container.appendChild(emptyDiv);
+        }
+        
+        function showFilterInfo() {
+            const existingInfo = document.querySelector('.filter-info');
+            if (existingInfo) {
+                existingInfo.remove();
+            }
+            
+            const totalShowing = filteredTiers.length;
+            if (totalShowing !== originalTiers.length) {
+                const info = document.createElement('div');
+                info.className = 'filter-info bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-blue-700';
+                info.innerHTML = `
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Đang hiển thị ${totalShowing} trong tổng số ${originalTiers.length} gói thành viên
+                    <button onclick="clearFilters()" class="ml-4 text-blue-600 hover:text-blue-800 underline">
+                        Xóa bộ lọc
+                    </button>
+                `;
+                
+                const gridContainer = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3').parentNode;
+                gridContainer.insertBefore(info, gridContainer.querySelector('.grid'));
+            }
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('priorityFilter').value = '';
+            
+            // Apply filters to show all
+            applyFilters();
+        }
+        
+        function updateURL(search, priority) {
+            const url = new URL(window.location);
+            
+            if (search) url.searchParams.set('search', search);
+            else url.searchParams.delete('search');
+            
+            if (priority) url.searchParams.set('priority', priority);
+            else url.searchParams.delete('priority');
+            
+            // Update URL without reloading page
+            window.history.replaceState({}, '', url);
+        }
+        
+        function initializeFiltersFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('search')) {
+                document.getElementById('searchInput').value = urlParams.get('search');
+            }
+            
+            if (urlParams.has('priority')) {
+                document.getElementById('priorityFilter').value = urlParams.get('priority');
+            }
+            
+            // Apply filters if any were set
+            if (urlParams.toString()) {
+                applyFilters();
+            }
+        }
+        
         function openCreateModal() {
             document.getElementById('modalTitle').textContent = 'Tạo gói thành viên mới';
             document.getElementById('formAction').value = 'create';

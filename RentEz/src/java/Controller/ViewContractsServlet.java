@@ -2,7 +2,7 @@ package Controller;
 
 import DAO.BookingDAO;
 import DAO.PropertyDAO;
-import DAO.UserDao;
+import DAO.UsersDao;
 import DAO.LocationDAO;
 import DTO.BookingDTO;
 import Model.Booking;
@@ -39,7 +39,7 @@ public class ViewContractsServlet extends HttpServlet {
         
         BookingDAO bookingDAO = new BookingDAO();
         PropertyDAO propertyDAO = new PropertyDAO();
-        UserDao userDAO = new UserDao();
+        UsersDao userDAO = new UsersDao();
         LocationDAO locationDAO = new LocationDAO();
         
         // Get bookings based on user role

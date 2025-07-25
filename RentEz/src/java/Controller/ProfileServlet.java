@@ -3,6 +3,7 @@ package Controller;
 import DAO.UsersDao;
 import Model.User;
 import Util.Common;
+import Service.CloudinaryService;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -132,39 +133,41 @@ public class ProfileServlet extends HttpServlet {
         // Handle avatar upload
         Part filePart = request.getPart("avatar");
         if (filePart != null && filePart.getSize() > 0) {
-            // Get the real path to the upload directory
-            String uploadPath = getServletContext().getRealPath("/") + "view/guest/asset/img";
-            
-            // Create the directory if it doesn't exist
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-            
-            // Generate a unique filename to prevent overwriting
-            String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
-            
-            // Save the file
-            filePart.write(uploadPath + File.separator + uniqueFileName);
-            
-            // Delete old avatar if exists and is not the default
-            if (user.getAvatar() != null && !user.getAvatar().isEmpty() && !user.getAvatar().contains("default-avatar")) {
-                // Extract filename from the path
-                String oldFileName = user.getAvatar();
-                if (oldFileName.contains("/")) {
-                    oldFileName = oldFileName.substring(oldFileName.lastIndexOf("/") + 1);
+            try {
+                CloudinaryService cloudinaryService = CloudinaryService.getInstance();
+                
+                // Check if Cloudinary is configured
+                if (!cloudinaryService.isConfigured()) {
+                    request.setAttribute("profileMessage", "Image upload service is not configured. Please contact administrator.");
+                    request.setAttribute("profileMessageType", "warning");
+                    request.getRequestDispatcher("/view/common/profile.jsp").forward(request, response);
+                    return;
                 }
                 
-                File oldAvatar = new File(uploadPath + File.separator + oldFileName);
-                if (oldAvatar.exists()) {
-                    oldAvatar.delete();
+                // Get original filename for reference
+                String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                
+                // Delete old avatar from Cloudinary if exists
+                if (user.getAvatar() != null && !user.getAvatar().isEmpty() && user.getAvatar().contains("cloudinary.com")) {
+                    String oldPublicId = cloudinaryService.extractPublicId(user.getAvatar());
+                    if (oldPublicId != null) {
+                        cloudinaryService.deleteImage(oldPublicId);
+                    }
                 }
+                
+                // Upload new avatar to Cloudinary
+                String cloudinaryUrl = cloudinaryService.uploadAvatarImage(filePart.getInputStream(), originalFileName);
+                
+                // Update user avatar with Cloudinary URL
+                user.setAvatar(cloudinaryUrl);
+                
+            } catch (Exception e) {
+                System.err.println("Error uploading avatar to Cloudinary: " + e.getMessage());
+                request.setAttribute("profileMessage", "Failed to upload avatar image. Please try again.");
+                request.setAttribute("profileMessageType", "danger");
+                request.getRequestDispatcher("/view/common/profile.jsp").forward(request, response);
+                return;
             }
-            
-            // Update user avatar in the user object with the relative path
-            user.setAvatar("view/guest/asset/img/" + uniqueFileName);
         }
         
         // Save updates to database

@@ -64,7 +64,8 @@
         <servlet-name>RentalBookingServlet</servlet-name>
         <servlet-class>Controller.RentalBookingServlet</servlet-class>
     </servlet>
-    <!-- ViewContractsServlet removed - replaced by BookingServlet -->    <servlet>
+    <!-- ViewContractsServlet removed - replaced by BookingServlet -->
+    <servlet>
         <servlet-name>PaymentServlet</servlet-name>
         <servlet-class>Controller.PaymentServlet</servlet-class>
     </servlet>
@@ -113,6 +114,10 @@
     <servlet>
         <servlet-name>BillManagementServlet</servlet-name>
         <servlet-class>Controller.BillManagementServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MessageServlet</servlet-name>
+        <servlet-class>Controller.MessageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -179,19 +184,23 @@
         <servlet-name>RentalBookingServlet</servlet-name>
         <url-pattern>/rental-booking</url-pattern>
     </servlet-mapping>
-    <!-- ViewContractsServlet mapping removed - replaced by BookingServlet -->    <servlet-mapping>
+    <!-- ViewContractsServlet mapping removed - replaced by BookingServlet -->
+    <servlet-mapping>
         <servlet-name>PaymentServlet</servlet-name>
         <url-pattern>/payments</url-pattern>
         <url-pattern>/payment-action</url-pattern>
-    </servlet-mapping>    <servlet-mapping>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>FavoriteServlet</servlet-name>
         <url-pattern>/favorites</url-pattern>
         <url-pattern>/favorite-action</url-pattern>
-    </servlet-mapping>    <servlet-mapping>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>TierMembershipServlet</servlet-name>
         <url-pattern>/membership</url-pattern>
         <url-pattern>/membership-action</url-pattern>
-    </servlet-mapping>    <servlet-mapping>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AdminTierServlet</servlet-name>
         <url-pattern>/admin/tiers</url-pattern>
         <url-pattern>/admin/tier-action</url-pattern>
@@ -234,7 +243,10 @@
         <servlet-name>BillManagementServlet</servlet-name>
         <url-pattern>/billManagement</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>MessageServlet</servlet-name>
+        <url-pattern>/MessageServlet</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>
             HomeServlet

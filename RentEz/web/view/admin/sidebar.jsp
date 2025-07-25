@@ -32,11 +32,11 @@
                 Quản lý loại phòng
             </a>
             
-            <a href="${pageContext.request.contextPath}/admin/service-fees" 
+            <a href="${pageContext.request.contextPath}/admin/posts" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
-               ${pageContext.request.requestURI.contains('service-fee') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
-                <i class="fas fa-calculator mr-3"></i>
-                Quản lý phí dịch vụ
+               ${pageContext.request.requestURI.contains('posts') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
+                <i class="fas fa-newspaper mr-3"></i>
+                Quản lý đăng bài
             </a>
             
             <a href="${pageContext.request.contextPath}/admin/tiers" 
@@ -60,12 +60,12 @@
                 Quản lý đặt thuê
             </a>
             
-            <a href="${pageContext.request.contextPath}/admin/support" 
+<!--            <a href="${pageContext.request.contextPath}/admin/contact-messages" 
                class="flex items-center px-4 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors
                ${pageContext.request.requestURI.contains('support') ? 'bg-white bg-opacity-20 text-white font-medium' : ''}">
                 <i class="fas fa-headset mr-3"></i>
                 Hỗ trợ & Phản hồi
-            </a>
+            </a>-->
         </nav>
     </div>
     

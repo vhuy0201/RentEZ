@@ -33,13 +33,13 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("user");
         
-        
         String servletPath = request.getServletPath();
         
         if ("/admin/payment-history".equals(servletPath)) {
             showPaymentHistory(request, response);
         } else if ("/admin/payment-action".equals(servletPath)) {
             String action = request.getParameter("action");
+            System.out.println("Payment action: " + action);
             if (action != null) {
                 switch (action) {
                     case "view-detail":
@@ -49,9 +49,11 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
                         printPaymentDetail(request, response);
                         break;
                     default:
+                        System.out.println("Unknown action: " + action);
                         response.sendRedirect(request.getContextPath() + "/admin/payment-history");
                 }
             } else {
+                System.out.println("No action parameter provided");
                 response.sendRedirect(request.getContextPath() + "/admin/payment-history");
             }
         }
@@ -161,36 +163,61 @@ public class AdminPaymentHistoryServlet extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-            int paymentId = Integer.parseInt(request.getParameter("paymentId"));
+            String paymentIdParam = request.getParameter("paymentId");          
+            
+            int paymentId;
+            try {
+                paymentId = Integer.parseInt(paymentIdParam.trim());
+            } catch (NumberFormatException e) {
+                response.sendRedirect(request.getContextPath() + "/admin/payment-history?error=invalid-id");
+                return;
+            }
             
             Payment payment = paymentDAO.getById(paymentId);
             
             if (payment != null) {
                 // Get payer information
-                User payer = userDAO.getById(payment.getPayerId());
-                if (payer != null) {
-                    request.setAttribute("payer", payer);
+                User payer = null;
+                try {
+                    payer = userDAO.getById(payment.getPayerId());
+                    if (payer != null) {
+                        System.out.println("Payer found: " + payer.getName());
+                        request.setAttribute("payer", payer);
+                    } else {
+                        System.out.println("Payer not found for ID: " + payment.getPayerId());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error fetching payer: " + e.getMessage());
                 }
                 
                 // If payeeId exists, also get payee information
                 if (payment.getPayeeId() > 0) {
-                    User payee = userDAO.getById(payment.getPayeeId());
-                    if (payee != null) {
-                        request.setAttribute("payee", payee);
+                    try {
+                        User payee = userDAO.getById(payment.getPayeeId());
+                        if (payee != null) {
+                            request.setAttribute("payee", payee);
+                        } else {
+                            System.out.println("Payee not found for ID: " + payment.getPayeeId());
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Error fetching payee: " + e.getMessage());
                     }
                 }
                 
-                
                 request.setAttribute("payment", payment);
-                request.getRequestDispatcher("/view/admin/payment-detail-template.jsp").include(request, response);
+                System.out.println("Forwarding to payment-detail.jsp");
+                
+                // Forward to the full payment detail page
+                request.getRequestDispatcher("/view/admin/payment-detail.jsp").forward(request, response);
+                
             } else {
-                response.getWriter().write("<div class='p-4 text-center text-red-600'><i class='fas fa-exclamation-circle text-3xl mb-3'></i><p>Không tìm thấy giao dịch</p></div>");
+                System.out.println("Payment not found for ID: " + paymentId);
+                response.sendRedirect(request.getContextPath() + "/admin/payment-history?error=not-found");
             }
-        } catch (NumberFormatException e) {
-            response.getWriter().write("<div class='p-4 text-center text-red-600'><i class='fas fa-exclamation-triangle text-3xl mb-3'></i><p>ID giao dịch không hợp lệ</p></div>");
         } catch (Exception e) {
+            System.out.println("Exception in viewPaymentDetail: " + e.getMessage());
             e.printStackTrace();
-            response.getWriter().write("<div class='p-4 text-center text-red-600'><i class='fas fa-exclamation-triangle text-3xl mb-3'></i><p>Đã xảy ra lỗi khi tải thông tin chi tiết</p></div>");
+            response.sendRedirect(request.getContextPath() + "/admin/payment-history?error=system-error");
         }
     }
     

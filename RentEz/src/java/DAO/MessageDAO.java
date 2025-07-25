@@ -8,11 +8,11 @@ import Connection.DBConnection;
 
 public class MessageDAO {
     
-    public List<Message> getMessagesBetweenUsers(int user1Id, int user2Id, int propertyId) {
+    public List<Message> getMessagesBetweenUsers(int user1Id, int user2Id) {
         List<Message> messages = new ArrayList<>();
-        String sql = "SELECT * FROM Messages WHERE " +
+        String sql = "SELECT * FROM Message WHERE " +
                     "((senderId = ? AND receiverId = ?) OR (senderId = ? AND receiverId = ?)) " +
-                    "AND propertyId = ? ORDER BY sendDate ASC";
+                    "ORDER BY sendDate ASC";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -21,7 +21,6 @@ public class MessageDAO {
             stmt.setInt(2, user2Id);
             stmt.setInt(3, user2Id);
             stmt.setInt(4, user1Id);
-            stmt.setInt(5, propertyId);
             
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -82,7 +81,7 @@ public class MessageDAO {
     }
     
     public boolean sendMessage(Message message) {
-        String sql = "INSERT INTO Messages (senderId, receiverId, propertyId, content, sendDate, readStatus, isNegotiation) " +
+        String sql = "INSERT INTO Message (senderId, receiverId, propertyId, content, sendDate, readStatus, isNegotiation) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();

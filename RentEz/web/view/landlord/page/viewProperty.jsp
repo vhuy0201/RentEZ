@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -182,6 +183,29 @@
 
             .success-message.show {
                 opacity: 1;
+            }
+
+            .error-message {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #f44336 0%, #e57373 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.75rem;
+                box-shadow: 0 4px 20px rgba(244, 67, 54, 0.3);
+                z-index: 1050;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.5s ease;
+                max-width: 400px;
+                font-weight: 500;
+                border-left: 4px solid #d32f2f;
+            }
+
+            .error-message.show {
+                opacity: 1;
+                transform: translateY(0);
             }
 
             .nav-link {
@@ -467,6 +491,16 @@
                 box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
             }
 
+            .btn-repost {
+                background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            }
+
+            .btn-repost:hover {
+                background: linear-gradient(135deg, #388e3c 0%, #4caf50 100%);
+                transform: translateY(-3px);
+                box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            }
+
             .btn-delete {
                 background: linear-gradient(135deg, #f44336 0%, #e57373 100%);
             }
@@ -475,6 +509,28 @@
                 background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
                 transform: translateY(-3px);
                 box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+            }
+            
+            .btn-restore {
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+            }
+            
+            .btn-restore:hover {
+                background: linear-gradient(135deg, #218838, #1c9970);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+            }
+            
+            .btn-permanent-delete {
+                background: linear-gradient(135deg, #dc3545, #c82333);
+                color: white;
+            }
+            
+            .btn-permanent-delete:hover {
+                background: linear-gradient(135deg, #c82333, #bd2130);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
             }
 
             /* Empty state */
@@ -589,6 +645,61 @@
                 font-size: 1rem;
             }
 
+            .filter-reset-btn {
+                background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+            }
+
+            .filter-reset-btn:hover {
+                background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+                color: white;
+            }
+
+            /* Quick filter buttons */
+            .btn-outline-success {
+                border-color: #28a745;
+                color: #28a745;
+            }
+
+            .btn-outline-success:hover {
+                background-color: #28a745;
+                border-color: #28a745;
+                color: white;
+            }
+
+            .btn-outline-warning {
+                border-color: #ffc107;
+                color: #ffc107;
+            }
+
+            .btn-outline-warning:hover {
+                background-color: #ffc107;
+                border-color: #ffc107;
+                color: #212529;
+            }
+
+            .btn-outline-secondary {
+                border-color: #6c757d;
+                color: #6c757d;
+            }
+
+            .btn-outline-secondary:hover {
+                background-color: #6c757d;
+                border-color: #6c757d;
+                color: white;
+            }
+
             /* Pagination */
             .pagination-container {
                 display: flex;
@@ -690,12 +801,6 @@
                             <div class="dashboard-section-subtitle mb-2">Kênh thông tin bất động sản</div>
                             <div class="dashboard-section-title">Quản lý tin đăng</div>
                         </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
-                            <a href="${pageContext.request.contextPath}/payments" class="btn btn-main">
-                                <i class="fas fa-plus me-2"></i>Nạp tiền
-                            </a>
-                        </div>
                     </div>
 
                     <!-- Success message -->
@@ -706,15 +811,23 @@
                         </div>
                     </c:if>
 
+                    <!-- Error message -->
+                    <c:if test="${not empty sessionScope.error}">
+                        <div class="error-message" id="errorMessage">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            ${sessionScope.error}
+                        </div>
+                    </c:if>
+
                     <!-- Filter bar -->
                     <div class="filter-bar mb-4">
                         <div class="search-box">
                             <i class="fas fa-search search-icon"></i>
-                            <input type="text" class="search-input" placeholder="Tìm kiếm tin đăng...">
+                            <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm tin đăng..." oninput="filterProperties()">
                         </div>
                         <div class="filter-item">
                             <span class="filter-label">Loại:</span>
-                            <select class="filter-select">
+                            <select class="filter-select" id="typeFilter" onchange="filterProperties()">
                                 <option value="">Tất cả</option>
                                 <option value="1">Căn hộ</option>
                                 <option value="2">Nhà riêng</option>
@@ -723,19 +836,34 @@
                         </div>
                         <div class="filter-item">
                             <span class="filter-label">Trạng thái:</span>
-                            <select class="filter-select">
+                            <select class="filter-select" id="statusFilter" onchange="filterProperties()">
                                 <option value="">Tất cả</option>
                                 <option value="Available">Còn trống</option>
                                 <option value="Rented">Đã thuê</option>
                             </select>
                         </div>
                         <div class="filter-item">
+                            <span class="filter-label">Hiển thị:</span>
+                            <select class="filter-select" id="publicStatusFilter" onchange="filterByPublicStatus()">
+                                <option value="public">Tin đăng công khai</option>
+                                <option value="hidden">Tin đăng đã ẩn</option>
+                                <option value="all">Tất cả tin đăng</option>
+                            </select>
+                        </div>
+                        <div class="filter-item">
                             <span class="filter-label">Sắp xếp:</span>
-                            <select class="filter-select">
+                            <select class="filter-select" id="sortFilter" onchange="sortProperties()">
                                 <option value="newest">Mới nhất</option>
                                 <option value="price_asc">Giá tăng dần</option>
                                 <option value="price_desc">Giá giảm dần</option>
+                                <option value="size_asc">Diện tích tăng dần</option>
+                                <option value="size_desc">Diện tích giảm dần</option>
                             </select>
+                        </div>
+                        <div class="filter-item">
+                            <button type="button" class="filter-reset-btn" onclick="resetFilters()" title="Đặt lại bộ lọc">
+                                <i class="fas fa-undo"></i>Reset
+                            </button>
                         </div>
                     </div>
 
@@ -747,6 +875,7 @@
                                     <i class="fas fa-list"></i>
                                 </div>
                                 Danh sách tin đăng
+                                <span class="property-count text-muted ms-2">(${fn:length(properties)} tin đăng)</span>
                             </div>
                             <a href="${pageContext.request.contextPath}/addProperty" class="btn btn-main btn-sm">
                                 <i class="fas fa-plus me-2"></i>Đăng tin mới
@@ -790,7 +919,14 @@
                                         </thead>
                                         <tbody>
                                             <c:forEach var="property" items="${properties}">
-                                                <tr>
+                                                <tr class="property-row" 
+                                                    data-public-status="${property.publicStatus}"
+                                                    data-type-id="${property.typeId}" 
+                                                    data-status="${property.availabilityStatus}"
+                                                    data-price="${property.price}"
+                                                    data-size="${property.size}"
+                                                    data-title="${fn:toLowerCase(property.title)}"
+                                                    data-type-name="${fn:toLowerCase(typeNames[property.typeId])}">
                                                     <td>
                                                         <div class="property-title">
                                                             <div class="property-title-icon">
@@ -836,15 +972,34 @@
                                                     </td>
                                                     <td>
                                                         <div class="action-buttons">
-                                                            <a href="${pageContext.request.contextPath}/viewPropertyDetail?propertyId=${property.propertyId}" class="btn-action btn-view" title="Xem chi tiết">
+                                                            <a href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}" class="btn-action btn-view" title="Xem chi tiết">
                                                                 <i class="fas fa-eye"></i>
                                                             </a>
-                                                            <a href="${pageContext.request.contextPath}/editProperty?propertyId=${property.propertyId}" class="btn-action btn-edit" title="Chỉnh sửa">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
-                                                            <a href="#" onclick="confirmDelete(${property.propertyId})" class="btn-action btn-delete" title="Xóa">
-                                                                <i class="fas fa-trash-alt"></i>
-                                                            </a>
+                                                            <c:choose>
+                                                                <c:when test="${property.publicStatus}">
+                                                                    <!-- Property is public - show normal actions -->
+                                                                    <a href="${pageContext.request.contextPath}/editProperty?propertyId=${property.propertyId}" class="btn-action btn-edit" title="Chỉnh sửa">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <c:if test="${property.availabilityStatus eq 'Rented'}">
+                                                                        <a href="#" onclick="confirmRepost(${property.propertyId})" class="btn-action btn-repost" title="Đăng lại">
+                                                                            <i class="fas fa-redo"></i>
+                                                                        </a>
+                                                                    </c:if>
+                                                                    <a href="#" onclick="confirmDelete(${property.propertyId})" class="btn-action btn-delete" title="Ẩn tin đăng">
+                                                                        <i class="fas fa-eye-slash"></i>
+                                                                    </a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <!-- Property is hidden - show restore action -->
+                                                                    <a href="#" onclick="confirmRestore(${property.propertyId})" class="btn-action btn-restore" title="Khôi phục tin đăng">
+                                                                        <i class="fas fa-undo"></i>
+                                                                    </a>
+                                                                    <a href="#" onclick="confirmPermanentDelete(${property.propertyId})" class="btn-action btn-permanent-delete" title="Xóa vĩnh viễn">
+                                                                        <i class="fas fa-trash-alt"></i>
+                                                                    </a>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -884,6 +1039,8 @@
                                                                 // Function to show and hide success message
                                                                 document.addEventListener('DOMContentLoaded', function () {
                                                                     const successMessage = document.getElementById('successMessage');
+                                                                    const errorMessage = document.getElementById('errorMessage');
+                                                                    
                                                                     if (successMessage) {
                                                                         successMessage.classList.add('show');
                                                                         setTimeout(function () {
@@ -900,13 +1057,263 @@
                                                                             body: 'attribute=successMessage'
                                                                         }).catch(error => console.error('Error cleaning session:', error));
                                                                     }
+                                                                    
+                                                                    if (errorMessage) {
+                                                                        errorMessage.classList.add('show');
+                                                                        setTimeout(function () {
+                                                                            errorMessage.classList.remove('show');
+                                                                            setTimeout(function () {
+                                                                                errorMessage.remove();
+                                                                            }, 500);
+                                                                        }, 5000);
+                                                                        fetch('${pageContext.request.contextPath}/cleanupSession', {
+                                                                            method: 'POST',
+                                                                            headers: {
+                                                                                'Content-Type': 'application/x-www-form-urlencoded'
+                                                                            },
+                                                                            body: 'attribute=error'
+                                                                        }).catch(error => console.error('Error cleaning session:', error));
+                                                                    }
+                                                                    
+                                                                    // Initialize filters
+                                                                    initializeFilters();
                                                                 });
 
-                                                                // Confirm delete function
+                                                                // Initialize filter default state
+                                                                function initializeFilters() {
+                                                                    // Set default filter to show only public properties
+                                                                    document.getElementById('publicStatusFilter').value = 'public';
+                                                                    filterByPublicStatus();
+                                                                    
+                                                                    // Update initial count
+                                                                    updateVisiblePropertyCount();
+                                                                }
+
+                                                                // General filter function for search, type, and status
+                                                                function filterProperties() {
+                                                                    // Add debounce for search input
+                                                                    clearTimeout(window.filterTimeout);
+                                                                    window.filterTimeout = setTimeout(() => {
+                                                                        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                                                                        const typeFilter = document.getElementById('typeFilter').value;
+                                                                        const statusFilter = document.getElementById('statusFilter').value;
+                                                                        const publicStatusFilter = document.getElementById('publicStatusFilter').value;
+                                                                        
+                                                                        const propertyRows = document.querySelectorAll('.property-row');
+                                                                        
+                                                                        propertyRows.forEach(row => {
+                                                                            let showRow = true;
+                                                                            
+                                                                            // Search filter (title and type name)
+                                                                            if (searchTerm) {
+                                                                                const title = row.dataset.title || '';
+                                                                                const typeName = row.dataset.typeName || '';
+                                                                                const searchMatch = title.includes(searchTerm) || typeName.includes(searchTerm);
+                                                                                if (!searchMatch) showRow = false;
+                                                                            }
+                                                                            
+                                                                            // Type filter
+                                                                            if (typeFilter && row.dataset.typeId !== typeFilter) {
+                                                                                showRow = false;
+                                                                            }
+                                                                            
+                                                                            // Status filter  
+                                                                            if (statusFilter && row.dataset.status !== statusFilter) {
+                                                                                showRow = false;
+                                                                            }
+                                                                            
+                                                                            // Public status filter
+                                                                            const isPublic = row.dataset.publicStatus === 'true';
+                                                                            if (publicStatusFilter === 'public' && !isPublic) {
+                                                                                showRow = false;
+                                                                            } else if (publicStatusFilter === 'hidden' && isPublic) {
+                                                                                showRow = false;
+                                                                            }
+                                                                            
+                                                                            row.style.display = showRow ? '' : 'none';
+                                                                        });
+                                                                        
+                                                                        updateVisiblePropertyCount();
+                                                                        showNoResultsMessage();
+                                                                    }, 300); // 300ms debounce
+                                                                }
+
+                                                                // Confirm delete function (soft delete)
                                                                 function confirmDelete(propertyId) {
-                                                                    if (confirm('Bạn có chắc chắn muốn xóa tin đăng này?')) {
+                                                                    if (confirm('Bạn có chắc chắn muốn ẩn tin đăng này? Tin đăng sẽ không hiển thị công khai nhưng bạn có thể khôi phục lại bất cứ lúc nào.')) {
                                                                         window.location.href = '${pageContext.request.contextPath}/deleteProperty?propertyId=' + propertyId;
                                                                     }
+                                                                }
+
+                                                                // Confirm restore function  
+                                                                function confirmRestore(propertyId) {
+                                                                    if (confirm('Bạn có chắc chắn muốn khôi phục tin đăng này? Tin đăng sẽ được hiển thị công khai trở lại.')) {
+                                                                        // Create and submit form for POST request
+                                                                        var form = document.createElement('form');
+                                                                        form.method = 'POST';
+                                                                        form.action = '${pageContext.request.contextPath}/restoreProperty';
+                                                                        
+                                                                        var input = document.createElement('input');
+                                                                        input.type = 'hidden';
+                                                                        input.name = 'propertyId';
+                                                                        input.value = propertyId;
+                                                                        
+                                                                        form.appendChild(input);
+                                                                        document.body.appendChild(form);
+                                                                        form.submit();
+                                                                    }
+                                                                }
+
+                                                                // Confirm permanent delete function
+                                                                function confirmPermanentDelete(propertyId) {
+                                                                    if (confirm('⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA VĨNH VIỄN tin đăng này?\n\nHành động này KHÔNG THỂ HOÀN TÁC. Tất cả dữ liệu liên quan sẽ bị mất hoàn toàn.')) {
+                                                                        if (confirm('Xác nhận lần cuối: Bạn thực sự muốn xóa vĩnh viễn tin đăng này?')) {
+                                                                            window.location.href = '${pageContext.request.contextPath}/permanentDeleteProperty?propertyId=' + propertyId;
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                // Confirm repost function
+                                                                function confirmRepost(propertyId) {
+                                                                    if (confirm('Bạn có muốn đăng lại tin này với trạng thái mới không? Tin đăng mới sẽ được tạo với thông tin tương tự nhưng ở trạng thái "Còn trống".')) {
+                                                                        window.location.href = '${pageContext.request.contextPath}/repostProperty?propertyId=' + propertyId;
+                                                                    }
+                                                                }
+
+                                                                // Filter properties by public status
+                                                                function filterByPublicStatus() {
+                                                                    const filter = document.getElementById('publicStatusFilter').value;
+                                                                    const propertyRows = document.querySelectorAll('.property-row');
+                                                                    
+                                                                    propertyRows.forEach(row => {
+                                                                        const isPublic = row.dataset.publicStatus === 'true';
+                                                                        
+                                                                        if (filter === 'all') {
+                                                                            row.style.display = '';
+                                                                        } else if (filter === 'public' && isPublic) {
+                                                                            row.style.display = '';
+                                                                        } else if (filter === 'hidden' && !isPublic) {
+                                                                            row.style.display = '';
+                                                                        } else {
+                                                                            row.style.display = 'none';
+                                                                        }
+                                                                    });
+                                                                    
+                                                                    // Update visible count
+                                                                    updateVisiblePropertyCount();
+                                                                    showNoResultsMessage();
+                                                                }
+
+                                                                // Sort properties function
+                                                                function sortProperties() {
+                                                                    const sortValue = document.getElementById('sortFilter').value;
+                                                                    const tbody = document.querySelector('.property-table tbody');
+                                                                    const rows = Array.from(tbody.querySelectorAll('.property-row'));
+                                                                    
+                                                                    rows.sort((a, b) => {
+                                                                        switch (sortValue) {
+                                                                            case 'price_asc':
+                                                                                return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                                                                            case 'price_desc':
+                                                                                return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                                                                            case 'size_asc':
+                                                                                return parseFloat(a.dataset.size) - parseFloat(b.dataset.size);
+                                                                            case 'size_desc':
+                                                                                return parseFloat(b.dataset.size) - parseFloat(a.dataset.size);
+                                                                            case 'newest':
+                                                                            default:
+                                                                                // Keep original order (newest first)
+                                                                                return 0;
+                                                                        }
+                                                                    });
+                                                                    
+                                                                    // Clear tbody and re-append sorted rows
+                                                                    tbody.innerHTML = '';
+                                                                    rows.forEach(row => tbody.appendChild(row));
+                                                                    
+                                                                    updateVisiblePropertyCount();
+                                                                }
+
+                                                                // Reset all filters
+                                                                function resetFilters() {
+                                                                    document.getElementById('searchInput').value = '';
+                                                                    document.getElementById('typeFilter').value = '';
+                                                                    document.getElementById('statusFilter').value = '';
+                                                                    document.getElementById('publicStatusFilter').value = 'public';
+                                                                    document.getElementById('sortFilter').value = 'newest';
+                                                                    
+                                                                    // Remove no results message
+                                                                    const noResultsRow = document.getElementById('noResultsRow');
+                                                                    if (noResultsRow) {
+                                                                        noResultsRow.remove();
+                                                                    }
+                                                                    
+                                                                    // Show all rows
+                                                                    const propertyRows = document.querySelectorAll('.property-row');
+                                                                    propertyRows.forEach(row => {
+                                                                        row.style.display = '';
+                                                                    });
+                                                                    
+                                                                    // Apply public status filter (default to public only)
+                                                                    filterByPublicStatus();
+                                                                    
+                                                                    // Reset sort to original order
+                                                                    sortProperties();
+                                                                }
+
+                                                                // Show/hide no results message
+                                                                function showNoResultsMessage() {
+                                                                    const visibleRows = document.querySelectorAll('.property-row:not([style*="display: none"])');
+                                                                    const tbody = document.querySelector('.property-table tbody');
+                                                                    let noResultsRow = document.getElementById('noResultsRow');
+                                                                    
+                                                                    if (visibleRows.length === 0) {
+                                                                        if (!noResultsRow) {
+                                                                            noResultsRow = document.createElement('tr');
+                                                                            noResultsRow.id = 'noResultsRow';
+                                                                            noResultsRow.innerHTML = `
+                                                                                <td colspan="6" class="text-center py-4">
+                                                                                    <div class="no-results-message">
+                                                                                        <i class="fas fa-search-minus text-muted mb-2" style="font-size: 2rem;"></i>
+                                                                                        <h5 class="text-muted">Không tìm thấy tin đăng</h5>
+                                                                                        <p class="text-muted mb-0">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                                                                                    </div>
+                                                                                </td>
+                                                                            `;
+                                                                            tbody.appendChild(noResultsRow);
+                                                                        }
+                                                                    } else {
+                                                                        if (noResultsRow) {
+                                                                            noResultsRow.remove();
+                                                                        }
+                                                                    }
+                                                                }
+                                                                
+                                                                function updateVisiblePropertyCount() {
+                                                                    const visibleRows = document.querySelectorAll('.property-row:not([style*="display: none"])');
+                                                                    const countElement = document.querySelector('.property-count');
+                                                                    if (countElement) {
+                                                                        countElement.textContent = `(Hiển thị ${visibleRows.length} tin đăng)`;
+                                                                    }
+                                                                }
+
+                                                                // Quick filter function
+                                                                function quickFilter(filterType) {
+                                                                    // Reset all filters first
+                                                                    document.getElementById('searchInput').value = '';
+                                                                    document.getElementById('typeFilter').value = '';
+                                                                    
+                                                                    if (filterType === 'Available' || filterType === 'Rented') {
+                                                                        document.getElementById('statusFilter').value = filterType;
+                                                                        document.getElementById('publicStatusFilter').value = 'public';
+                                                                    } else if (filterType === 'hidden') {
+                                                                        document.getElementById('statusFilter').value = '';
+                                                                        document.getElementById('publicStatusFilter').value = 'hidden';
+                                                                    }
+                                                                    
+                                                                    // Apply filters
+                                                                    filterProperties();
+                                                                    filterByPublicStatus();
                                                                 }
 
                                                                 // Confirm logout function

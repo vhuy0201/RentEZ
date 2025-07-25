@@ -245,6 +245,201 @@
     </div>
 
     <script>
+        // Store original data for filtering
+        let originalFeeCategories = [];
+        let filteredFeeCategories = [];
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store original table data
+            storeOriginalData();
+            
+            // Initialize filters from URL params
+            initializeFiltersFromURL();
+            
+            // Add event listeners for real-time filtering
+            setupEventListeners();
+        });
+        
+        function storeOriginalData() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            originalFeeCategories = [];
+            
+            tableRows.forEach(row => {
+                if (row.cells.length > 1) { // Skip empty state row
+                    const feeCategory = {
+                        element: row,
+                        id: row.cells[0].textContent.trim().replace('#', ''),
+                        name: row.cells[1].querySelector('.text-sm.font-medium').textContent.trim(),
+                        unitPrice: row.cells[2].textContent.trim(),
+                        unit: row.cells[3].textContent.trim()
+                    };
+                    originalFeeCategories.push(feeCategory);
+                }
+            });
+            filteredFeeCategories = [...originalFeeCategories];
+        }
+        
+        function setupEventListeners() {
+            // Search input - real-time filtering
+            document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            // Filter fee categories
+            filteredFeeCategories = originalFeeCategories.filter(feeCategory => {
+                // Search filter
+                if (searchTerm && !matchesSearch(feeCategory, searchTerm)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Update table display
+            updateTableDisplay();
+            
+            // Update pagination info
+            updatePaginationInfo();
+            
+            // Update URL (optional)
+            updateURL(searchTerm);
+        }
+        
+        function matchesSearch(feeCategory, searchTerm) {
+            return (
+                feeCategory.name.toLowerCase().includes(searchTerm) ||
+                feeCategory.unit.toLowerCase().includes(searchTerm) ||
+                feeCategory.unitPrice.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        function updateTableDisplay() {
+            const tbody = document.querySelector('tbody');
+            
+            // Hide all original rows
+            originalFeeCategories.forEach(feeCategory => {
+                feeCategory.element.style.display = 'none';
+            });
+            
+            // Show filtered rows
+            if (filteredFeeCategories.length > 0) {
+                filteredFeeCategories.forEach(feeCategory => {
+                    feeCategory.element.style.display = '';
+                });
+                
+                // Hide empty state if it exists
+                const emptyRow = tbody.querySelector('.empty-state-row');
+                if (emptyRow) {
+                    emptyRow.style.display = 'none';
+                }
+            } else {
+                // Show empty state
+                showEmptyState(tbody);
+            }
+        }
+        
+        function showEmptyState(tbody) {
+            // Remove existing empty state
+            const existingEmpty = tbody.querySelector('.empty-state-row');
+            if (existingEmpty) {
+                existingEmpty.remove();
+            }
+            
+            // Create new empty state
+            const emptyRow = document.createElement('tr');
+            emptyRow.className = 'empty-state-row';
+            emptyRow.innerHTML = `
+                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                    <div class="flex flex-col items-center justify-center">
+                        <i class="fas fa-calculator mb-3 text-3xl text-gray-400"></i>
+                        <p class="text-lg font-medium">Không tìm thấy danh mục phí nào</p>
+                        <p class="text-sm text-gray-400 mt-1">Thử thay đổi từ khóa tìm kiếm</p>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(emptyRow);
+        }
+        
+        function updatePaginationInfo() {
+            const totalShowing = filteredFeeCategories.length;
+            const paginationInfo = document.querySelector('.text-sm.text-gray-700');
+            if (paginationInfo) {
+                paginationInfo.innerHTML = `
+                    Hiển thị <span class="font-medium">${totalShowing}</span> danh mục phí
+                `;
+            }
+            
+            // Show filter info if filters are active
+            showFilterInfo(totalShowing);
+        }
+        
+        function showFilterInfo(totalShowing) {
+            const existingInfo = document.querySelector('.filter-info');
+            if (existingInfo) {
+                existingInfo.remove();
+            }
+            
+            if (totalShowing !== originalFeeCategories.length) {
+                const info = document.createElement('div');
+                info.className = 'filter-info bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-blue-700';
+                info.innerHTML = `
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Đang hiển thị ${totalShowing} trong tổng số ${originalFeeCategories.length} danh mục phí
+                    <button onclick="clearFilters()" class="ml-4 text-blue-600 hover:text-blue-800 underline">
+                        Xóa bộ lọc
+                    </button>
+                `;
+                
+                const table = document.querySelector('.bg-white.rounded-xl.shadow-sm.border');
+                table.parentNode.insertBefore(info, table);
+            }
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            
+            // Apply filters to show all
+            applyFilters();
+        }
+        
+        function updateURL(search) {
+            const url = new URL(window.location);
+            
+            if (search) url.searchParams.set('search', search);
+            else url.searchParams.delete('search');
+            
+            // Update URL without reloading page
+            window.history.replaceState({}, '', url);
+        }
+        
+        function initializeFiltersFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('search')) {
+                document.getElementById('searchInput').value = urlParams.get('search');
+            }
+            
+            // Apply filters if any were set
+            if (urlParams.toString()) {
+                applyFilters();
+            }
+        }
+        
         function openCreateModal() {
             document.getElementById('modalTitle').textContent = 'Tạo danh mục phí mới';
             document.getElementById('formAction').value = 'create';
@@ -289,18 +484,6 @@
         function closeDeleteModal() {
             document.getElementById('deleteModal').classList.add('hidden');
         }
-        
-        function applyFilters() {
-            const searchValue = document.getElementById('searchInput').value;
-            window.location.href = '${pageContext.request.contextPath}/admin/service-fees?search=' + encodeURIComponent(searchValue);
-        }
-        
-        // Bắt sự kiện Enter cho input search
-        document.getElementById('searchInput').addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                applyFilters();
-            }
-        });
         
         // Close modals when clicking outside
         window.onclick = function(event) {

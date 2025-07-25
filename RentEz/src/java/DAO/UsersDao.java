@@ -14,7 +14,7 @@ import java.util.Random;
 public class UsersDao {
     public boolean insert(User user) {
         Connection conn = DBConnection.getConnection();
-        String sql = "INSERT INTO [User] (Name, Email, Phone, Address, Role, Password, Avatar) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [User] (Name, Email, Phone, Address, Role, Password, Avatar, Status) VALUES (?, ?, ?, ?, ?, ?, ?,1)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, user.getName());
@@ -50,6 +50,7 @@ public class UsersDao {
                 user.setRole(rs.getString("Role"));
                 user.setPassword(rs.getString("Password"));
                 user.setAvatar(rs.getString("Avatar"));
+                user.setStatus(rs.getBoolean("Status"));
                 conn.close();
                 return user;
             }
@@ -139,6 +140,7 @@ public class UsersDao {
                 user.setAddress(rs.getString("Address"));
                 user.setRole(rs.getString("Role"));
                 user.setPassword(rs.getString("Password"));
+                user.setAvatar(rs.getString("Avatar"));
                 conn.close();
                 return user;
             }
@@ -183,6 +185,51 @@ public class UsersDao {
             return getByEmail(user.getEmail());
         }
         return null;
+    }
+    
+    public List<User> getUsersHaveMessage(int userId) {
+        List<User> users = new ArrayList<>();
+        Connection conn = DBConnection.getConnection();
+        String sql = "WITH RecentMessages AS (\n" +
+"    SELECT \n" +
+"        CASE \n" +
+"            WHEN senderId = " + userId + " THEN receiverId\n" +
+"            ELSE senderId\n" +
+"        END AS contactId,\n" +
+"        MAX(sendDate) AS lastMessageDate\n" +
+"    FROM Message\n" +
+"    WHERE senderId = " + userId + " OR receiverId = " + userId + "\n" +
+"    GROUP BY \n" +
+"        CASE \n" +
+"            WHEN senderId = " + userId + " THEN receiverId\n" +
+"            ELSE senderId\n" +
+"        END\n" +
+")\n" +
+"\n" +
+"SELECT u.*\n" +
+"FROM RecentMessages rm\n" +
+"JOIN [User] u ON u.userId = rm.contactId\n" +
+"ORDER BY rm.lastMessageDate DESC;";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("UserID"));
+                user.setName(rs.getString("Name"));
+                user.setEmail(rs.getString("Email"));
+                user.setPhone(rs.getString("Phone"));
+                user.setAddress(rs.getString("Address"));
+                user.setRole(rs.getString("Role"));
+                user.setPassword(rs.getString("Password"));
+                user.setAvatar(rs.getString("Avatar"));
+                users.add(user);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+        return users;
     }
     
     /**

@@ -47,6 +47,7 @@
                     </div>
                 </div>
             </header>
+
             <!-- Content -->
             <main class="p-6">
                 <!-- Search and Filter -->
@@ -308,6 +309,299 @@
 
     <!-- JavaScript -->
     <script>
+        // Store original data for filtering
+        let originalBookings = [];
+        let filteredBookings = [];
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store original table data
+            storeOriginalData();
+            
+            // Initialize filters from URL params
+            initializeFiltersFromURL();
+            
+            // Add event listeners for real-time filtering
+            setupEventListeners();
+        });
+        
+        function storeOriginalData() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            originalBookings = [];
+            
+            tableRows.forEach(row => {
+                if (row.cells.length > 1) { // Skip empty state row
+                    const booking = {
+                        element: row,
+                        id: row.cells[0].textContent.trim(),
+                        propertyName: row.cells[1].querySelector('.text-sm.font-medium').textContent.trim(),
+                        renterName: row.cells[2].querySelector('.text-sm.font-medium').textContent.trim(),
+                        renterPhone: row.cells[2].querySelector('.text-sm.text-gray-500').textContent.trim(),
+                        status: getStatusFromElement(row.cells[5]),
+                        createdDate: getDateFromElement(row.cells[5])
+                    };
+                    originalBookings.push(booking);
+                }
+            });
+            filteredBookings = [...originalBookings];
+        }
+        
+        function getStatusFromElement(statusCell) {
+            const statusSpan = statusCell.querySelector('span');
+            if (statusSpan.classList.contains('bg-green-100')) return 'Confirmed';
+            if (statusSpan.classList.contains('bg-yellow-100')) return 'Pending';
+            if (statusSpan.classList.contains('bg-red-100')) return 'Cancelled';
+            if (statusSpan.classList.contains('bg-blue-100')) return 'Completed';
+            return statusSpan.textContent.trim();
+        }
+        
+        function getDateFromElement(statusCell) {
+            const dateText = statusCell.querySelector('.text-xs.text-gray-500').textContent.trim();
+            return dateText;
+        }
+        
+        function setupEventListeners() {
+            // Search input - real-time filtering
+            document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+            
+            // Status filter
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            
+            // Date filters
+            document.getElementById('fromDate').addEventListener('change', applyFilters);
+            document.getElementById('toDate').addEventListener('change', applyFilters);
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            
+            // Filter bookings
+            filteredBookings = originalBookings.filter(booking => {
+                // Search filter
+                if (searchTerm && !matchesSearch(booking, searchTerm)) {
+                    return false;
+                }
+                
+                // Status filter
+                if (statusFilter && booking.status !== statusFilter) {
+                    return false;
+                }
+                
+                // Date filter
+                if ((fromDate || toDate) && !matchesDateRange(booking, fromDate, toDate)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Update table display
+            updateTableDisplay();
+            
+            // Update stats
+            updateStats();
+            
+            // Update URL (optional)
+            updateURL(searchTerm, statusFilter, fromDate, toDate);
+        }
+        
+        function matchesSearch(booking, searchTerm) {
+            return (
+                booking.id.toLowerCase().includes(searchTerm) ||
+                booking.propertyName.toLowerCase().includes(searchTerm) ||
+                booking.renterName.toLowerCase().includes(searchTerm) ||
+                booking.renterPhone.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        function matchesDateRange(booking, fromDate, toDate) {
+            const bookingDate = parseBookingDate(booking.createdDate);
+            if (!bookingDate) return true;
+            
+            if (fromDate) {
+                const from = new Date(fromDate);
+                if (bookingDate < from) return false;
+            }
+            
+            if (toDate) {
+                const to = new Date(toDate);
+                to.setHours(23, 59, 59, 999); // End of day
+                if (bookingDate > to) return false;
+            }
+            
+            return true;
+        }
+        
+        function parseBookingDate(dateString) {
+            // Parse date from format "dd/MM/yyyy HH:mm"
+            const match = dateString.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})/);
+            if (match) {
+                const [, day, month, year, hour, minute] = match;
+                return new Date(year, month - 1, day, hour, minute);
+            }
+            return null;
+        }
+        
+        function updateTableDisplay() {
+            const tbody = document.querySelector('tbody');
+            
+            // Hide all original rows
+            originalBookings.forEach(booking => {
+                booking.element.style.display = 'none';
+            });
+            
+            // Show filtered rows
+            if (filteredBookings.length > 0) {
+                filteredBookings.forEach(booking => {
+                    booking.element.style.display = '';
+                });
+                
+                // Hide empty state if it exists
+                const emptyRow = tbody.querySelector('td[colspan="7"]');
+                if (emptyRow) {
+                    emptyRow.parentElement.style.display = 'none';
+                }
+            } else {
+                // Show empty state
+                showEmptyState(tbody);
+            }
+        }
+        
+        function showEmptyState(tbody) {
+            // Remove existing empty state
+            const existingEmpty = tbody.querySelector('.empty-state-row');
+            if (existingEmpty) {
+                existingEmpty.remove();
+            }
+            
+            // Create new empty state
+            const emptyRow = document.createElement('tr');
+            emptyRow.className = 'empty-state-row';
+            emptyRow.innerHTML = `
+                <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                    <div class="flex flex-col items-center justify-center">
+                        <i class="fas fa-search mb-3 text-3xl text-gray-400"></i>
+                        <p class="text-lg font-medium">Không tìm thấy đặt thuê nào</p>
+                        <p class="text-sm text-gray-400 mt-1">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(emptyRow);
+        }
+        
+        function updateStats() {
+            const stats = {
+                confirmed: filteredBookings.filter(b => b.status === 'Confirmed').length,
+                pending: filteredBookings.filter(b => b.status === 'Pending').length,
+                cancelled: filteredBookings.filter(b => b.status === 'Cancelled').length,
+                completed: filteredBookings.filter(b => b.status === 'Completed').length,
+                total: filteredBookings.length
+            };
+            
+            // Update stats display
+            const statsCards = document.querySelectorAll('.grid .bg-gradient-to-br');
+            if (statsCards.length >= 4) {
+                statsCards[0].querySelector('.text-2xl').textContent = stats.confirmed;
+                statsCards[1].querySelector('.text-2xl').textContent = stats.pending;
+                statsCards[2].querySelector('.text-2xl').textContent = stats.cancelled;
+                // Keep total revenue as is for the 4th card
+            }
+            
+            // Show filter info
+            showFilterInfo(stats.total);
+        }
+        
+        function showFilterInfo(totalShowing) {
+            const existingInfo = document.querySelector('.filter-info');
+            if (existingInfo) {
+                existingInfo.remove();
+            }
+            
+            if (totalShowing !== originalBookings.length) {
+                const info = document.createElement('div');
+                info.className = 'filter-info bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-blue-700';
+                info.innerHTML = `
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Đang hiển thị ${totalShowing} trong tổng số ${originalBookings.length} đặt thuê
+                    <button onclick="clearFilters()" class="ml-4 text-blue-600 hover:text-blue-800 underline">
+                        Xóa bộ lọc
+                    </button>
+                `;
+                
+                const table = document.querySelector('.bg-white.rounded-xl.shadow-sm.border');
+                table.parentNode.insertBefore(info, table);
+            }
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('fromDate').value = '';
+            document.getElementById('toDate').value = '';
+            
+            // Apply filters to show all
+            applyFilters();
+        }
+        
+        function updateURL(search, status, fromDate, toDate) {
+            const url = new URL(window.location);
+            
+            if (search) url.searchParams.set('search', search);
+            else url.searchParams.delete('search');
+            
+            if (status) url.searchParams.set('status', status);
+            else url.searchParams.delete('status');
+            
+            if (fromDate) url.searchParams.set('dateFrom', fromDate);
+            else url.searchParams.delete('dateFrom');
+            
+            if (toDate) url.searchParams.set('dateTo', toDate);
+            else url.searchParams.delete('dateTo');
+            
+            // Update URL without reloading page
+            window.history.replaceState({}, '', url);
+        }
+        
+        function initializeFiltersFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has('search')) {
+                document.getElementById('searchInput').value = urlParams.get('search');
+            }
+            
+            if (urlParams.has('status')) {
+                document.getElementById('statusFilter').value = urlParams.get('status');
+            }
+            
+            if (urlParams.has('dateFrom')) {
+                document.getElementById('fromDate').value = urlParams.get('dateFrom');
+            }
+            
+            if (urlParams.has('dateTo')) {
+                document.getElementById('toDate').value = urlParams.get('dateTo');
+            }
+            
+            // Apply filters if any were set
+            if (urlParams.toString()) {
+                applyFilters();
+            }
+        }
+        
         function exportBookings() {
             // Get current filter values
             const search = document.getElementById('searchInput').value;
@@ -365,27 +659,6 @@
             form.submit();
             document.body.removeChild(form);
         }
-        
-        // Initialize filters from URL params
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            if (urlParams.has('search')) {
-                document.getElementById('searchInput').value = urlParams.get('search');
-            }
-            
-            if (urlParams.has('status')) {
-                document.getElementById('statusFilter').value = urlParams.get('status');
-            }
-            
-            if (urlParams.has('dateFrom')) {
-                document.getElementById('fromDate').value = urlParams.get('dateFrom');
-            }
-            
-            if (urlParams.has('dateTo')) {
-                document.getElementById('toDate').value = urlParams.get('dateTo');
-            }
-        });
     </script>
 </body>
 </html>

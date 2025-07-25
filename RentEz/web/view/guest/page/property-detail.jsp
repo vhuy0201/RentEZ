@@ -463,7 +463,7 @@
                                     <c:if test="${sessionScope.user != null}">
                                         <!-- Contract Document Style -->
                                         <div class="contract-document p-4" style="font-family: 'Times New Roman', serif; line-height: 1.8; max-height: 70vh; overflow-y: auto;">
-                                            
+
                                             <input type="hidden" name="propertyId" value="${property.propertyId}">
                                             <input type="hidden" name="landlordId" value="${landlord.userId}">
 
@@ -536,8 +536,8 @@
                                                 <h6 class="fw-bold text-orange-600 mb-3">ĐIỀU 1: DIỆN TÍCH VÀ THỜI GIAN THUÊ</h6>
                                                 <div class="ms-3">
                                                     <p class="text-justify mb-3">1.1 Bên A đồng ý cho Bên B thuê toàn bộ ngôi nhà <strong>"${property.title}"</strong> 
-                                                    tọa lạc tại địa chỉ: <strong>${location.address}, ${location.city}, ${location.stateProvince}</strong> 
-                                                    với các đặc điểm sau:</p>
+                                                        tọa lạc tại địa chỉ: <strong>${location.address}, ${location.city}, ${location.stateProvince}</strong> 
+                                                        với các đặc điểm sau:</p>
                                                     <div class="ms-4 mb-3">
                                                         <p class="mb-1">- Diện tích: <strong>${property.size} m²</strong></p>
                                                         <p class="mb-1">- Loại hình: <strong>${propertyType.typeName}</strong></p>
@@ -545,7 +545,7 @@
                                                         <p class="mb-1">- Số phòng tắm: <strong>${property.numberOfBathrooms}</strong></p>
                                                         <p class="mb-1">- Kết cấu: Nhà nguyên căn đầy đủ tiện nghi</p>
                                                     </div>
-                                                    
+
                                                     <!-- Rental Period Selection -->
                                                     <div class="bg-orange-50 p-3 rounded mb-3 border-start border-4 border-orange-500">
                                                         <h6 class="fw-bold text-orange-700 mb-3">
@@ -572,7 +572,7 @@
                                                         </div>
                                                         <div class="mt-3">
                                                             <p class="text-justify">1.5 Thời gian cho thuê: Bắt đầu từ ngày: <strong><span id="displayStartDate">__/__/____</span></strong> 
-                                                            và sẽ chấm dứt vào ngày: <strong><span id="displayEndDate">__/__/____</span></strong></p>
+                                                                và sẽ chấm dứt vào ngày: <strong><span id="displayEndDate">__/__/____</span></strong></p>
                                                             <input type="hidden" id="endDate" name="endDate">
                                                         </div>
                                                     </div>
@@ -629,7 +629,7 @@
                                                         <textarea class="form-control" id="termsAndConditions" name="termsAndConditions" 
                                                                   rows="3" readonly>${propertyBookingTemplate != null ? propertyBookingTemplate.termsAndConditions : 'Hai bên cam kết thực hiện đúng và đầy đủ các điều khoản đã thỏa thuận.'}</textarea>
                                                     </div>
-                                                    
+
                                                     <div class="bg-yellow-50 p-3 rounded border-start border-4 border-yellow-500">
                                                         <label class="form-label fw-bold">3.2 Điều khoản phạt:</label>
                                                         <textarea class="form-control" id="penaltyClause" name="penaltyClause" 
@@ -654,7 +654,7 @@
                                                         <h6 class="fw-bold text-orange-600 mb-3">
                                                             <i class="fas fa-signature me-2"></i>Chữ ký người thuê nhà:
                                                         </h6>
-                                                        
+
                                                         <!-- Digital signature canvas -->
                                                         <div class="signature-container mb-3">
                                                             <label class="form-label fw-bold mb-2">Vui lòng ký tên của bạn vào khung bên dưới:</label>
@@ -722,27 +722,27 @@
                 background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
                 box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
             }
-            
+
             #signatureCanvas {
                 border: 2px dashed #dee2e6 !important;
                 background: white;
                 border-radius: 8px;
                 transition: border-color 0.3s ease;
             }
-            
+
             #signatureCanvas:hover {
                 border-color: #ffa500 !important;
             }
-            
+
             #signatureCanvas.active {
                 border-color: #fd7e14 !important;
                 box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
             }
-            
+
             .signature-container {
                 position: relative;
             }
-            
+
             .signature-container::after {
                 content: "Chữ ký của bạn";
                 position: absolute;
@@ -756,11 +756,11 @@
                 opacity: 0.5;
                 font-size: 14px;
             }
-            
+
             .signature-container.has-signature::after {
                 display: none;
             }
-            
+
             /* Responsive canvas */
             @media (max-width: 768px) {
                 #signatureCanvas {
@@ -775,361 +775,358 @@
 
         <!-- JavaScript cho Gallery -->
         <script>
-                                                function changeMainImage(src) {
-                                                    document.getElementById('mainImage').src = src;
+                                                                        function changeMainImage(src) {
+                                                                            document.getElementById('mainImage').src = src;
 
-                                                    // Đổi trạng thái active cho thumbnails
-                                                    const thumbnails = document.querySelectorAll('.thumbnail');
-                                                    thumbnails.forEach(thumb => {
-                                                        if (thumb.src === src) {
-                                                            thumb.classList.add('active');
-                                                        } else {
-                                                            thumb.classList.remove('active');
-                                                        }
-                                                    });
-                                                }            // Check if Bootstrap is loaded properly
-                                                function isBootstrapLoaded() {
-                                                    return (typeof bootstrap !== 'undefined');
-                                                }
-                                                console.log("Bootstrap loaded status:", isBootstrapLoaded());            // JavaScript for Schedule Viewing Modal
-                                                document.addEventListener('DOMContentLoaded', function () {
-                                                    // Initialize Bootstrap modal
-                                                    const scheduleViewingModal = document.getElementById('scheduleViewingModal');
-                                                    let bsModal = null;
-
-                                                    if (scheduleViewingModal) {
-                                                        // Initialize the modal only once
-                                                        bsModal = new bootstrap.Modal(scheduleViewingModal, {
-                                                            backdrop: true, // Allow closing when clicking outside
-                                                            keyboard: true      // Will close when pressing ESC key
-                                                        });
-                                                    }
-
-                                                    // Initialize Rental Booking Modal
-                                                    const rentalBookingModal = document.getElementById('rentalBookingModal');
-                                                    let rentalModal = null;
-
-                                                    if (rentalBookingModal) {
-                                                        rentalModal = new bootstrap.Modal(rentalBookingModal, {
-                                                            backdrop: true,
-                                                            keyboard: true
-                                                        });
-                                                    }
-
-                                                    // Rental Modal Date and Price Calculations
-                                                    const startDateInput = document.getElementById('startDate');
-                                                    const endDateInput = document.getElementById('endDate');
-                                                    const monthlyRentInput = document.getElementById('monthlyRent');
-                                                    const depositAmountInput = document.getElementById('depositAmount');
-                                                    const totalPriceInput = document.getElementById('totalPrice');
-                                                    const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
-
-                                                    // Set current date on modal open
-                                                    function setCurrentDate() {
-                                                        const now = new Date();
-                                                        const day = String(now.getDate()).padStart(2, '0');
-                                                        const month = String(now.getMonth() + 1).padStart(2, '0');
-                                                        const year = now.getFullYear();
-                                                        // Hiển thị theo định dạng Việt Nam: dd/mm/yyyy
-                                                        document.getElementById('currentDate').textContent = `${day}/${month}/${year}`;
-                                                    }
-                                                    
-                                                    // Calculate end date based on start date and months
-                                                    function calculateEndDate() {
-                                                        const startDateInput = document.getElementById('startDate');
-                                                        const monthsSelect = document.getElementById('rentalMonths');
-                                                        const endDateInput = document.getElementById('endDate');
-                                                        const displayStartDate = document.getElementById('displayStartDate');
-                                                        const displayEndDate = document.getElementById('displayEndDate');
-                                                        
-                                                        if (startDateInput.value && monthsSelect.value) {
-                                                            const startDate = new Date(startDateInput.value);
-                                                            const months = parseInt(monthsSelect.value);
-                                                            
-                                                            // Calculate end date (chính xác ngày cuối cùng của kỳ thuê)
-                                                            const endDate = new Date(startDate);
-                                                            endDate.setMonth(endDate.getMonth() + months);
-                                                            endDate.setDate(endDate.getDate() - 1); // Ngày cuối của kỳ thuê
-                                                            
-                                                            // Format dates theo định dạng Việt Nam (dd/mm/yyyy)
-                                                            const formatDate = (date) => {
-                                                                const day = String(date.getDate()).padStart(2, '0');
-                                                                const month = String(date.getMonth() + 1).padStart(2, '0');
-                                                                const year = date.getFullYear();
-                                                                return `${day}/${month}/${year}`;
-                                                            };
-                                                            
-                                                            // Update displays
-                                                            displayStartDate.textContent = formatDate(startDate);
-                                                            displayEndDate.textContent = formatDate(endDate);
-                                                            
-                                                            // Set hidden end date input (định dạng yyyy-mm-dd cho form submit)
-                                                            const endDateString = endDate.toISOString().split('T')[0];
-                                                            endDateInput.value = endDateString;
-                                                            
-                                                            // Calculate total price
-                                                            calculateTotalPrice();
-                                                        } else {
-                                                            displayStartDate.textContent = '__/__/____';
-                                                            displayEndDate.textContent = '__/__/____';
-                                                            endDateInput.value = '';
-                                                        }
-                                                    }
-                                                    
-                                                    function calculateTotalPrice() {
-                                                        const monthsSelect = document.getElementById('rentalMonths');
-                                                        const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
-                                                        const depositAmount = parseFloat(depositAmountInput.value) || 0;
-                                                        const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
-                                                        
-                                                        // Tổng giá trị hợp đồng = Tiền thuê hàng tháng + Tiền cọc (không nhân với số tháng)
-                                                        const totalPrice = monthlyRent + depositAmount;
-                                                        
-                                                        // Update hidden field value
-                                                        totalPriceInput.value = totalPrice;
-                                                        
-                                                        // Update display field with formatted number
-                                                        if (totalPriceDisplayInput) {
-                                                            totalPriceDisplayInput.value = totalPrice.toLocaleString('vi-VN');
-                                                        }
-                                                    }
-
-                                                // Set minimum dates and add event listeners
-                                                if (startDateInput && endDateInput) {
-                                                    const today = new Date();
-                                                    const yyyy = today.getFullYear();
-                                                    const mm = String(today.getMonth() + 1).padStart(2, '0');
-                                                    const dd = String(today.getDate()).padStart(2, '0');
-                                                    const todayStr = `${yyyy}-${mm}-${dd}`;
-
-                                                    startDateInput.min = todayStr;
-
-                                                    // Add event listeners for date and month changes
-                                                    startDateInput.addEventListener('change', calculateEndDate);
-                                                    
-                                                    const monthsSelect = document.getElementById('rentalMonths');
-                                                    if (monthsSelect) {
-                                                        monthsSelect.addEventListener('change', calculateEndDate);
-                                                    }
-                                                }
-
-                                                // Initial calculation when modal opens
-                                                if (rentalBookingModal) {
-                                                    rentalBookingModal.addEventListener('shown.bs.modal', function () {
-                                                        setCurrentDate();
-                                                        calculateTotalPrice();
-                                                        
-                                                        // Format display amounts
-                                                        const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
-                                                        const depositAmount = parseFloat(depositAmountInput.value) || 0;
-                                                        
-                                                        const monthlyRentDisplay = document.getElementById('monthlyRentDisplay');
-                                                        const depositAmountDisplay = document.getElementById('depositAmountDisplay');
-                                                        
-                                                        if (monthlyRentDisplay) {
-                                                            monthlyRentDisplay.value = monthlyRent.toLocaleString('vi-VN');
-                                                        }
-                                                        if (depositAmountDisplay) {
-                                                            depositAmountDisplay.value = depositAmount.toLocaleString('vi-VN');
-                                                        }
-
-                                                        // Initialize digital signature
-                                                        initializeSignature();
-                                                    });
-                                                }
-
-                                                // Digital Signature Functions
-                                                let signatureCanvas, signatureCtx, isDrawing = false;
-
-                                                function initializeSignature() {
-                                                    signatureCanvas = document.getElementById('signatureCanvas');
-                                                    if (!signatureCanvas) return;
-
-                                                    signatureCtx = signatureCanvas.getContext('2d');
-                                                    
-                                                    // Set canvas size for better quality
-                                                    const rect = signatureCanvas.getBoundingClientRect();
-                                                    signatureCanvas.width = 500;
-                                                    signatureCanvas.height = 150;
-                                                    
-                                                    // Configure drawing style
-                                                    signatureCtx.strokeStyle = '#000';
-                                                    signatureCtx.lineWidth = 2;
-                                                    signatureCtx.lineCap = 'round';
-                                                    signatureCtx.lineJoin = 'round';
-                                                    
-                                                    // Mouse events
-                                                    signatureCanvas.addEventListener('mousedown', startDrawing);
-                                                    signatureCanvas.addEventListener('mousemove', draw);
-                                                    signatureCanvas.addEventListener('mouseup', stopDrawing);
-                                                    signatureCanvas.addEventListener('mouseout', stopDrawing);
-                                                    
-                                                    // Touch events for mobile
-                                                    signatureCanvas.addEventListener('touchstart', handleTouch);
-                                                    signatureCanvas.addEventListener('touchmove', handleTouch);
-                                                    signatureCanvas.addEventListener('touchend', stopDrawing);
-                                                }
-
-                                                function startDrawing(e) {
-                                                    isDrawing = true;
-                                                    signatureCanvas.classList.add('active');
-                                                    
-                                                    const rect = signatureCanvas.getBoundingClientRect();
-                                                    const scaleX = signatureCanvas.width / rect.width;
-                                                    const scaleY = signatureCanvas.height / rect.height;
-                                                    
-                                                    signatureCtx.beginPath();
-                                                    signatureCtx.moveTo(
-                                                        (e.clientX - rect.left) * scaleX, 
-                                                        (e.clientY - rect.top) * scaleY
-                                                    );
-                                                }
-
-                                                function draw(e) {
-                                                    if (!isDrawing) return;
-                                                    
-                                                    const rect = signatureCanvas.getBoundingClientRect();
-                                                    const scaleX = signatureCanvas.width / rect.width;
-                                                    const scaleY = signatureCanvas.height / rect.height;
-                                                    
-                                                    signatureCtx.lineTo(
-                                                        (e.clientX - rect.left) * scaleX, 
-                                                        (e.clientY - rect.top) * scaleY
-                                                    );
-                                                    signatureCtx.stroke();
-                                                }
-
-                                                function stopDrawing() {
-                                                    if (isDrawing) {
-                                                        isDrawing = false;
-                                                        signatureCanvas.classList.remove('active');
-                                                        
-                                                        // Save signature data
-                                                        const signatureData = signatureCanvas.toDataURL();
-                                                        document.getElementById('signatureData').value = signatureData;
-                                                        
-                                                        // Add visual feedback
-                                                        const container = document.querySelector('.signature-container');
-                                                        container.classList.add('has-signature');
-                                                    }
-                                                }
-
-                                                function handleTouch(e) {
-                                                    e.preventDefault();
-                                                    const touch = e.touches[0];
-                                                    const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
-                                                                                    e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
-                                                        clientX: touch.clientX,
-                                                        clientY: touch.clientY
-                                                    });
-                                                    signatureCanvas.dispatchEvent(mouseEvent);
-                                                }
-
-                                                function clearSignature() {
-                                                    if (signatureCtx) {
-                                                        signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
-                                                        document.getElementById('signatureData').value = '';
-                                                        
-                                                        // Remove visual feedback
-                                                        const container = document.querySelector('.signature-container');
-                                                        container.classList.remove('has-signature');
-                                                        signatureCanvas.classList.remove('active');
-                                                    }
-                                                }                                                                // Also calculate on page load
-                                                                calculateTotalPrice();
-
-                                                                // Rental form validation and submission
-                                                                const rentalForm = document.querySelector('#rentalBookingModal form');
-                                                                const rentalSubmitBtn = document.getElementById('rentalSubmitBtn');
-                                                                const rentalSpinner = document.getElementById('rentalSpinner');
-                                                                const rentalSubmitBtnText = document.getElementById('rentalSubmitBtnText');
-
-                                                                if (rentalForm) {
-                                                                    rentalForm.addEventListener('submit', function (event) {
-                                                                        let isValid = true;
-
-                                                        // Validate required fields
-                                                        const startDate = startDateInput.value;
-                                                        const monthsSelect = document.getElementById('rentalMonths');
-                                                        const months = monthsSelect ? monthsSelect.value : '';
-                                                        const depositAmount = depositAmountInput.value;
-                                                        const signedByRenter = document.getElementById('signedByRenter').checked;
-                                                        const signatureData = document.getElementById('signatureData').value;
-
-                                                        if (!startDate || !months || !depositAmount || depositAmount <= 0) {
-                                                            event.preventDefault();
-                                                            showToast('Vui lòng điền đầy đủ thông tin bắt buộc');
-                                                            isValid = false;
-                                                        }
-
-                                                        if (!signatureData || signatureData.trim() === '') {
-                                                            event.preventDefault();
-                                                            showToast('Vui lòng ký tên vào khung chữ ký');
-                                                            isValid = false;
-                                                        }
-
-                                                        if (!signedByRenter) {
-                                                            event.preventDefault();
-                                                            showToast('Bạn cần xác nhận đồng ý với hợp đồng thuê nhà');
-                                                            isValid = false;
-                                                        }                                                                        if (!isValid) {
-                                                                            return false;
+                                                                            // Đổi trạng thái active cho thumbnails
+                                                                            const thumbnails = document.querySelectorAll('.thumbnail');
+                                                                            thumbnails.forEach(thumb => {
+                                                                                if (thumb.src === src) {
+                                                                                    thumb.classList.add('active');
+                                                                                } else {
+                                                                                    thumb.classList.remove('active');
+                                                                                }
+                                                                            });
+                                                                        }            // Check if Bootstrap is loaded properly
+                                                                        function isBootstrapLoaded() {
+                                                                            return (typeof bootstrap !== 'undefined');
                                                                         }
+                                                                        console.log("Bootstrap loaded status:", isBootstrapLoaded());            // JavaScript for Schedule Viewing Modal
+                                                                        document.addEventListener('DOMContentLoaded', function () {
+                                                                            // Initialize Bootstrap modal
+                                                                            const scheduleViewingModal = document.getElementById('scheduleViewingModal');
+                                                                            let bsModal = null;
 
-                                                                        // Show loading spinner
-                                                                        if (rentalSubmitBtn && rentalSpinner && rentalSubmitBtnText) {
-                                                                            rentalSubmitBtn.disabled = true;
-                                                                            rentalSpinner.classList.remove('d-none');
-                                                                            rentalSubmitBtnText.textContent = 'Đang xử lý...';
-                                                                        }
+                                                                            if (scheduleViewingModal) {
+                                                                                // Initialize the modal only once
+                                                                                bsModal = new bootstrap.Modal(scheduleViewingModal, {
+                                                                                    backdrop: true, // Allow closing when clicking outside
+                                                                                    keyboard: true      // Will close when pressing ESC key
+                                                                                });
+                                                                            }
 
-                                                                        return true;
-                                                                    });
-                                                                }
+                                                                            // Initialize Rental Booking Modal
+                                                                            const rentalBookingModal = document.getElementById('rentalBookingModal');
+                                                                            let rentalModal = null;
 
-                                                                // Reset rental form when modal is hidden
-                                                                if (rentalBookingModal) {
-                                                                    rentalBookingModal.addEventListener('hidden.bs.modal', function () {
-                                                                        if (rentalForm)
-                                                                            rentalForm.reset();
-                                                                        calculateTotalPrice();
-                                                                        
-                                                                        // Clear signature
-                                                                        clearSignature();
-                                                                        
-                                                                        if (rentalSubmitBtn)
-                                                                            rentalSubmitBtn.disabled = false;
-                                                                        if (rentalSpinner)
-                                                                            rentalSpinner.classList.add('d-none');
-                                                                        if (rentalSubmitBtnText)
-                                                                            rentalSubmitBtnText.textContent = 'Gửi yêu cầu thuê nhà';
-                                                                    });
-                                                                }
+                                                                            if (rentalBookingModal) {
+                                                                                rentalModal = new bootstrap.Modal(rentalBookingModal, {
+                                                                                    backdrop: true,
+                                                                                    keyboard: true
+                                                                                });
+                                                                            }
 
-                                                                // Function to show toast notifications
-                                                                function showToast(message) {
-                                                                    // Remove any existing toasts
-                                                                    const existingToasts = document.querySelectorAll('.toast-container');
-                                                                    existingToasts.forEach(t => document.body.removeChild(t));
+                                                                            // Rental Modal Date and Price Calculations
+                                                                            const startDateInput = document.getElementById('startDate');
+                                                                            const endDateInput = document.getElementById('endDate');
+                                                                            const monthlyRentInput = document.getElementById('monthlyRent');
+                                                                            const depositAmountInput = document.getElementById('depositAmount');
+                                                                            const totalPriceInput = document.getElementById('totalPrice');
+                                                                            const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
 
-                                                                    // Create toast container
-                                                                    const toastContainer = document.createElement('div');
-                                                                    toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
-                                                                    toastContainer.style.zIndex = '5';
+                                                                            // Set current date on modal open
+                                                                            function setCurrentDate() {
+                                                                                const currentDateEl = document.getElementById("currentDate");
+                                                                                const today = new Date();
+                                                                                if (currentDateEl) {
+                                                                                    currentDateEl.textContent = today.toLocaleDateString('vi-VN');
+                                                                                }
+                                                                            }
 
-                                                                    // Create toast HTML
-                                                                    const isSuccess = message.toLowerCase().includes('thành công') ||
-                                                                            !message.toLowerCase().includes('thất bại') &&
-                                                                            !message.toLowerCase().includes('lỗi') &&
-                                                                            !message.toLowerCase().includes('không');
+                                                                            // Calculate end date based on start date and months
+                                                                            function calculateEndDate() {
+                                                                                const startDateInput = document.getElementById("startDate");
+                                                                                const rentalMonthsSelect = document.getElementById("rentalMonths");
+                                                                                const displayStartDate = document.getElementById("displayStartDate");
+                                                                                const displayEndDate = document.getElementById("displayEndDate");
+                                                                                const hiddenEndDate = document.getElementById("endDate");
 
-                                                                    const borderColor = isSuccess ? 'success' : 'danger';
-                                                                    const iconType = isSuccess ? 'check-circle-fill' : 'exclamation-triangle-fill';
+                                                                                const startDateValue = startDateInput.value;
+                                                                                const rentalMonths = parseInt(rentalMonthsSelect.value);
 
-                                                                    const toastContent = `
-                        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header border-${borderColor} border-bottom">
-                                <i class="bi bi-${iconType} me-2 text-${borderColor}"></i>
+                                                                                if (startDateValue && rentalMonths) {
+                                                                                    const startDate = new Date(startDateValue);
+                                                                                    const endDate = new Date(startDate);
+                                                                                    endDate.setMonth(endDate.getMonth() + rentalMonths);
+
+                                                                                    // Hiển thị ngày bắt đầu và kết thúc
+                                                                                    displayStartDate.textContent = startDate.toLocaleDateString('vi-VN');
+                                                                                    displayEndDate.textContent = endDate.toLocaleDateString('vi-VN');
+                                                                                    hiddenEndDate.value = endDate.toISOString().split("T")[0]; // yyyy-mm-dd
+                                                                                }
+                                                                            }
+                                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                                showCurrentDate();
+
+                                                                                document.getElementById("startDate").addEventListener("change", updateRentalPeriod);
+                                                                                document.getElementById("rentalMonths").addEventListener("change", updateRentalPeriod);
+                                                                            });
+
+                                                                            function calculateTotalPrice() {
+                                                                                const monthsSelect = document.getElementById('rentalMonths');
+                                                                                const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
+                                                                                const depositAmount = parseFloat(depositAmountInput.value) || 0;
+                                                                                const totalPriceDisplayInput = document.getElementById('totalPriceDisplay');
+
+                                                                                // Tổng giá trị hợp đồng = Tiền thuê hàng tháng + Tiền cọc (không nhân với số tháng)
+                                                                                const totalPrice = monthlyRent + depositAmount;
+
+                                                                                // Update hidden field value
+                                                                                totalPriceInput.value = totalPrice;
+
+                                                                                // Update display field with formatted number
+                                                                                if (totalPriceDisplayInput) {
+                                                                                    totalPriceDisplayInput.value = totalPrice.toLocaleString('vi-VN');
+                                                                                }
+                                                                            }
+
+                                                                            // Set minimum dates and add event listeners
+                                                                            if (startDateInput && endDateInput) {
+                                                                                const today = new Date();
+                                                                                const yyyy = today.getFullYear();
+                                                                                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                                                                                const dd = String(today.getDate()).padStart(2, '0');
+                                                                                const todayStr = `${yyyy}-${mm}-${dd}`;
+
+                                                                                            startDateInput.min = todayStr;
+
+                                                                                            // Add event listeners for date and month changes
+                                                                                            startDateInput.addEventListener('change', calculateEndDate);
+
+                                                                                            const monthsSelect = document.getElementById('rentalMonths');
+                                                                                            if (monthsSelect) {
+                                                                                                monthsSelect.addEventListener('change', calculateEndDate);
+                                                                                            }
+                                                                                        }
+
+                                                                                        // Initial calculation when modal opens
+                                                                                        if (rentalBookingModal) {
+                                                                                            rentalBookingModal.addEventListener('shown.bs.modal', function () {
+                                                                                                setCurrentDate();
+                                                                                                calculateTotalPrice();
+
+                                                                                                // Format display amounts
+                                                                                                const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
+                                                                                                const depositAmount = parseFloat(depositAmountInput.value) || 0;
+
+                                                                                                const monthlyRentDisplay = document.getElementById('monthlyRentDisplay');
+                                                                                                const depositAmountDisplay = document.getElementById('depositAmountDisplay');
+
+                                                                                                if (monthlyRentDisplay) {
+                                                                                                    monthlyRentDisplay.value = monthlyRent.toLocaleString('vi-VN');
+                                                                                                }
+                                                                                                if (depositAmountDisplay) {
+                                                                                                    depositAmountDisplay.value = depositAmount.toLocaleString('vi-VN');
+                                                                                                }
+
+                                                                                                // Initialize digital signature
+                                                                                                initializeSignature();
+
+                                                                                                // Trigger calculateEndDate if both date and month are selected
+                                                                                                setTimeout(() => {
+                                                                                                    calculateEndDate();
+                                                                                                }, 100);
+                                                                                            });
+                                                                                        }
+
+                                                                                        // Digital Signature Functions
+                                                                                        let signatureCanvas, signatureCtx, isDrawing = false;
+
+                                                                                        function initializeSignature() {
+                                                                                            signatureCanvas = document.getElementById('signatureCanvas');
+                                                                                            if (!signatureCanvas)
+                                                                                                return;
+
+                                                                                            signatureCtx = signatureCanvas.getContext('2d');
+
+                                                                                            // Set canvas size for better quality
+                                                                                            const rect = signatureCanvas.getBoundingClientRect();
+                                                                                            signatureCanvas.width = 500;
+                                                                                            signatureCanvas.height = 150;
+
+                                                                                            // Configure drawing style
+                                                                                            signatureCtx.strokeStyle = '#000';
+                                                                                            signatureCtx.lineWidth = 2;
+                                                                                            signatureCtx.lineCap = 'round';
+                                                                                            signatureCtx.lineJoin = 'round';
+
+                                                                                            // Mouse events
+                                                                                            signatureCanvas.addEventListener('mousedown', startDrawing);
+                                                                                            signatureCanvas.addEventListener('mousemove', draw);
+                                                                                            signatureCanvas.addEventListener('mouseup', stopDrawing);
+                                                                                            signatureCanvas.addEventListener('mouseout', stopDrawing);
+
+                                                                                            // Touch events for mobile
+                                                                                            signatureCanvas.addEventListener('touchstart', handleTouch);
+                                                                                            signatureCanvas.addEventListener('touchmove', handleTouch);
+                                                                                            signatureCanvas.addEventListener('touchend', stopDrawing);
+                                                                                        }
+
+                                                                                        function startDrawing(e) {
+                                                                                            isDrawing = true;
+                                                                                            signatureCanvas.classList.add('active');
+
+                                                                                            const rect = signatureCanvas.getBoundingClientRect();
+                                                                                            const scaleX = signatureCanvas.width / rect.width;
+                                                                                            const scaleY = signatureCanvas.height / rect.height;
+
+                                                                                            signatureCtx.beginPath();
+                                                                                            signatureCtx.moveTo(
+                                                                                                    (e.clientX - rect.left) * scaleX,
+                                                                                                    (e.clientY - rect.top) * scaleY
+                                                                                                    );
+                                                                                        }
+
+                                                                                        function draw(e) {
+                                                                                            if (!isDrawing)
+                                                                                                return;
+
+                                                                                            const rect = signatureCanvas.getBoundingClientRect();
+                                                                                            const scaleX = signatureCanvas.width / rect.width;
+                                                                                            const scaleY = signatureCanvas.height / rect.height;
+
+                                                                                            signatureCtx.lineTo(
+                                                                                                    (e.clientX - rect.left) * scaleX,
+                                                                                                    (e.clientY - rect.top) * scaleY
+                                                                                                    );
+                                                                                            signatureCtx.stroke();
+                                                                                        }
+
+                                                                                        function stopDrawing() {
+                                                                                            if (isDrawing) {
+                                                                                                isDrawing = false;
+                                                                                                signatureCanvas.classList.remove('active');
+
+                                                                                                // Save signature data
+                                                                                                const signatureData = signatureCanvas.toDataURL();
+                                                                                                document.getElementById('signatureData').value = signatureData;
+
+                                                                                                // Add visual feedback
+                                                                                                const container = document.querySelector('.signature-container');
+                                                                                                container.classList.add('has-signature');
+                                                                                            }
+                                                                                        }
+
+                                                                                        function handleTouch(e) {
+                                                                                            e.preventDefault();
+                                                                                            const touch = e.touches[0];
+                                                                                            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' :
+                                                                                                    e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                                                                                                        clientX: touch.clientX,
+                                                                                                        clientY: touch.clientY
+                                                                                                    });
+                                                                                            signatureCanvas.dispatchEvent(mouseEvent);
+                                                                                        }
+
+                                                                                        function clearSignature() {
+                                                                                            if (signatureCtx) {
+                                                                                                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+                                                                                                document.getElementById('signatureData').value = '';
+
+                                                                                                // Remove visual feedback
+                                                                                                const container = document.querySelector('.signature-container');
+                                                                                                container.classList.remove('has-signature');
+                                                                                                signatureCanvas.classList.remove('active');
+                                                                                            }
+                                                                                        }                                                                // Also calculate on page load
+                                                                                        calculateTotalPrice();
+
+                                                                                        // Rental form validation and submission
+                                                                                        const rentalForm = document.querySelector('#rentalBookingModal form');
+                                                                                        const rentalSubmitBtn = document.getElementById('rentalSubmitBtn');
+                                                                                        const rentalSpinner = document.getElementById('rentalSpinner');
+                                                                                        const rentalSubmitBtnText = document.getElementById('rentalSubmitBtnText');
+
+                                                                                        if (rentalForm) {
+                                                                                            rentalForm.addEventListener('submit', function (event) {
+                                                                                                let isValid = true;
+
+                                                                                                // Validate required fields
+                                                                                                const startDate = startDateInput.value;
+                                                                                                const monthsSelect = document.getElementById('rentalMonths');
+                                                                                                const months = monthsSelect ? monthsSelect.value : '';
+                                                                                                const depositAmount = depositAmountInput.value;
+                                                                                                const signedByRenter = document.getElementById('signedByRenter').checked;
+                                                                                                const signatureData = document.getElementById('signatureData').value;
+
+                                                                                                if (!startDate || !months || !depositAmount || depositAmount <= 0) {
+                                                                                                    event.preventDefault();
+                                                                                                    showToast('Vui lòng điền đầy đủ thông tin bắt buộc');
+                                                                                                    isValid = false;
+                                                                                                }
+
+                                                                                                if (!signatureData || signatureData.trim() === '') {
+                                                                                                    event.preventDefault();
+                                                                                                    showToast('Vui lòng ký tên vào khung chữ ký');
+                                                                                                    isValid = false;
+                                                                                                }
+
+                                                                                                if (!signedByRenter) {
+                                                                                                    event.preventDefault();
+                                                                                                    showToast('Bạn cần xác nhận đồng ý với hợp đồng thuê nhà');
+                                                                                                    isValid = false;
+                                                                                                }
+                                                                                                if (!isValid) {
+                                                                                                    return false;
+                                                                                                }
+
+                                                                                                // Show loading spinner
+                                                                                                if (rentalSubmitBtn && rentalSpinner && rentalSubmitBtnText) {
+                                                                                                    rentalSubmitBtn.disabled = true;
+                                                                                                    rentalSpinner.classList.remove('d-none');
+                                                                                                    rentalSubmitBtnText.textContent = 'Đang xử lý...';
+                                                                                                }
+
+                                                                                                return true;
+                                                                                            });
+                                                                                        }
+
+                                                                                        // Reset rental form when modal is hidden
+                                                                                        if (rentalBookingModal) {
+                                                                                            rentalBookingModal.addEventListener('hidden.bs.modal', function () {
+                                                                                                if (rentalForm)
+                                                                                                    rentalForm.reset();
+                                                                                                calculateTotalPrice();
+
+                                                                                                // Clear signature
+                                                                                                clearSignature();
+
+                                                                                                if (rentalSubmitBtn)
+                                                                                                    rentalSubmitBtn.disabled = false;
+                                                                                                if (rentalSpinner)
+                                                                                                    rentalSpinner.classList.add('d-none');
+                                                                                                if (rentalSubmitBtnText)
+                                                                                                    rentalSubmitBtnText.textContent = 'Gửi yêu cầu thuê nhà';
+                                                                                            });
+                                                                                        }
+
+                                                                                        // Function to show toast notifications
+                                                                                        function showToast(message) {
+                                                                                            // Remove any existing toasts
+                                                                                            const existingToasts = document.querySelectorAll('.toast-container');
+                                                                                            existingToasts.forEach(t => {
+                                                                                                if (document.body.contains(t)) {
+                                                                                                    document.body.removeChild(t);
+                                                                                                }
+                                                                                            });
+
+                                                                                            // Create toast container
+                                                                                            const toastContainer = document.createElement('div');
+                                                                                            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                                                                                            toastContainer.style.zIndex = '9999';
+
+                                                                                            // Create toast HTML
+                                                                                            const isSuccess = message.toLowerCase().includes('thành công') ||
+                                                                                                    message.toLowerCase().includes('hoàn tất') ||
+                                                                                                    message.toLowerCase().includes('gửi thành công');
+
+                                                                                            const toastClass = isSuccess ? 'text-bg-success' : 'text-bg-danger';
+                                                                                            const iconClass = isSuccess ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+                                                                                            const toastContent = `
+                        <div class="toast show ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <i class="${iconClass} me-2"></i>
                                 <strong class="me-auto">Thông báo</strong>
                                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>
@@ -1139,214 +1136,245 @@
                         </div>
                     `;
 
-                                                                    toastContainer.innerHTML = toastContent;
-                                                                    document.body.appendChild(toastContainer);
+                                                                                            toastContainer.innerHTML = toastContent;
+                                                                                            document.body.appendChild(toastContainer);
 
-                                                                    // Initialize Bootstrap toast
-                                                                    const toastElement = toastContainer.querySelector('.toast');
-                                                                    if (toastElement) {
-                                                                        const bsToast = new bootstrap.Toast(toastElement, {
-                                                                            autohide: true,
-                                                                            delay: 5000
-                                                                        });
+                                                                                            // Initialize Bootstrap toast if available
+                                                                                            const toastElement = toastContainer.querySelector('.toast');
+                                                                                            if (toastElement) {
+                                                                                                if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+                                                                                                    const bsToast = new bootstrap.Toast(toastElement, {
+                                                                                                        autohide: true,
+                                                                                                        delay: 5000
+                                                                                                    });
 
-                                                                        // Remove from DOM after hiding animation
-                                                                        toastElement.addEventListener('hidden.bs.toast', () => {
-                                                                            if (document.body.contains(toastContainer)) {
-                                                                                document.body.removeChild(toastContainer);
-                                                                            }
-                                                                        });
+                                                                                                    // Remove from DOM after hiding animation
+                                                                                                    toastElement.addEventListener('hidden.bs.toast', () => {
+                                                                                                        if (document.body.contains(toastContainer)) {
+                                                                                                            document.body.removeChild(toastContainer);
+                                                                                                        }
+                                                                                                    });
 
-                                                                        // Handle close button
-                                                                        const closeButton = toastElement.querySelector('.btn-close');
-                                                                        if (closeButton) {
-                                                                            closeButton.addEventListener('click', () => {
-                                                                                bsToast.hide();
-                                                                            });
-                                                                        }
-                                                                    }
-                                                                }
+                                                                                                    // Handle close button
+                                                                                                    const closeButton = toastElement.querySelector('.btn-close');
+                                                                                                    if (closeButton) {
+                                                                                                        closeButton.addEventListener('click', () => {
+                                                                                                            bsToast.hide();
+                                                                                                        });
+                                                                                                    }
 
-                                                                // Set minimum date for date picker to today
-                                                                const scheduleDateInput = document.getElementById('scheduleDate');
-                                                                if (scheduleDateInput) {
-                                                                    const today = new Date();
-                                                                    const yyyy = today.getFullYear();
-                                                                    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-                                                                    const dd = String(today.getDate()).padStart(2, '0');
-                                                                    scheduleDateInput.min = `${yyyy}-${mm}-${dd}`;
-                                                                            }
-                                                                            // Handle form validation before submission
-                                                                            const scheduleForm = document.querySelector('#scheduleViewingModal form');
-                                                                            const submitBtn = document.getElementById('scheduleSubmitBtn');
-                                                                            const submitSpinner = document.getElementById('scheduleSpinner');
-                                                                            const submitBtnText = document.getElementById('submitBtnText');
-                                                                            // Get time picker
-                                                                            const scheduleTimeInput = document.getElementById('scheduleTime');
+                                                                                                    bsToast.show();
+                                                                                                } else {
+                                                                                                    // Fallback: auto-hide after 5 seconds
+                                                                                                    setTimeout(() => {
+                                                                                                        if (document.body.contains(toastContainer)) {
+                                                                                                            toastContainer.style.transition = 'opacity 0.3s ease-out';
+                                                                                                            toastContainer.style.opacity = '0';
+                                                                                                            setTimeout(() => {
+                                                                                                                if (document.body.contains(toastContainer)) {
+                                                                                                                    document.body.removeChild(toastContainer);
+                                                                                                                }
+                                                                                                            }, 300);
+                                                                                                        }
+                                                                                                    }, 5000);
 
-                                                                            if (scheduleForm) {
-                                                                                scheduleForm.addEventListener('submit', function (event) {
-                                                                                    let isValid = true;
-
-                                                                                    // Validate the date input
-                                                                                    const dateValue = scheduleDateInput.value;
-                                                                                    if (!dateValue || dateValue === '') {
-                                                                                        event.preventDefault();
-                                                                                        scheduleDateInput.classList.add('is-invalid');
-                                                                                        isValid = false;
-                                                                                    } else {
-                                                                                        scheduleDateInput.classList.remove('is-invalid');
-
-                                                                                        const selectedDate = new Date(dateValue);
-                                                                                        const currentDate = new Date();
-                                                                                        currentDate.setHours(0, 0, 0, 0); // Reset time part for date comparison
-
-                                                                                        if (selectedDate < currentDate) {
-                                                                                            event.preventDefault();
-                                                                                            scheduleDateInput.classList.add('is-invalid');
-                                                                                            showToast('Không thể chọn ngày trong quá khứ');
-                                                                                            isValid = false;
-                                                                                        }
-                                                                                    }
-
-                                                                                    // Validate time input
-                                                                                    if (scheduleTimeInput) {
-                                                                                        const timeValue = scheduleTimeInput.value;
-                                                                                        if (!timeValue || timeValue === '') {
-                                                                                            event.preventDefault();
-                                                                                            scheduleTimeInput.classList.add('is-invalid');
-                                                                                            isValid = false;
-                                                                                        } else {
-                                                                                            scheduleTimeInput.classList.remove('is-invalid');
-
-                                                                                            // Check if the selected time is within business hours (8:00 AM to 8:00 PM)
-                                                                                            const [hours, minutes] = timeValue.split(':').map(Number);
-                                                                                            if (hours < 8 || hours > 20 || (hours === 20 && minutes > 0)) {
-                                                                                                event.preventDefault();
-                                                                                                scheduleTimeInput.classList.add('is-invalid');
-                                                                                                showToast('Vui lòng chọn thời gian từ 8:00 sáng đến 8:00 tối');
-                                                                                                isValid = false;
-                                                                                            }
-
-                                                                                            // If today is selected, make sure the time is in the future
-                                                                                            const selectedDate = new Date(dateValue);
-                                                                                            const currentDate = new Date();
-                                                                                            if (selectedDate.getDate() === currentDate.getDate() &&
-                                                                                                    selectedDate.getMonth() === currentDate.getMonth() &&
-                                                                                                    selectedDate.getFullYear() === currentDate.getFullYear()) {
-
-                                                                                                const currentHour = currentDate.getHours();
-                                                                                                const currentMinute = currentDate.getMinutes();
-
-                                                                                                if (hours < currentHour || (hours === currentHour && minutes <= currentMinute)) {
-                                                                                                    event.preventDefault();
-                                                                                                    scheduleTimeInput.classList.add('is-invalid');
-                                                                                                    showToast('Vui lòng chọn thời gian trong tương lai');
-                                                                                                    isValid = false;
+                                                                                                    // Handle close button for fallback
+                                                                                                    const closeButton = toastElement.querySelector('.btn-close');
+                                                                                                    if (closeButton) {
+                                                                                                        closeButton.addEventListener('click', () => {
+                                                                                                            toastContainer.style.transition = 'opacity 0.3s ease-out';
+                                                                                                            toastContainer.style.opacity = '0';
+                                                                                                            setTimeout(() => {
+                                                                                                                if (document.body.contains(toastContainer)) {
+                                                                                                                    document.body.removeChild(toastContainer);
+                                                                                                                }
+                                                                                                            }, 300);
+                                                                                                        });
+                                                                                                    }
                                                                                                 }
                                                                                             }
                                                                                         }
-                                                                                    }
 
-                                                                                    if (!isValid) {
-                                                                                        return false;
-                                                                                    }
+                                                                                        // Set minimum date for date picker to today
+                                                                                        const scheduleDateInput = document.getElementById('scheduleDate');
+                                                                                        if (scheduleDateInput) {
+                                                                                            const today = new Date();
+                                                                                            const yyyy = today.getFullYear();
+                                                                                            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                                                                                            const dd = String(today.getDate()).padStart(2, '0');
+                                                                                            scheduleDateInput.min = `${yyyy}-${mm}-${dd}`;
+                                                                                                    }
+                                                                                                    // Handle form validation before submission
+                                                                                                    const scheduleForm = document.querySelector('#scheduleViewingModal form');
+                                                                                                    const submitBtn = document.getElementById('scheduleSubmitBtn');
+                                                                                                    const submitSpinner = document.getElementById('scheduleSpinner');
+                                                                                                    const submitBtnText = document.getElementById('submitBtnText');
+                                                                                                    // Get time picker
+                                                                                                    const scheduleTimeInput = document.getElementById('scheduleTime');
 
-                                                                                    // Show loading spinner and disable button during submission
-                                                                                    if (submitBtn && submitSpinner && submitBtnText) {
-                                                                                        submitBtn.disabled = true;
-                                                                                        submitSpinner.classList.remove('d-none');
-                                                                                        submitBtnText.textContent = 'Đang xử lý...';
-                                                                                    }
+                                                                                                    if (scheduleForm) {
+                                                                                                        scheduleForm.addEventListener('submit', function (event) {
+                                                                                                            let isValid = true;
 
-                                                                                    // Form is valid, allow submission
-                                                                                    return true;
-                                                                                });
-                                                                            }
-                                                                            // Reset form when modal is hidden
-                                                                            const scheduleModal = document.getElementById('scheduleViewingModal');
-                                                                            if (scheduleModal) {
-                                                                                scheduleModal.addEventListener('hidden.bs.modal', function () {
-                                                                                    if (scheduleForm)
-                                                                                        scheduleForm.reset();
-                                                                                    if (scheduleDateInput)
-                                                                                        scheduleDateInput.classList.remove('is-invalid');
-                                                                                    if (scheduleTimeInput)
-                                                                                        scheduleTimeInput.classList.remove('is-invalid');
-                                                                                    if (submitBtn)
-                                                                                        submitBtn.disabled = false;
-                                                                                    if (submitSpinner)
-                                                                                        submitSpinner.classList.add('d-none');
-                                                                                    if (submitBtnText)
-                                                                                        submitBtnText.textContent = 'Xác nhận';
-                                                                                });
-                                                                            }                // Handle messages from server after form submission (e.g., success/error)
-                                                                            const urlParams = new URLSearchParams(window.location.search);
-                                                                            const scheduleMessage = urlParams.get('scheduleMessage');
-                                                                            const rentalMessage = urlParams.get('message');
+                                                                                                            // Validate the date input
+                                                                                                            const dateValue = scheduleDateInput.value;
+                                                                                                            if (!dateValue || dateValue === '') {
+                                                                                                                event.preventDefault();
+                                                                                                                scheduleDateInput.classList.add('is-invalid');
+                                                                                                                isValid = false;
+                                                                                                            } else {
+                                                                                                                scheduleDateInput.classList.remove('is-invalid');
 
-                                                                            if (scheduleMessage) {
-                                                                                // Display a toast notification
-                                                                                showToast(decodeURIComponent(scheduleMessage));
+                                                                                                                const selectedDate = new Date(dateValue);
+                                                                                                                const currentDate = new Date();
+                                                                                                                currentDate.setHours(0, 0, 0, 0); // Reset time part for date comparison
 
-                                                                                // Clean the URL - remove scheduleMessage parameter
-                                                                                const url = new URL(window.location.href);
-                                                                                url.searchParams.delete('scheduleMessage');
-                                                                                window.history.replaceState({}, document.title, url.toString());
-                                                                            }
+                                                                                                                if (selectedDate < currentDate) {
+                                                                                                                    event.preventDefault();
+                                                                                                                    scheduleDateInput.classList.add('is-invalid');
+                                                                                                                    showToast('Không thể chọn ngày trong quá khứ');
+                                                                                                                    isValid = false;
+                                                                                                                }
+                                                                                                            }
 
-                                                                            if (rentalMessage) {
-                                                                                // Display a toast notification for rental booking
-                                                                                showToast(decodeURIComponent(rentalMessage));
+                                                                                                            // Validate time input
+                                                                                                            if (scheduleTimeInput) {
+                                                                                                                const timeValue = scheduleTimeInput.value;
+                                                                                                                if (!timeValue || timeValue === '') {
+                                                                                                                    event.preventDefault();
+                                                                                                                    scheduleTimeInput.classList.add('is-invalid');
+                                                                                                                    isValid = false;
+                                                                                                                } else {
+                                                                                                                    scheduleTimeInput.classList.remove('is-invalid');
 
-                                                                                // Clean the URL - remove message parameter                const url = new URL(window.location.href);
-                                                                                url.searchParams.delete('message');
-                                                                                window.history.replaceState({}, document.title, url.toString());
-                                                                            }
-                                                                        });
+                                                                                                                    // Check if the selected time is within business hours (8:00 AM to 8:00 PM)
+                                                                                                                    const [hours, minutes] = timeValue.split(':').map(Number);
+                                                                                                                    if (hours < 8 || hours > 20 || (hours === 20 && minutes > 0)) {
+                                                                                                                        event.preventDefault();
+                                                                                                                        scheduleTimeInput.classList.add('is-invalid');
+                                                                                                                        showToast('Vui lòng chọn thời gian từ 8:00 sáng đến 8:00 tối');
+                                                                                                                        isValid = false;
+                                                                                                                    }
 
-                                                                        // Favorite functionality
-                                                                        function toggleFavorite(propertyId, isAdd) {
-                                                                            const favoriteBtn = document.getElementById('favoriteBtn');
-                                                                            const originalHtml = favoriteBtn.innerHTML;
+                                                                                                                    // If today is selected, make sure the time is in the future
+                                                                                                                    const selectedDate = new Date(dateValue);
+                                                                                                                    const currentDate = new Date();
+                                                                                                                    if (selectedDate.getDate() === currentDate.getDate() &&
+                                                                                                                            selectedDate.getMonth() === currentDate.getMonth() &&
+                                                                                                                            selectedDate.getFullYear() === currentDate.getFullYear()) {
 
-                                                                            // Show loading state
-                                                                            favoriteBtn.disabled = true;
-                                                                            favoriteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Đang xử lý...';
+                                                                                                                        const currentHour = currentDate.getHours();
+                                                                                                                        const currentMinute = currentDate.getMinutes();
 
-                                                                            const form = document.createElement('form');
-                                                                            form.method = 'POST';
-                                                                            form.action = '${pageContext.request.contextPath}/favorite-action';
+                                                                                                                        if (hours < currentHour || (hours === currentHour && minutes <= currentMinute)) {
+                                                                                                                            event.preventDefault();
+                                                                                                                            scheduleTimeInput.classList.add('is-invalid');
+                                                                                                                            showToast('Vui lòng chọn thời gian trong tương lai');
+                                                                                                                            isValid = false;
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
 
-                                                                            const actionInput = document.createElement('input');
-                                                                            actionInput.type = 'hidden';
-                                                                            actionInput.name = 'action';
-                                                                            actionInput.value = isAdd ? 'add' : 'remove';
+                                                                                                            if (!isValid) {
+                                                                                                                return false;
+                                                                                                            }
 
-                                                                            const propertyInput = document.createElement('input');
-                                                                            propertyInput.type = 'hidden';
-                                                                            propertyInput.name = 'propertyId';
-                                                                            propertyInput.value = propertyId;
+                                                                                                            // Show loading spinner and disable button during submission
+                                                                                                            if (submitBtn && submitSpinner && submitBtnText) {
+                                                                                                                submitBtn.disabled = true;
+                                                                                                                submitSpinner.classList.remove('d-none');
+                                                                                                                submitBtnText.textContent = 'Đang xử lý...';
+                                                                                                            }
 
-                                                                            const redirectInput = document.createElement('input');
-                                                                            redirectInput.type = 'hidden';
-                                                                            redirectInput.name = 'redirectUrl';
-                                                                            redirectInput.value = window.location.href;
+                                                                                                            // Form is valid, allow submission
+                                                                                                            return true;
+                                                                                                        });
+                                                                                                    }
+                                                                                                    // Reset form when modal is hidden
+                                                                                                    const scheduleModal = document.getElementById('scheduleViewingModal');
+                                                                                                    if (scheduleModal) {
+                                                                                                        scheduleModal.addEventListener('hidden.bs.modal', function () {
+                                                                                                            if (scheduleForm)
+                                                                                                                scheduleForm.reset();
+                                                                                                            if (scheduleDateInput)
+                                                                                                                scheduleDateInput.classList.remove('is-invalid');
+                                                                                                            if (scheduleTimeInput)
+                                                                                                                scheduleTimeInput.classList.remove('is-invalid');
+                                                                                                            if (submitBtn)
+                                                                                                                submitBtn.disabled = false;
+                                                                                                            if (submitSpinner)
+                                                                                                                submitSpinner.classList.add('d-none');
+                                                                                                            if (submitBtnText)
+                                                                                                                submitBtnText.textContent = 'Xác nhận';
+                                                                                                        });
+                                                                                                    }                // Handle messages from server after form submission (e.g., success/error)
+                                                                                                    const urlParams = new URLSearchParams(window.location.search);
+                                                                                                    const scheduleMessage = urlParams.get('scheduleMessage');
+                                                                                                    const rentalMessage = urlParams.get('message');
 
-                                                                            form.appendChild(actionInput);
-                                                                            form.appendChild(propertyInput);
-                                                                            form.appendChild(redirectInput);
+                                                                                                    if (scheduleMessage) {
+                                                                                                        // Display a toast notification
+                                                                                                        showToast(decodeURIComponent(scheduleMessage));
 
-                                                                            document.body.appendChild(form);
-                                                                            form.submit();
-                                                                        }
+                                                                                                        // Clean the URL - remove scheduleMessage parameter
+                                                                                                        const url = new URL(window.location.href);
+                                                                                                        url.searchParams.delete('scheduleMessage');
+                                                                                                        window.history.replaceState({}, document.title, url.toString());
+                                                                                                    }
 
-                                                                        function redirectToLogin() {
-                                                                            if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
-                                                                                window.location.href = '${pageContext.request.contextPath}/login?redirect=' +
-                                                                                        encodeURIComponent(window.location.href);
-                                                                            }
-                                                                        }
+                                                                                                    if (rentalMessage) {
+                                                                                                        // Display a toast notification for rental booking
+                                                                                                        showToast(decodeURIComponent(rentalMessage));
+
+                                                                                                        // Clean the URL - remove message parameter                const url = new URL(window.location.href);
+                                                                                                        url.searchParams.delete('message');
+                                                                                                        window.history.replaceState({}, document.title, url.toString());
+                                                                                                    }
+                                                                                                });
+
+                                                                                                // Favorite functionality
+                                                                                                function toggleFavorite(propertyId, isAdd) {
+                                                                                                    const favoriteBtn = document.getElementById('favoriteBtn');
+                                                                                                    const originalHtml = favoriteBtn.innerHTML;
+
+                                                                                                    // Show loading state
+                                                                                                    favoriteBtn.disabled = true;
+                                                                                                    favoriteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Đang xử lý...';
+
+                                                                                                    const form = document.createElement('form');
+                                                                                                    form.method = 'POST';
+                                                                                                    form.action = '${pageContext.request.contextPath}/favorite-action';
+
+                                                                                                    const actionInput = document.createElement('input');
+                                                                                                    actionInput.type = 'hidden';
+                                                                                                    actionInput.name = 'action';
+                                                                                                    actionInput.value = isAdd ? 'add' : 'remove';
+
+                                                                                                    const propertyInput = document.createElement('input');
+                                                                                                    propertyInput.type = 'hidden';
+                                                                                                    propertyInput.name = 'propertyId';
+                                                                                                    propertyInput.value = propertyId;
+
+                                                                                                    const redirectInput = document.createElement('input');
+                                                                                                    redirectInput.type = 'hidden';
+                                                                                                    redirectInput.name = 'redirectUrl';
+                                                                                                    redirectInput.value = window.location.href;
+
+                                                                                                    form.appendChild(actionInput);
+                                                                                                    form.appendChild(propertyInput);
+                                                                                                    form.appendChild(redirectInput);
+
+                                                                                                    document.body.appendChild(form);
+                                                                                                    form.submit();
+                                                                                                }
+
+                                                                                                function redirectToLogin() {
+                                                                                                    if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
+                                                                                                        window.location.href = '${pageContext.request.contextPath}/login?redirect=' +
+                                                                                                                encodeURIComponent(window.location.href);
+                                                                                                    }
+                                                                                                }
         </script>
     </body>
 </html>

@@ -640,7 +640,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
-                            <a href="${pageContext.request.contextPath}/payments" class="btn btn-main">
+                            <a href="#" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>
                         </div>
@@ -916,7 +916,7 @@
                                             <div class="current-image mt-3">
                                                 <label class="form-label">Hình ảnh hiện tại:</label>
                                                 <div class="current-image-preview">
-                                                    <img src="${pageContext.request.contextPath}/image?path=${property.avatar}" alt="Current Property Image" class="current-property-image">
+                                                    <img src="${property.avatar}" alt="Current Property Image" class="current-property-image">
                                                 </div>
                                                 <small class="text-muted">Chọn ảnh mới để thay thế ảnh hiện tại</small>
                                             </div>

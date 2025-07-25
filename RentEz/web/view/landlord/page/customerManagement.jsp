@@ -215,6 +215,121 @@
             color: #e2e8f0;
             margin-bottom: 1rem;
         }
+
+        /* Filter Styles */
+        .filter-bar {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #ff6d00;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 109, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #ff6d00;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 109, 0, 0.1);
+        }
+
+        .filter-reset-btn {
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+        }
+
+        .customer-count {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .hidden-customer {
+            display: none !important;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -253,14 +368,67 @@
                     </div>
                 </c:if>
                 
+                <!-- Filter bar -->
+                <div class="filter-bar mb-4">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Tìm kiếm khách hàng..." oninput="filterCustomers()">
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">Trạng thái:</span>
+                        <select class="filter-select" id="statusFilter" onchange="filterCustomers()">
+                            <option value="">Tất cả</option>
+                            <option value="Còn hạn">Còn hạn</option>
+                            <option value="Sắp hết hạn">Sắp hết hạn</option>
+                            <option value="Đã quá hạn">Đã quá hạn</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">Thời hạn:</span>
+                        <select class="filter-select" id="periodFilter" onchange="filterCustomers()">
+                            <option value="">Tất cả</option>
+                            <option value="next-7">7 ngày tới</option>
+                            <option value="next-30">30 ngày tới</option>
+                            <option value="expired">Đã quá hạn</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <span class="filter-label">Sắp xếp:</span>
+                        <select class="filter-select" id="sortFilter" onchange="sortCustomers()">
+                            <option value="name">Tên A-Z</option>
+                            <option value="endDate">Ngày hết hạn</option>
+                            <option value="totalPrice">Giá trị hợp đồng</option>
+                            <option value="daysLeft">Số ngày còn lại</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <button type="button" class="filter-reset-btn" onclick="resetFilters()" title="Đặt lại bộ lọc">
+                            <i class="fas fa-undo"></i>Reset
+                        </button>
+                    </div>
+                    <div class="filter-item">
+                        <span class="customer-count text-muted">(${customerBookings.size()} khách hàng)</span>
+                    </div>
+                </div>
+                
                 <!-- Customer Table -->
                 <div class="customer-table">
                     <c:choose>
                         <c:when test="${not empty customerBookings}">
                             <!-- Modern Tailwind-based Customer Cards -->
-                            <div class="grid gap-4">
+                            <div class="grid gap-4" id="customerGrid">
                                 <c:forEach var="customerData" items="${customerBookings}">
-                                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200 hover:border-blue-200">
+                                    <div class="customer-card bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200 hover:border-blue-200"
+                                         data-customer-name="${customerData.renter.name}"
+                                         data-customer-email="${customerData.renter.email}"
+                                         data-customer-phone="${customerData.renter.phone}"
+                                         data-property-title="${customerData.property.title}"
+                                         data-status="${customerData.status}"
+                                         data-days-left="${customerData.daysLeft}"
+                                         data-start-date="${customerData.booking.startDate.time}"
+                                         data-end-date="${customerData.booking.endDate.time}"
+                                         data-total-price="${customerData.booking.totalPrice}"
+                                         data-monthly-rent="${customerData.booking.monthlyRent}">
                                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                             <!-- Customer Info -->
                                             <div class="flex items-center gap-4 flex-1">
@@ -346,14 +514,26 @@
                                                 
                                                 <!-- Action Buttons -->
                                                 <div class="flex gap-2">
-                                                    <button type="button" class="w-8 h-8 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors duration-200" title="Xem chi tiết">
+                                                    <!-- Chat Button -->
+                                                    <button type="button" 
+                                                            class="w-8 h-8 flex items-center justify-center bg-orange-100 hover:bg-orange-200 text-orange-600 rounded-lg transition-colors duration-200" 
+                                                            title="Nhắn tin"
+                                                            onclick="openChatWithCustomer('${customerData.renter.userId}', '${customerData.renter.name}', '${customerData.property.propertyId}', '${customerData.property.title}')">
+                                                        <i class="fas fa-comments text-xs"></i>
+                                                    </button>
+                                                    <!-- View User Detail Button -->
+                                                    <a type="button" 
+                                                            class="w-8 h-8 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors duration-200" 
+                                                            title="Xem thông tin chi tiết"
+                                                            href="${pageContext.request.contextPath}/user-detail?userId=${customerData.renter.userId}">
                                                         <i class="fas fa-eye text-xs"></i>
-                                                    </button>
-                                                    <button type="button" class="w-8 h-8 flex items-center justify-center bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-colors duration-200" title="Liên hệ">
+                                                    </a>
+                                                    <!-- Contact Button -->
+                                                    <button type="button" 
+                                                            class="w-8 h-8 flex items-center justify-center bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-colors duration-200" 
+                                                            title="Gọi điện"
+                                                            onclick="contactCustomer('${customerData.renter.phone}', '${customerData.renter.name}')">
                                                         <i class="fas fa-phone text-xs"></i>
-                                                    </button>
-                                                    <button type="button" class="w-8 h-8 flex items-center justify-center bg-amber-100 hover:bg-amber-200 text-amber-600 rounded-lg transition-colors duration-200" title="Gia hạn hợp đồng">
-                                                        <i class="fas fa-calendar-plus text-xs"></i>
                                                     </button>
                                                 </div>
                                             </div>
@@ -404,6 +584,193 @@
         function confirmLogout() {
             if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
                 window.location.href = '${pageContext.request.contextPath}/logout';
+            }
+        }
+
+        // Filter customers function with debounce
+        let filterTimeout;
+        function filterCustomers() {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(() => {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const statusFilter = document.getElementById('statusFilter').value;
+                const periodFilter = document.getElementById('periodFilter').value;
+                const customers = document.querySelectorAll('.customer-card');
+                let visibleCount = 0;
+                const currentTime = new Date().getTime();
+
+                customers.forEach(customer => {
+                    const customerName = customer.dataset.customerName.toLowerCase();
+                    const customerEmail = customer.dataset.customerEmail.toLowerCase();
+                    const customerPhone = customer.dataset.customerPhone.toLowerCase();
+                    const propertyTitle = customer.dataset.propertyTitle.toLowerCase();
+                    const status = customer.dataset.status;
+                    const daysLeft = parseInt(customer.dataset.daysLeft);
+                    const endDate = parseInt(customer.dataset.endDate);
+
+                    let showCustomer = true;
+
+                    // Search filter
+                    if (searchTerm) {
+                        const searchMatch = customerName.includes(searchTerm) || 
+                                          customerEmail.includes(searchTerm) || 
+                                          customerPhone.includes(searchTerm) || 
+                                          propertyTitle.includes(searchTerm);
+                        if (!searchMatch) showCustomer = false;
+                    }
+
+                    // Status filter
+                    if (statusFilter && status !== statusFilter) {
+                        showCustomer = false;
+                    }
+
+                    // Period filter
+                    if (periodFilter) {
+                        switch (periodFilter) {
+                            case 'next-7':
+                                if (daysLeft < 0 || daysLeft > 7) showCustomer = false;
+                                break;
+                            case 'next-30':
+                                if (daysLeft < 0 || daysLeft > 30) showCustomer = false;
+                                break;
+                            case 'expired':
+                                if (daysLeft >= 0) showCustomer = false;
+                                break;
+                        }
+                    }
+
+                    if (showCustomer) {
+                        customer.classList.remove('hidden-customer');
+                        visibleCount++;
+                    } else {
+                        customer.classList.add('hidden-customer');
+                    }
+                });
+
+                updateCustomerCount(visibleCount);
+                showNoResultsMessage(visibleCount === 0);
+            }, 300);
+        }
+
+        // Sort customers function
+        function sortCustomers() {
+            const sortBy = document.getElementById('sortFilter').value;
+            const customerGrid = document.getElementById('customerGrid');
+            const customers = Array.from(document.querySelectorAll('.customer-card'));
+
+            customers.sort((a, b) => {
+                switch (sortBy) {
+                    case 'name':
+                        return a.dataset.customerName.localeCompare(b.dataset.customerName);
+                    case 'endDate':
+                        return parseInt(a.dataset.endDate) - parseInt(b.dataset.endDate);
+                    case 'totalPrice':
+                        return parseFloat(b.dataset.totalPrice) - parseFloat(a.dataset.totalPrice);
+                    case 'daysLeft':
+                        return parseInt(a.dataset.daysLeft) - parseInt(b.dataset.daysLeft);
+                    default:
+                        return 0;
+                }
+            });
+
+            // Clear and re-append sorted customers
+            customerGrid.innerHTML = '';
+            customers.forEach(customer => customerGrid.appendChild(customer));
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('periodFilter').value = '';
+            document.getElementById('sortFilter').value = 'name';
+            
+            const customers = document.querySelectorAll('.customer-card');
+            customers.forEach(customer => {
+                customer.classList.remove('hidden-customer');
+            });
+            
+            updateCustomerCount(customers.length);
+            showNoResultsMessage(false);
+            sortCustomers();
+        }
+
+        // Update customer count
+        function updateCustomerCount(count) {
+            const countElement = document.querySelector('.customer-count');
+            if (countElement) {
+                countElement.textContent = `(${count} khách hàng)`;
+            }
+        }
+
+        // Show/hide no results message
+        function showNoResultsMessage(show) {
+            let noResultsDiv = document.getElementById('noResultsMessage');
+            
+            if (show) {
+                if (!noResultsDiv) {
+                    noResultsDiv = document.createElement('div');
+                    noResultsDiv.id = 'noResultsMessage';
+                    noResultsDiv.className = 'no-results';
+                    noResultsDiv.innerHTML = `
+                        <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6 mx-auto">
+                            <i class="fas fa-search text-3xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-600 mb-3">Không tìm thấy khách hàng</h3>
+                        <p class="text-gray-500">Hãy thử điều chỉnh bộ lọc hoặc từ khóa tìm kiếm</p>
+                    `;
+                    document.getElementById('customerGrid').appendChild(noResultsDiv);
+                }
+            } else {
+                if (noResultsDiv) {
+                    noResultsDiv.remove();
+                }
+            }
+        }
+
+        // Action button functions
+        function openChatWithCustomer(userId, userName, propertyId, propertyTitle) {
+            // Placeholder for chat functionality
+            // Will be integrated with the chat system later
+            alert(`Tính năng chat sẽ được tích hợp sau.\nSẽ mở chat với: ${userName}\nVề bất động sản: ${propertyTitle}`);
+            
+            // Future implementation:
+            // if (typeof window.openMiniChat === 'function') {
+            //     window.openMiniChat(userId, propertyId, userName, propertyTitle);
+            // } else {
+            //     window.location.href = `${pageContext.request.contextPath}/chat?userId=${userId}&propertyId=${propertyId}`;
+            // }
+        }
+
+        function viewUserDetail(userId) {
+            // Redirect to user detail page
+            window.location.href = `${pageContext.request.contextPath}/user-detail?userId=${userId}`;
+        }
+
+        function contactCustomer(phone, customerName) {
+            if (phone) {
+                // Show contact options
+                const options = [
+                    `Gọi điện: ${phone}`,
+                    'Hủy'
+                ];
+                
+                const choice = confirm(`Liên hệ với ${customerName}\n\nSố điện thoại: ${phone}\n\nBạn có muốn gọi điện không?`);
+                if (choice) {
+                    // Open phone dialer on mobile or show phone number on desktop
+                    if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                        window.location.href = `tel:${phone}`;
+                    } else {
+                        // Copy to clipboard and show notification
+                        navigator.clipboard.writeText(phone).then(() => {
+                            alert(`Số điện thoại ${phone} đã được sao chép vào clipboard.`);
+                        }).catch(() => {
+                            alert(`Số điện thoại: ${phone}`);
+                        });
+                    }
+                }
+            } else {
+                alert('Không có thông tin số điện thoại.');
             }
         }
     </script>
