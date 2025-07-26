@@ -29,8 +29,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="MessageServlet?action=getUsers">
-                        <i class="fas fa-chat"></i>Chat
+                    <a class="nav-link" href="${pageContext.request.contextPath}/MessageServlet?action=getUsers">
+                        <i class="fas fa-comments"></i>Chat
                     </a>
                 </li>
                 <li class="nav-item">
