@@ -16,22 +16,27 @@
     
     <style>
         .chat-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            height: calc(100vh - 150px);
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0;
+            height: calc(100vh - 180px);
             display: flex;
             flex-direction: column;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         
         .chat-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
-            border-radius: 15px 15px 0 0;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
         
         .chat-header-left {
@@ -76,15 +81,12 @@
         
         .messages-container {
             flex: 1;
-            background: white;
-            padding: 20px;
+            background: #f8f9ff;
+            padding: 25px 30px;
             overflow-y: auto;
-            border-left: 1px solid #e0e0e0;
-            border-right: 1px solid #e0e0e0;
-            background-image: url('${pageContext.request.contextPath}/view/guest/asset/img/chat-bg-pattern.png');
-            background-size: 400px;
-            background-repeat: repeat;
-            background-attachment: fixed;
+            background-image: 
+                radial-gradient(circle at 20px 80px, #667eea12 0%, transparent 50%),
+                radial-gradient(circle at 80px 20px, #764ba212 0%, transparent 50%);
         }
         
         .message {
@@ -150,10 +152,8 @@
         
         .message-input-container {
             background: white;
-            padding: 20px;
-            border-radius: 0 0 15px 15px;
-            border: 1px solid #e0e0e0;
-            border-top: none;
+            padding: 25px 30px;
+            border-top: 1px solid #e6e9f0;
         }
         
         .input-group {

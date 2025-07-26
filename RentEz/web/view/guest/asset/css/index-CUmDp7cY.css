@@ -2106,8 +2106,6 @@ button:focus{
 }
 .common-accordion .accordion-item{
     border:1px solid var(--gray-200);
-    background-
-    border-radius:8px;
     overflow:hidden
 }
 .common-accordion .accordion-item:not(:last-child){
@@ -5242,7 +5240,6 @@ button.slick-next{
     text-align:center
 }
 .message,.testimonial__inner{
-    padding:80px 0;
     position:relative;
     z-index:1
 }

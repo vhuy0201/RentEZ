@@ -336,17 +336,54 @@
                                 </div>
                             </div>
                             <!-- Cột bên phải: Thông tin chủ nhà -->
-                            <div class="col-lg-4">                                <div class="landlord-info d-flex">
+                            <div class="col-lg-4">                                
+                                <div class="landlord-info d-flex">
                                     <img src="${landlord.avatar != null && !landlord.avatar.isEmpty() ? landlord.avatar : pageContext.request.contextPath.concat('/view/guest/asset/img/default-avatar.png')}" alt="Avatar">
                                     <div>
                                         <h4>${landlord.name}</h4>
                                         <p><i class="fa fa-phone"></i> ${landlord.phone}</p>
                                         <p><i class="fa fa-envelope"></i> ${landlord.email}</p>
-                                        <p>
-                                            <a href="${pageContext.request.contextPath}/ratings?action=viewLandlordRatings&landlordId=${landlord.userId}" class="btn btn-sm btn-primary">
-                                                <i class="fa fa-star"></i> Xem đánh giá
+                                        <div class="d-flex gap-2">
+                                            <a href="${pageContext.request.contextPath}/ratings?action=viewLandlordRatings&landlordId=${landlord.userId}" 
+                                               class="btn btn-outline-primary btn-sm flex-fill">
+                                                <i class="fas fa-star me-1"></i>
                                             </a>
-                                        </p>
+                                            <button type="button" class="btn btn-outline-danger btn-sm flex-fill" 
+                                                    data-bs-toggle="modal" data-bs-target="#reportModal">
+                                                <i class="fas fa-flag me-1"></i>
+                                            </button>
+                                            <a href="${pageContext.request.contextPath}/MessageServlet?action=getMessages&receiverID=${landlord.userId}" 
+                                               class="btn btn-outline-success btn-sm flex-fill">
+                                                <i class="fas fa-comments me-1"></i>
+                                            </a>
+                                        </div>
+                                        <!-- Report Modal -->
+                                        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="reportModalLabel">Báo cáo chủ nhà</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form id="reportForm" action="ReportServlet" method="POST">
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="landLordId" value="${landlord.userId}" />
+                                                            <input type="hidden" name="action" value="create" />
+                                                            <input type="hidden" name="propertyID" value="${property.propertyId}" />
+
+                                                            <div class="mb-3">
+                                                                <label for="reportContent" class="form-label">Nội dung báo cáo:</label>
+                                                                <textarea class="form-control" id="reportContent" name="content" rows="4" required placeholder="Nhập nội dung báo cáo..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                            <button type="submit" class="btn btn-danger">Gửi báo cáo</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>                
                                 <!-- Favorite Button -->

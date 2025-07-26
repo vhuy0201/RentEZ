@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,9 @@ import DAO.PropertyDAO;
 import DAO.PropertyTypeDAO;
 import DAO.UsersDao;
 import DAO.BillDAO;
+import DAO.NotificationDAO;
 import Model.Location;
+import Model.Notification;
 import Model.Property;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -39,6 +40,7 @@ public class LandlordContractServlet extends HttpServlet {
     private LocationDAO locationDAO;
     private PropertyTypeDAO propertyTypeDAO;
     private BillDAO billDAO;
+    private NotificationDAO notificationDao;
 
     @Override
     public void init() throws ServletException {
@@ -49,6 +51,7 @@ public class LandlordContractServlet extends HttpServlet {
         locationDAO = new LocationDAO();
         propertyTypeDAO = new PropertyTypeDAO();
         billDAO = new BillDAO();
+        notificationDao = new NotificationDAO();
     }
 
     @Override
@@ -98,7 +101,7 @@ public class LandlordContractServlet extends HttpServlet {
 
             // Get all bookings/contracts for the landlord
             int landlordId = currentUser.getUserId();
-            
+
             List<Booking> bookings = bookingDAO.getBookingsByLandlord(landlordId);
             List<BookingDTO> bookingDTOs = new ArrayList<>();
 
@@ -187,7 +190,7 @@ public class LandlordContractServlet extends HttpServlet {
             if (success) {
                 // Update property availability status to "Rented"
                 boolean propertyUpdated = propertyDAO.updateAvailabilityStatus(booking.getPropertyId(), "Rented");
-                
+
                 // Create bill for the rental contract
                 Bill contractBill = new Bill();
                 contractBill.setPropertyId(booking.getPropertyId());
@@ -200,6 +203,17 @@ public class LandlordContractServlet extends HttpServlet {
                 // Insert bill record
                 boolean billCreated = billDAO.insert(contractBill);
 
+                String notifMessage = "Hợp đồng thuê nhà của bạn đã được duyệt, bạn đã có thể bắt đầu sử dụng ngôi nhà";
+
+                Notification notification = new Notification();
+                notification.setUserId(booking.getRenterId());
+                notification.setMessage(notifMessage);
+                notification.setSentDate(new Date());
+                notification.setIsRead(false);
+                notification.setReferenceId(booking.getBookingId());
+                notification.setReferenceType("Booking");
+
+                notificationDao.insert(notification);
                 Map<String, Object> responseData = new HashMap<>();
                 if (billCreated && propertyUpdated) {
                     responseData.put("success", true);
@@ -256,9 +270,21 @@ public class LandlordContractServlet extends HttpServlet {
 
             // Use real database implementation
             boolean success = bookingDAO.rejectContract(contractId, reason);
-
+            // Get booking details
+            Booking booking = bookingDAO.getById(contractId);
             Map<String, Object> responseData = new HashMap<>();
             if (success) {
+                String notifMessage = "Hợp đồng thuê nhà của bạn đã bị từ chối, hãy liên hệ với chủ nhà để biết thêm chi tiết";
+
+                Notification notification = new Notification();
+                notification.setUserId(booking.getRenterId());
+                notification.setMessage(notifMessage);
+                notification.setSentDate(new Date());
+                notification.setIsRead(false);
+                notification.setReferenceId(booking.getBookingId());
+                notification.setReferenceType("Booking");
+
+                notificationDao.insert(notification);
                 responseData.put("success", true);
                 responseData.put("message", "Hợp đồng đã được từ chối");
             } else {
@@ -279,10 +305,10 @@ public class LandlordContractServlet extends HttpServlet {
             out.close();
         }
     }
-    
+
     /**
-     * Helper method to generate current billing period string
-     * Format: MM/yyyy (e.g., "01/2025")
+     * Helper method to generate current billing period string Format: MM/yyyy
+     * (e.g., "01/2025")
      */
     private String getCurrentBillingPeriod() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
