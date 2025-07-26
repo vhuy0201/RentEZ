@@ -35,7 +35,7 @@ public class ViewPropertyServlet extends HttpServlet {
         try {
             // Retrieve properties for the landlord
             PropertyDAO propertyDAO = new PropertyDAO();
-            List<Property> allProperties = propertyDAO.getAll(); // Get all properties
+            List<Property> allProperties = propertyDAO.getPropertiesByLandlordId(user.getUserId()); // Get all properties by landlordId
             List<Property> filteredProperties = new ArrayList<>();
             PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
             Map<Integer, String> typeNames = new HashMap<>();

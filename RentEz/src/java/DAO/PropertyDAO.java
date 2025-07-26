@@ -282,7 +282,7 @@ public class PropertyDAO {
         Connection conn = DBConnection.getConnection();
         String sql = "INSERT INTO Property (Title, Description, TypeID, LocationID, LandlordID, Price, Size, NumberOfBedrooms, NumberOfBathrooms, AvailabilityStatus, PriorityLevel, Avatar,PublicStatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+            PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, property.getTitle());
             pstmt.setString(2, property.getDescription());
             pstmt.setInt(3, property.getTypeId());
@@ -297,11 +297,20 @@ public class PropertyDAO {
             pstmt.setString(12, property.getAvatar());
             pstmt.setBoolean(13, property.isPublicStatus());
             int rows = pstmt.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int generatedId = rs.getInt(1);
+                        conn.close();
+                        return generatedId;
+                    }
+                }
+            }
             conn.close();
-            return rows;
+            return -1; 
         } catch (Exception e) {
             System.out.println("Error: " + e);
-            return 0;
+            return -1;
         }
     }
     
