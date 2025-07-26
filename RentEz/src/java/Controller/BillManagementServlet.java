@@ -178,7 +178,7 @@ public class BillManagementServlet extends HttpServlet {
         }
 
         request.setAttribute("bill", bill);
-        request.getRequestDispatcher("/view/landlord/page/billDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/landlord/page/bill-details.jsp").forward(request, response);
     }
 
     private void showCreateBillForm(HttpServletRequest request, HttpServletResponse response, int landlordId)

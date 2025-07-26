@@ -119,6 +119,10 @@
         <servlet-name>MessageServlet</servlet-name>
         <servlet-class>Controller.MessageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReportServlet</servlet-name>
+        <servlet-class>Controller.ReportServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -246,6 +250,10 @@
     <servlet-mapping>
         <servlet-name>MessageServlet</servlet-name>
         <url-pattern>/MessageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportServlet</servlet-name>
+        <url-pattern>/ReportServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>
