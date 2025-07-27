@@ -6,6 +6,7 @@ import DAO.PropertyDAO;
 import DAO.PropertyTypeDAO;
 import DAO.WalletDAO;
 import DAO.PaymentDAO;
+import DAO.PropertyImageDAO;
 import DAO.WalletTransferDao;
 import Model.Booking;
 import Model.Location;
@@ -31,9 +32,9 @@ import java.util.List;
 import java.sql.Timestamp;
 
 @WebServlet(name = "AddPropertiesServlet", urlPatterns = {"/addProperty"})
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50)   // 50MB
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 4, // 4MB
+        maxFileSize = 1024 * 1024 * 20, // 20MB
+        maxRequestSize = 1024 * 1024 * 100)   // 100MB
 public class AddPropertyServlet extends HttpServlet {
 
     private static final String UPLOAD_DIR = "uploads";
@@ -42,13 +43,13 @@ public class AddPropertyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
+
         // Load property types from database
         loadPropertyTypes(request);
-        
+
         request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
     }
-    
+
     /**
      * Helper method to load property types from database
      */
@@ -81,6 +82,10 @@ public class AddPropertyServlet extends HttpServlet {
             int numberOfBathrooms = Integer.parseInt(request.getParameter("numberOfBathrooms"));
             String availabilityStatus = request.getParameter("availabilityStatus");
             int priorityLevel = Integer.parseInt(request.getParameter("priorityLevel"));
+
+            String aiGenImage1 = request.getParameter("aiGenImage1");
+            String aiGenImage2 = request.getParameter("aiGenImage2");
+            String aiGenImage3 = request.getParameter("aiGenImage3");
 
             // Handle avatar image upload
             String avatarPath = handleAvatarUpload(request);
@@ -135,6 +140,26 @@ public class AddPropertyServlet extends HttpServlet {
                 return;
             }
 
+            if (propertyId != -1) {
+                List<String> aiImageUrls = new ArrayList<>();
+                if (aiGenImage1 != null && !aiGenImage1.isEmpty()) {
+                    aiImageUrls.add(aiGenImage1);
+                }
+                if (aiGenImage2 != null && !aiGenImage2.isEmpty()) {
+                    aiImageUrls.add(aiGenImage2);
+                }
+                if (aiGenImage3 != null && !aiGenImage3.isEmpty()) {
+                    aiImageUrls.add(aiGenImage3);
+                }
+                if (!aiImageUrls.isEmpty()) {
+                    PropertyImageDAO propertyImageDAO = new PropertyImageDAO();
+                    boolean imagesInserted = propertyImageDAO.insertMultiple(propertyId, aiImageUrls);
+                    if (!imagesInserted) {
+                        System.err.println("Warning: Failed to insert AI images for property " + propertyId);
+                    }
+                }
+            }
+
             // Handle Booking creation if booking parameters are present
             String startDateStr = "2024-01-01";
             String endDateStr = "2024-01-01";
@@ -168,7 +193,7 @@ public class AddPropertyServlet extends HttpServlet {
                     request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                     return;
                 }
-                
+
                 // Xử lý phí hệ thống 10% khi có booking
                 try {
                     boolean feeProcessed = processSystemFee(booking.getTotalPrice(), propertyId, user);
@@ -198,13 +223,13 @@ public class AddPropertyServlet extends HttpServlet {
     private String handleAvatarUpload(HttpServletRequest request) throws IOException, ServletException {
         try {
             CloudinaryService cloudinaryService = CloudinaryService.getInstance();
-            
+
             // Check if Cloudinary is configured
             if (!cloudinaryService.isConfigured()) {
                 System.err.println("Cloudinary is not configured properly");
                 return null;
             }
-            
+
             for (Part part : request.getParts()) {
                 if ("avatarImage".equals(part.getName())) {
                     String submittedFileName = part.getSubmittedFileName();
@@ -230,13 +255,13 @@ public class AddPropertyServlet extends HttpServlet {
     private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
         try {
             CloudinaryService cloudinaryService = CloudinaryService.getInstance();
-            
+
             // Check if Cloudinary is configured
             if (!cloudinaryService.isConfigured()) {
                 System.err.println("Cloudinary is not configured properly");
                 return null;
             }
-            
+
             for (Part part : request.getParts()) {
                 if ("propertyImage".equals(part.getName())) {
                     String submittedFileName = part.getSubmittedFileName();
@@ -260,18 +285,18 @@ public class AddPropertyServlet extends HttpServlet {
     }
 
     /**
-     * Process system fee transfer when booking is created
-     * Takes 10% of total price and transfers to system account (userId 3)
+     * Process system fee transfer when booking is created Takes 10% of total
+     * price and transfers to system account (userId 3)
      */
     private boolean processSystemFee(double totalPrice, int propertyId, User landlord) {
         try {
             double systemFeeAmount = totalPrice * 0.10; // 10% phí hệ thống
             int systemUserId = 3; // ID của hệ thống
-            
+
             // Lấy wallet của hệ thống
             WalletDAO walletDAO = new WalletDAO();
             Wallet systemWallet = walletDAO.getWalletByUserId(systemUserId);
-            
+
             // Tạo wallet cho hệ thống nếu chưa có
             if (systemWallet == null) {
                 systemWallet = new Wallet();
@@ -284,7 +309,7 @@ public class AddPropertyServlet extends HttpServlet {
                 double newBalance = systemWallet.getBalance() + systemFeeAmount;
                 walletDAO.updateBalance(systemUserId, newBalance);
             }
-            
+
             // Tạo bản ghi WalletTransfer
             WalletTransfer transfer = new WalletTransfer();
             transfer.setUserID(systemUserId);
@@ -293,10 +318,10 @@ public class AddPropertyServlet extends HttpServlet {
             transfer.setTimeCode(String.valueOf(System.currentTimeMillis()));
             transfer.setContent("Phí hệ thống 10% từ property ID: " + propertyId + " của landlord: " + landlord.getName());
             transfer.setIsRefunded(false);
-            
+
             WalletTransferDao transferDao = new WalletTransferDao();
             boolean transferSuccess = transferDao.create(transfer);
-            
+
             // Tạo bản ghi Payment để theo dõi
             Payment payment = new Payment();
             payment.setPayerId(landlord.getUserId());
@@ -311,19 +336,19 @@ public class AddPropertyServlet extends HttpServlet {
             payment.setTransCode(transfer.getTransCode());
             payment.setTimeCode(transfer.getTimeCode());
             payment.setIsRefunded(false);
-            
+
             PaymentDAO paymentDAO = new PaymentDAO();
             boolean paymentSuccess = paymentDAO.insert(payment);
-            
+
             return transferSuccess && paymentSuccess;
-            
+
         } catch (Exception e) {
             System.out.println("Error processing system fee: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-    
+
     @Override
     public String getServletInfo() {
         return "Add Property Servlet handles property creation with type, location, and landlord details.";

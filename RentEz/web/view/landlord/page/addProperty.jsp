@@ -450,6 +450,16 @@
             .modal-body {
                 padding: 1.5rem;
             }
+
+            .form-footer .btn {
+                padding: 0.5rem 1.2rem !important;
+                font-size: 1rem !important;
+                border-radius: 0.5rem !important;
+                margin-right: 0.5rem;
+            }
+            .form-footer .btn:last-child {
+                margin-right: 0;
+            }
         </style>
     </head>
     <body>
@@ -533,6 +543,9 @@
                         </div>
                         <div class="form-body">
                             <form action="addProperty" method="post" enctype="multipart/form-data" id="propertyForm">
+                                <input type="hidden" id="aiGenImage1" name="aiGenImage1" value="">
+                                <input type="hidden" id="aiGenImage2" name="aiGenImage2" value="">
+                                <input type="hidden" id="aiGenImage3" name="aiGenImage3" value="">
                                 <!-- Basic Information Section -->
                                 <div class="form-section">
                                     <div class="form-section-title">
@@ -722,10 +735,17 @@
                                     <button type="button" class="btn btn-outline" onclick="openBookingModal()">
                                         <i class="fas fa-calendar-plus me-2"></i>Tạo chính sách thuê nhà
                                     </button>
-                                    <button type="submit" class="btn btn-main">
-                                        <i class="fas fa-check me-2"></i>Đăng tin
+                                    <button type="button" class="btn btn-outline" id="aiOptimizeBtn">
+                                        <i class="fas fa-magic me-2"></i>Tối ưu tiêu đề & mô tả AI
                                     </button>
                                 </div>
+                                <div class="mt-4 d-flex flex-column align-center">
+                                    <button type="button" class="btn btn-outline" id="aiGenSingleImageBtn">
+                                        <i class="fas fa-image me-2"></i>Gen thêm những ảnh liên quan bằng AI
+                                    </button>
+                                    <div id="ai-gen-single-image-preview" class="mt-2"></div>
+                                </div>
+                                <div id="ai-message" class="mt-3"></div>
                             </form>
                         </div>
                     </div>
@@ -799,6 +819,174 @@
 
         <jsp:include page="/view/common/footer.jsp" />
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
+        <script src="https://esm.run/@google/generative-ai"></script>
+        <script type="module">
+                                            import { GoogleGenAI, Modality } from "https://esm.run/@google/genai";
+
+                                            const ai = new GoogleGenAI({apiKey: "AIzaSyARZh7ZkALP9zrvJ5l99vAFfILIQWtHU0k"});
+
+                                            document.getElementById('aiGenSingleImageBtn').onclick = async function () {
+                                                const prompt = document.getElementById('title').value.trim();
+                                                const previewDiv = document.getElementById('ai-gen-single-image-preview');
+                                                previewDiv.innerHTML = '';
+                                                if (!prompt) {
+                                                    previewDiv.innerHTML = '<div class="alert alert-danger">Vui lòng nhập mô tả để sinh ảnh!</div>';
+                                                    return;
+                                                }
+                                                previewDiv.innerHTML = '<div class="alert alert-info">Đang sinh ảnh AI, vui lòng chờ...</div>';
+                                                const images = [];
+                                                const urls = [];
+                                                for (let i = 0; i < 3; i++) {
+                                                    try {
+                                                        const response = await ai.models.generateContent({
+                                                            model: "gemini-2.0-flash-preview-image-generation",
+                                                            contents: [{role: "user", parts: [{text: prompt}]}],
+                                                            config: {
+                                                                responseModalities: [Modality.TEXT, Modality.IMAGE],
+                                                            },
+                                                        });
+                                                        let found = false;
+                                                        for (const part of response.candidates[0].content.parts) {
+                                                            if (part.inlineData) {
+                                                                const imageData = part.inlineData.data;
+                                                                const imageUrl = "data:image/png;base64," + imageData;
+                                                                images.push(imageUrl);
+                                                                found = true;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!found) {
+                                                            images.push(null);
+                                                        }
+                                                    } catch (e) {
+                                                        images.push(null);
+                                                    }
+                                                }
+
+                                                 // Gửi từng ảnh lên servlet để lấy url cloudinary
+                                                previewDiv.innerHTML = '<div class="alert alert-info">Đang upload ảnh lên Cloudinary...</div>';
+                                                for (let i = 0; i < images.length; i++) {
+                                                    if (images[i]) {
+                                                        try {
+                                                            const res = await fetch('${pageContext.request.contextPath}/upload-ai-image', {
+                                                                method: 'POST',
+                                                                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                                                body: 'imageData=' + encodeURIComponent(images[i])
+                                                            });
+                                                            const data = await res.json();
+                                                            if (data.url) {
+                                                                urls[i] = data.url;
+                                                            } else {
+                                                                urls[i] = null;
+                                                            }
+                                                        } catch (e) {
+                                                            urls[i] = null;
+                                                        }
+                                                    } else {
+                                                        urls[i] = null;
+                                                    }
+                                                }
+
+                                                // Hiển thị 3 ảnh
+                                                previewDiv.innerHTML = '';
+                                                let hasImage = false;
+                                                urls.forEach((img, idx) => {
+                                                    if (img) {
+                                                        hasImage = true;
+                                                        previewDiv.innerHTML += `
+                                                            <div style="display:inline-block;margin-right:12px;text-align:center;">
+                                                                <img src="` + img + `" alt="AI Image #` + (idx + 1) + `" style="max-width:180px;max-height:180px;border-radius:8px;border:2px solid #e65100;display:block;margin-bottom:8px;">
+                                                                <a href="` + img + `" download="ai-image-` + (idx + 1) + `.png" class="btn btn-outline btn-sm" target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fas fa-download me-2"></i>Tải ảnh #` + (idx + 1) + `
+                                                                </a>
+                                                            </div>
+                                                        `;
+                                                    } else {
+                                                        previewDiv.innerHTML += `<div style="display:inline-block;margin-right:12px;"><div class="alert alert-warning">Không nhận được ảnh #${idx+1}</div></div>`;
+                                                    }
+                                                });
+                                                document.getElementById('aiGenImage1').value = urls[0] || "";
+                                                document.getElementById('aiGenImage2').value = urls[1] || "";
+                                                document.getElementById('aiGenImage3').value = urls[2] || "";
+                                                if (!hasImage) {
+                                                    previewDiv.innerHTML = '<div class="alert alert-warning">Không nhận được ảnh nào từ AI!</div>';
+                                                }
+                                            };
+        </script>
+        <script>
+            document.getElementById('aiOptimizeBtn').onclick = async function () {
+                const title = document.getElementById('title').value;
+                const description = document.getElementById('description').value;
+                const typeIdSelect = document.getElementById('typeId');
+                const propertyTypeName = typeIdSelect.options[typeIdSelect.selectedIndex]?.text;
+                const price = document.getElementById('price').value;
+                const size = document.getElementById('size').value;
+                const bedrooms = document.getElementById('numberOfBedrooms').value;
+                const bathrooms = document.getElementById('numberOfBathrooms').value;
+
+                if (!title || !description || !propertyTypeName || !price || !size || !bedrooms || !bathrooms) {
+                    showAIMessage('Vui lòng nhập đầy đủ thông tin trước khi tối ưu!', true);
+                    return;
+                }
+
+                showAIMessage('Đang tối ưu tiêu đề và mô tả bằng AI...', false);
+
+                try {
+                    const res = await fetch('${pageContext.request.contextPath}/aiOptimizeProperty', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            title, description, propertyTypeName, price, size, bedrooms, bathrooms
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.title && data.content) {
+                        document.getElementById('title').value = data.title;
+                        document.getElementById('description').value = data.content;
+                        showAIMessage('Đã tối ưu thành công!', false);
+                    } else {
+                        showAIMessage('Không nhận được kết quả từ AI.', true);
+                    }
+                } catch (e) {
+                    showAIMessage('Có lỗi khi gọi AI: ' + e, true);
+                }
+            };
+
+            document.getElementById('aiEnhanceImgBtn').onclick = async function () {
+                const input = document.getElementById('avatarImage');
+                if (!input.files.length) {
+                    showAIMessage('Vui lòng chọn ảnh đại diện trước!', true);
+                    return;
+                }
+                showAIMessage('Đang làm đẹp ảnh bằng AI...', false);
+
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('avatarImage', file);
+                formData.append('description', document.getElementById('description').value);
+
+                try {
+                    const res = await fetch('${pageContext.request.contextPath}/aiEnhanceImage', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (!res.ok)
+                        throw new Error('Lỗi khi gửi ảnh lên server');
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('previewImg').src = url;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    showAIMessage('Đã làm đẹp ảnh thành công!', false);
+                } catch (e) {
+                    showAIMessage('Có lỗi khi làm đẹp ảnh: ' + e, true);
+                }
+            };
+
+            function showAIMessage(msg, isError) {
+                const el = document.getElementById('ai-message');
+                el.innerHTML = '<div class="alert ' + (isError ? 'alert-danger' : 'alert-info') + '">' + msg + '</div>';
+            }
+        </script>
         <script>
             // Modal control functions
             function openBookingModal() {
@@ -819,7 +1007,7 @@
                 const file = input.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         document.getElementById('previewImg').src = e.target.result;
                         document.getElementById('imagePreview').style.display = 'block';
                     };
@@ -835,31 +1023,31 @@
                 if (depositAmount && monthlyRent) {
                     const totalPrice = parseInt(depositAmount) + parseInt(monthlyRent);
                     document.getElementById('totalPrice').value = totalPrice;
-                    
+
                     // Hiển thị phí hệ thống
                     updateSystemFeeDisplay(totalPrice);
                 }
             }
-            
+
             // Update system fee display
             function updateSystemFeeDisplay(totalPrice) {
                 const systemFee = totalPrice * 0.10;
                 const systemFeeElement = document.getElementById('systemFeeDisplay');
                 if (systemFeeElement) {
                     const formattedFee = new Intl.NumberFormat('vi-VN').format(systemFee);
-                    systemFeeElement.innerHTML = 
-                        '<div class="alert alert-info mt-2" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3;">' +
+                    systemFeeElement.innerHTML =
+                            '<div class="alert alert-info mt-2" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 4px solid #2196f3;">' +
                             '<small>' +
-                                '<i class="fas fa-calculator me-1"></i>' +
-                                '<strong>Phí hệ thống (10%):</strong> ' +
-                                '<span class="text-primary fw-bold">' + formattedFee + ' ₫</span>' +
+                            '<i class="fas fa-calculator me-1"></i>' +
+                            '<strong>Phí hệ thống (10%):</strong> ' +
+                            '<span class="text-primary fw-bold">' + formattedFee + ' ₫</span>' +
                             '</small>' +
-                        '</div>';
+                            '</div>';
                 }
             }
 
             // Auto-update monthly rent when property price changes
-            document.getElementById('price').addEventListener('input', function() {
+            document.getElementById('price').addEventListener('input', function () {
                 const monthlyRentField = document.getElementById('monthlyRent');
                 if (monthlyRentField) {
                     monthlyRentField.value = this.value;
@@ -871,7 +1059,7 @@
                 // Validate required fields
                 const totalPrice = document.getElementById('totalPrice').value;
                 const depositAmount = document.getElementById('depositAmount').value;
-                
+
                 if (!totalPrice || !depositAmount) {
                     alert('Vui lòng điền đầy đủ thông tin chính sách thuê nhà!');
                     return;
@@ -879,7 +1067,7 @@
 
                 const propertyForm = document.getElementById('propertyForm');
                 const bookingFields = ['totalPrice', 'depositAmount', 'monthlyRent', 'penaltyClause', 'termsAndConditions'];
-                
+
                 bookingFields.forEach(field => {
                     const input = document.getElementById(field);
                     const hiddenInput = document.createElement('input');
@@ -888,7 +1076,7 @@
                     hiddenInput.value = input.value;
                     propertyForm.appendChild(hiddenInput);
                 });
-                
+
                 propertyForm.submit();
             }
 
@@ -900,7 +1088,7 @@
             }
 
             // Validate form before submission
-            document.getElementById('propertyForm').addEventListener('submit', function(e) {
+            document.getElementById('propertyForm').addEventListener('submit', function (e) {
                 const avatarInput = document.getElementById('avatarImage');
                 if (!avatarInput.files.length) {
                     e.preventDefault();
