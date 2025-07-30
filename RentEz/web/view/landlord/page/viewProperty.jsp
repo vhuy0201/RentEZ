@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/fontawesome-all.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/line-awesome.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/view/guest/asset/css/index-CUmDp7cY.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/view/landlord/common/navigation.css"/>
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
@@ -516,23 +516,23 @@
                 transform: translateY(-3px);
                 box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
             }
-            
+
             .btn-restore {
                 background: linear-gradient(135deg, #28a745, #20c997);
                 color: white;
             }
-            
+
             .btn-restore:hover {
                 background: linear-gradient(135deg, #218838, #1c9970);
                 transform: translateY(-2px);
                 box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
             }
-            
+
             .btn-permanent-delete {
                 background: linear-gradient(135deg, #dc3545, #c82333);
                 color: white;
             }
-            
+
             .btn-permanent-delete:hover {
                 background: linear-gradient(135deg, #c82333, #bd2130);
                 transform: translateY(-2px);
@@ -994,7 +994,7 @@
                                                                 <i class="fas fa-eye"></i>
                                                             </a>
                                                             <c:choose>
-                                                                <c:when test="${property.publicStatus}">
+                                                                <c:when test="${property.publicStatus && property.availabilityStatus ne 'Hidden'}">
                                                                     <!-- Property is public - show normal actions -->
                                                                     <a href="${pageContext.request.contextPath}/editProperty?propertyId=${property.propertyId}" class="btn-action btn-edit" title="Chỉnh sửa">
                                                                         <i class="fas fa-edit"></i>
@@ -1009,9 +1009,24 @@
                                                                     </a>
                                                                 </c:when>
                                                                 <c:when test="${property.publicStatus eq false && property.availabilityStatus ne 'Deleted'}">
-                                                                    
+                                                                    <!-- Property is hidden - show restore and permanent delete options -->
+                                                                    <a href="${pageContext.request.contextPath}/editProperty?propertyId=${property.propertyId}" class="btn-action btn-edit" title="Chỉnh sửa">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <a href="#" onclick="confirmRestore(${property.propertyId})" class="btn-action btn-restore" title="Khôi phục tin đăng">
+                                                                        <i class="fas fa-undo"></i>
+                                                                    </a>
                                                                     <a href="#" onclick="confirmPermanentDelete(${property.propertyId})" class="btn-action btn-permanent-delete" title="Xóa vĩnh viễn">
                                                                         <i class="fas fa-trash-alt"></i>
+                                                                    </a>
+                                                                </c:when>
+                                                                <c:when test="${property.publicStatus eq false && property.availabilityStatus eq 'Hidden'}">
+                                                                    <!-- Property is hidden - show restore and permanent delete options -->
+                                                                    <a href="${pageContext.request.contextPath}/editProperty?propertyId=${property.propertyId}" class="btn-action btn-edit" title="Chỉnh sửa">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <a href="#" onclick="confirmRestore(${property.propertyId})" class="btn-action btn-restore" title="Khôi phục tin đăng">
+                                                                        <i class="fas fa-undo"></i>
                                                                     </a>
                                                                 </c:when>
                                                             </c:choose>
@@ -1051,242 +1066,243 @@
         <jsp:include page="/view/common/footer.jsp" />
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
         <script>
-                                                                // Function to show and hide success message
-                                                                document.addEventListener('DOMContentLoaded', function () {
-                                                                    const successMessage = document.getElementById('successMessage');
-                                                                    const errorMessage = document.getElementById('errorMessage');
-                                                                    
-                                                                    if (successMessage) {
-                                                                        successMessage.classList.add('show');
-                                                                        setTimeout(function () {
-                                                                            successMessage.classList.remove('show');
-                                                                            setTimeout(function () {
-                                                                                successMessage.remove();
-                                                                            }, 500);
-                                                                        }, 3000);
-                                                                        fetch('${pageContext.request.contextPath}/cleanupSession', {
-                                                                            method: 'POST',
-                                                                            headers: {
-                                                                                'Content-Type': 'application/x-www-form-urlencoded'
-                                                                            },
-                                                                            body: 'attribute=successMessage'
-                                                                        }).catch(error => console.error('Error cleaning session:', error));
-                                                                    }
-                                                                    
-                                                                    if (errorMessage) {
-                                                                        errorMessage.classList.add('show');
-                                                                        setTimeout(function () {
-                                                                            errorMessage.classList.remove('show');
-                                                                            setTimeout(function () {
-                                                                                errorMessage.remove();
-                                                                            }, 500);
-                                                                        }, 5000);
-                                                                        fetch('${pageContext.request.contextPath}/cleanupSession', {
-                                                                            method: 'POST',
-                                                                            headers: {
-                                                                                'Content-Type': 'application/x-www-form-urlencoded'
-                                                                            },
-                                                                            body: 'attribute=error'
-                                                                        }).catch(error => console.error('Error cleaning session:', error));
-                                                                    }
-                                                                    
-                                                                    // Initialize filters
-                                                                    initializeFilters();
-                                                                });
+                                                                        // Function to show and hide success message
+                                                                        document.addEventListener('DOMContentLoaded', function () {
+                                                                            const successMessage = document.getElementById('successMessage');
+                                                                            const errorMessage = document.getElementById('errorMessage');
 
-                                                                // Initialize filter default state
-                                                                function initializeFilters() {
-                                                                    // Set default filter to show only public properties
-                                                                    document.getElementById('publicStatusFilter').value = 'all';
-                                                                    filterByPublicStatus();
-                                                                    
-                                                                    // Update initial count
-                                                                    updateVisiblePropertyCount();
-                                                                }
+                                                                            if (successMessage) {
+                                                                                successMessage.classList.add('show');
+                                                                                setTimeout(function () {
+                                                                                    successMessage.classList.remove('show');
+                                                                                    setTimeout(function () {
+                                                                                        successMessage.remove();
+                                                                                    }, 500);
+                                                                                }, 3000);
+                                                                                fetch('${pageContext.request.contextPath}/cleanupSession', {
+                                                                                    method: 'POST',
+                                                                                    headers: {
+                                                                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                                                                    },
+                                                                                    body: 'attribute=successMessage'
+                                                                                }).catch(error => console.error('Error cleaning session:', error));
+                                                                            }
 
-                                                                // General filter function for search, type, and status
-                                                                function filterProperties() {
-                                                                    // Add debounce for search input
-                                                                    clearTimeout(window.filterTimeout);
-                                                                    window.filterTimeout = setTimeout(() => {
-                                                                        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-                                                                        const typeFilter = document.getElementById('typeFilter').value;
-                                                                        const statusFilter = document.getElementById('statusFilter').value;
-                                                                        const publicStatusFilter = document.getElementById('publicStatusFilter').value;
-                                                                        
-                                                                        const propertyRows = document.querySelectorAll('.property-row');
-                                                                        
-                                                                        propertyRows.forEach(row => {
-                                                                            let showRow = true;
-                                                                            
-                                                                            // Search filter (title and type name)
-                                                                            if (searchTerm) {
-                                                                                const title = row.dataset.title || '';
-                                                                                const typeName = row.dataset.typeName || '';
-                                                                                const searchMatch = title.includes(searchTerm) || typeName.includes(searchTerm);
-                                                                                if (!searchMatch) showRow = false;
+                                                                            if (errorMessage) {
+                                                                                errorMessage.classList.add('show');
+                                                                                setTimeout(function () {
+                                                                                    errorMessage.classList.remove('show');
+                                                                                    setTimeout(function () {
+                                                                                        errorMessage.remove();
+                                                                                    }, 500);
+                                                                                }, 5000);
+                                                                                fetch('${pageContext.request.contextPath}/cleanupSession', {
+                                                                                    method: 'POST',
+                                                                                    headers: {
+                                                                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                                                                    },
+                                                                                    body: 'attribute=error'
+                                                                                }).catch(error => console.error('Error cleaning session:', error));
                                                                             }
-                                                                            
-                                                                            // Type filter
-                                                                            if (typeFilter && row.dataset.typeId !== typeFilter) {
-                                                                                showRow = false;
-                                                                            }
-                                                                            
-                                                                            // Status filter  
-                                                                            if (statusFilter && row.dataset.status !== statusFilter) {
-                                                                                showRow = false;
-                                                                            }
-                                                                            
-                                                                            // Public status filter
-                                                                            const isPublic = row.dataset.publicStatus === 'true';
-                                                                            if (publicStatusFilter === 'public' && !isPublic) {
-                                                                                showRow = false;
-                                                                            } else if (publicStatusFilter === 'hidden' && isPublic) {
-                                                                                showRow = false;
-                                                                            }
-                                                                            
-                                                                            row.style.display = showRow ? '' : 'none';
+
+                                                                            // Initialize filters
+                                                                            initializeFilters();
                                                                         });
-                                                                        
-                                                                        updateVisiblePropertyCount();
-                                                                        showNoResultsMessage();
-                                                                    }, 300); // 300ms debounce
-                                                                }
 
-                                                                // Confirm delete function (soft delete)
-                                                                function confirmDelete(propertyId) {
-                                                                    if (confirm('Bạn có chắc chắn muốn ẩn tin đăng này? Tin đăng sẽ không hiển thị công khai nhưng bạn có thể khôi phục lại bất cứ lúc nào.')) {
-                                                                        window.location.href = '${pageContext.request.contextPath}/deleteProperty?propertyId=' + propertyId;
-                                                                    }
-                                                                }
+                                                                        // Initialize filter default state
+                                                                        function initializeFilters() {
+                                                                            // Set default filter to show only public properties
+                                                                            document.getElementById('publicStatusFilter').value = 'all';
+                                                                            filterByPublicStatus();
 
-                                                                // Confirm restore function  
-                                                                function confirmRestore(propertyId) {
-                                                                    if (confirm('Bạn có chắc chắn muốn khôi phục tin đăng này? Tin đăng sẽ được hiển thị công khai trở lại.')) {
-                                                                        // Create and submit form for POST request
-                                                                        var form = document.createElement('form');
-                                                                        form.method = 'POST';
-                                                                        form.action = '${pageContext.request.contextPath}/restoreProperty';
-                                                                        
-                                                                        var input = document.createElement('input');
-                                                                        input.type = 'hidden';
-                                                                        input.name = 'propertyId';
-                                                                        input.value = propertyId;
-                                                                        
-                                                                        form.appendChild(input);
-                                                                        document.body.appendChild(form);
-                                                                        form.submit();
-                                                                    }
-                                                                }
-
-                                                                // Confirm permanent delete function
-                                                                function confirmPermanentDelete(propertyId) {
-                                                                    if (confirm('⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA VĨNH VIỄN tin đăng này?\n\nHành động này KHÔNG THỂ HOÀN TÁC. Tất cả dữ liệu liên quan sẽ bị mất hoàn toàn.')) {
-                                                                        if (confirm('Xác nhận lần cuối: Bạn thực sự muốn xóa vĩnh viễn tin đăng này?')) {
-                                                                            window.location.href = '${pageContext.request.contextPath}/permanentDeleteProperty?propertyId=' + propertyId;
+                                                                            // Update initial count
+                                                                            updateVisiblePropertyCount();
                                                                         }
-                                                                    }
-                                                                }
 
-                                                                // Confirm repost function
-                                                                function confirmRepost(propertyId) {
-                                                                    if (confirm('Bạn có muốn đăng lại tin này với trạng thái mới không? Tin đăng mới sẽ được tạo với thông tin tương tự nhưng ở trạng thái "Còn trống".')) {
-                                                                        window.location.href = '${pageContext.request.contextPath}/repostProperty?propertyId=' + propertyId;
-                                                                    }
-                                                                }
+                                                                        // General filter function for search, type, and status
+                                                                        function filterProperties() {
+                                                                            // Add debounce for search input
+                                                                            clearTimeout(window.filterTimeout);
+                                                                            window.filterTimeout = setTimeout(() => {
+                                                                                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                                                                                const typeFilter = document.getElementById('typeFilter').value;
+                                                                                const statusFilter = document.getElementById('statusFilter').value;
+                                                                                const publicStatusFilter = document.getElementById('publicStatusFilter').value;
 
-                                                                // Filter properties by public status
-                                                                function filterByPublicStatus() {
-                                                                    const filter = document.getElementById('publicStatusFilter').value;
-                                                                    const propertyRows = document.querySelectorAll('.property-row');
-                                                                    
-                                                                    propertyRows.forEach(row => {
-                                                                        const isPublic = row.dataset.publicStatus === 'true';
-                                                                        
-                                                                        if (filter === 'all') {
-                                                                            row.style.display = '';
-                                                                        } else if (filter === 'public' && isPublic) {
-                                                                            row.style.display = '';
-                                                                        } else if (filter === 'hidden' && !isPublic) {
-                                                                            row.style.display = '';
-                                                                        } else {
-                                                                            row.style.display = 'none';
+                                                                                const propertyRows = document.querySelectorAll('.property-row');
+
+                                                                                propertyRows.forEach(row => {
+                                                                                    let showRow = true;
+
+                                                                                    // Search filter (title and type name)
+                                                                                    if (searchTerm) {
+                                                                                        const title = row.dataset.title || '';
+                                                                                        const typeName = row.dataset.typeName || '';
+                                                                                        const searchMatch = title.includes(searchTerm) || typeName.includes(searchTerm);
+                                                                                        if (!searchMatch)
+                                                                                            showRow = false;
+                                                                                    }
+
+                                                                                    // Type filter
+                                                                                    if (typeFilter && row.dataset.typeId !== typeFilter) {
+                                                                                        showRow = false;
+                                                                                    }
+
+                                                                                    // Status filter  
+                                                                                    if (statusFilter && row.dataset.status !== statusFilter) {
+                                                                                        showRow = false;
+                                                                                    }
+
+                                                                                    // Public status filter
+                                                                                    const isPublic = row.dataset.publicStatus === 'true';
+                                                                                    if (publicStatusFilter === 'public' && !isPublic) {
+                                                                                        showRow = false;
+                                                                                    } else if (publicStatusFilter === 'hidden' && isPublic) {
+                                                                                        showRow = false;
+                                                                                    }
+
+                                                                                    row.style.display = showRow ? '' : 'none';
+                                                                                });
+
+                                                                                updateVisiblePropertyCount();
+                                                                                showNoResultsMessage();
+                                                                            }, 300); // 300ms debounce
                                                                         }
-                                                                    });
-                                                                    
-                                                                    // Update visible count
-                                                                    updateVisiblePropertyCount();
-                                                                    showNoResultsMessage();
-                                                                }
 
-                                                                // Sort properties function
-                                                                function sortProperties() {
-                                                                    const sortValue = document.getElementById('sortFilter').value;
-                                                                    const tbody = document.querySelector('.property-table tbody');
-                                                                    const rows = Array.from(tbody.querySelectorAll('.property-row'));
-                                                                    
-                                                                    rows.sort((a, b) => {
-                                                                        switch (sortValue) {
-                                                                            case 'price_asc':
-                                                                                return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
-                                                                            case 'price_desc':
-                                                                                return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
-                                                                            case 'size_asc':
-                                                                                return parseFloat(a.dataset.size) - parseFloat(b.dataset.size);
-                                                                            case 'size_desc':
-                                                                                return parseFloat(b.dataset.size) - parseFloat(a.dataset.size);
-                                                                            case 'newest':
-                                                                            default:
-                                                                                // Keep original order (newest first)
-                                                                                return 0;
+                                                                        // Confirm delete function (soft delete)
+                                                                        function confirmDelete(propertyId) {
+                                                                            if (confirm('Bạn có chắc chắn muốn ẩn tin đăng này? Tin đăng sẽ không hiển thị công khai nhưng bạn có thể khôi phục lại bất cứ lúc nào.')) {
+                                                                                window.location.href = '${pageContext.request.contextPath}/deleteProperty?propertyId=' + propertyId;
+                                                                            }
                                                                         }
-                                                                    });
-                                                                    
-                                                                    // Clear tbody and re-append sorted rows
-                                                                    tbody.innerHTML = '';
-                                                                    rows.forEach(row => tbody.appendChild(row));
-                                                                    
-                                                                    updateVisiblePropertyCount();
-                                                                }
 
-                                                                // Reset all filters
-                                                                function resetFilters() {
-                                                                    document.getElementById('searchInput').value = '';
-                                                                    document.getElementById('typeFilter').value = '';
-                                                                    document.getElementById('statusFilter').value = '';
-                                                                    document.getElementById('publicStatusFilter').value = 'public';
-                                                                    document.getElementById('sortFilter').value = 'newest';
-                                                                    
-                                                                    // Remove no results message
-                                                                    const noResultsRow = document.getElementById('noResultsRow');
-                                                                    if (noResultsRow) {
-                                                                        noResultsRow.remove();
-                                                                    }
-                                                                    
-                                                                    // Show all rows
-                                                                    const propertyRows = document.querySelectorAll('.property-row');
-                                                                    propertyRows.forEach(row => {
-                                                                        row.style.display = '';
-                                                                    });
-                                                                    
-                                                                    // Apply public status filter (default to public only)
-                                                                    filterByPublicStatus();
-                                                                    
-                                                                    // Reset sort to original order
-                                                                    sortProperties();
-                                                                }
+                                                                        // Confirm restore function  
+                                                                        function confirmRestore(propertyId) {
+                                                                            if (confirm('Bạn có chắc chắn muốn khôi phục tin đăng này? Tin đăng sẽ được hiển thị công khai trở lại.')) {
+                                                                                // Create and submit form for POST request
+                                                                                var form = document.createElement('form');
+                                                                                form.method = 'POST';
+                                                                                form.action = '${pageContext.request.contextPath}/restoreProperty';
 
-                                                                // Show/hide no results message
-                                                                function showNoResultsMessage() {
-                                                                    const visibleRows = document.querySelectorAll('.property-row:not([style*="display: none"])');
-                                                                    const tbody = document.querySelector('.property-table tbody');
-                                                                    let noResultsRow = document.getElementById('noResultsRow');
-                                                                    
-                                                                    if (visibleRows.length === 0) {
-                                                                        if (!noResultsRow) {
-                                                                            noResultsRow = document.createElement('tr');
-                                                                            noResultsRow.id = 'noResultsRow';
-                                                                            noResultsRow.innerHTML = `
+                                                                                var input = document.createElement('input');
+                                                                                input.type = 'hidden';
+                                                                                input.name = 'propertyId';
+                                                                                input.value = propertyId;
+
+                                                                                form.appendChild(input);
+                                                                                document.body.appendChild(form);
+                                                                                form.submit();
+                                                                            }
+                                                                        }
+
+                                                                        // Confirm permanent delete function
+                                                                        function confirmPermanentDelete(propertyId) {
+                                                                            if (confirm('⚠️ CẢNH BÁO: Bạn có chắc chắn muốn XÓA VĨNH VIỄN tin đăng này?\n\nHành động này KHÔNG THỂ HOÀN TÁC. Tất cả dữ liệu liên quan sẽ bị mất hoàn toàn.')) {
+                                                                                if (confirm('Xác nhận lần cuối: Bạn thực sự muốn xóa vĩnh viễn tin đăng này?')) {
+                                                                                    window.location.href = '${pageContext.request.contextPath}/permanentDeleteProperty?propertyId=' + propertyId;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        // Confirm repost function
+                                                                        function confirmRepost(propertyId) {
+                                                                            if (confirm('Bạn có muốn đăng lại tin này với trạng thái mới không? Tin đăng mới sẽ được tạo với thông tin tương tự nhưng ở trạng thái "Còn trống".')) {
+                                                                                window.location.href = '${pageContext.request.contextPath}/repostProperty?propertyId=' + propertyId;
+                                                                            }
+                                                                        }
+
+                                                                        // Filter properties by public status
+                                                                        function filterByPublicStatus() {
+                                                                            const filter = document.getElementById('publicStatusFilter').value;
+                                                                            const propertyRows = document.querySelectorAll('.property-row');
+
+                                                                            propertyRows.forEach(row => {
+                                                                                const isPublic = row.dataset.publicStatus === 'true';
+
+                                                                                if (filter === 'all') {
+                                                                                    row.style.display = '';
+                                                                                } else if (filter === 'public' && isPublic) {
+                                                                                    row.style.display = '';
+                                                                                } else if (filter === 'hidden' && !isPublic) {
+                                                                                    row.style.display = '';
+                                                                                } else {
+                                                                                    row.style.display = 'none';
+                                                                                }
+                                                                            });
+
+                                                                            // Update visible count
+                                                                            updateVisiblePropertyCount();
+                                                                            showNoResultsMessage();
+                                                                        }
+
+                                                                        // Sort properties function
+                                                                        function sortProperties() {
+                                                                            const sortValue = document.getElementById('sortFilter').value;
+                                                                            const tbody = document.querySelector('.property-table tbody');
+                                                                            const rows = Array.from(tbody.querySelectorAll('.property-row'));
+
+                                                                            rows.sort((a, b) => {
+                                                                                switch (sortValue) {
+                                                                                    case 'price_asc':
+                                                                                        return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                                                                                    case 'price_desc':
+                                                                                        return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                                                                                    case 'size_asc':
+                                                                                        return parseFloat(a.dataset.size) - parseFloat(b.dataset.size);
+                                                                                    case 'size_desc':
+                                                                                        return parseFloat(b.dataset.size) - parseFloat(a.dataset.size);
+                                                                                    case 'newest':
+                                                                                    default:
+                                                                                        // Keep original order (newest first)
+                                                                                        return 0;
+                                                                                }
+                                                                            });
+
+                                                                            // Clear tbody and re-append sorted rows
+                                                                            tbody.innerHTML = '';
+                                                                            rows.forEach(row => tbody.appendChild(row));
+
+                                                                            updateVisiblePropertyCount();
+                                                                        }
+
+                                                                        // Reset all filters
+                                                                        function resetFilters() {
+                                                                            document.getElementById('searchInput').value = '';
+                                                                            document.getElementById('typeFilter').value = '';
+                                                                            document.getElementById('statusFilter').value = '';
+                                                                            document.getElementById('publicStatusFilter').value = 'public';
+                                                                            document.getElementById('sortFilter').value = 'newest';
+
+                                                                            // Remove no results message
+                                                                            const noResultsRow = document.getElementById('noResultsRow');
+                                                                            if (noResultsRow) {
+                                                                                noResultsRow.remove();
+                                                                            }
+
+                                                                            // Show all rows
+                                                                            const propertyRows = document.querySelectorAll('.property-row');
+                                                                            propertyRows.forEach(row => {
+                                                                                row.style.display = '';
+                                                                            });
+
+                                                                            // Apply public status filter (default to public only)
+                                                                            filterByPublicStatus();
+
+                                                                            // Reset sort to original order
+                                                                            sortProperties();
+                                                                        }
+
+                                                                        // Show/hide no results message
+                                                                        function showNoResultsMessage() {
+                                                                            const visibleRows = document.querySelectorAll('.property-row:not([style*="display: none"])');
+                                                                            const tbody = document.querySelector('.property-table tbody');
+                                                                            let noResultsRow = document.getElementById('noResultsRow');
+
+                                                                            if (visibleRows.length === 0) {
+                                                                                if (!noResultsRow) {
+                                                                                    noResultsRow = document.createElement('tr');
+                                                                                    noResultsRow.id = 'noResultsRow';
+                                                                                    noResultsRow.innerHTML = `
                                                                                 <td colspan="6" class="text-center py-4">
                                                                                     <div class="no-results-message">
                                                                                         <i class="fas fa-search-minus text-muted mb-2" style="font-size: 2rem;"></i>
@@ -1295,49 +1311,49 @@
                                                                                     </div>
                                                                                 </td>
                                                                             `;
-                                                                            tbody.appendChild(noResultsRow);
+                                                                                    tbody.appendChild(noResultsRow);
+                                                                                }
+                                                                            } else {
+                                                                                if (noResultsRow) {
+                                                                                    noResultsRow.remove();
+                                                                                }
+                                                                            }
                                                                         }
-                                                                    } else {
-                                                                        if (noResultsRow) {
-                                                                            noResultsRow.remove();
+
+                                                                        function updateVisiblePropertyCount() {
+                                                                            const visibleRows = document.querySelectorAll('.property-row:not([style*="display: none"])');
+                                                                            const countElement = document.querySelector('.property-count');
+                                                                            if (countElement) {
+                                                                                countElement.textContent = `(Hiển thị ${visibleRows.length} tin đăng)`;
+                                                                            }
                                                                         }
-                                                                    }
-                                                                }
-                                                                
-                                                                function updateVisiblePropertyCount() {
-                                                                    const visibleRows = document.querySelectorAll('.property-row:not([style*="display: none"])');
-                                                                    const countElement = document.querySelector('.property-count');
-                                                                    if (countElement) {
-                                                                        countElement.textContent = `(Hiển thị ${visibleRows.length} tin đăng)`;
-                                                                    }
-                                                                }
 
-                                                                // Quick filter function
-                                                                function quickFilter(filterType) {
-                                                                    // Reset all filters first
-                                                                    document.getElementById('searchInput').value = '';
-                                                                    document.getElementById('typeFilter').value = '';
-                                                                    
-                                                                    if (filterType === 'Available' || filterType === 'Rented') {
-                                                                        document.getElementById('statusFilter').value = filterType;
-                                                                        document.getElementById('publicStatusFilter').value = 'public';
-                                                                    } else if (filterType === 'hidden') {
-                                                                        document.getElementById('statusFilter').value = '';
-                                                                        document.getElementById('publicStatusFilter').value = 'hidden';
-                                                                    }
-                                                                    
-                                                                    // Apply filters
-                                                                    filterProperties();
-                                                                    filterByPublicStatus();
-                                                                }
+                                                                        // Quick filter function
+                                                                        function quickFilter(filterType) {
+                                                                            // Reset all filters first
+                                                                            document.getElementById('searchInput').value = '';
+                                                                            document.getElementById('typeFilter').value = '';
 
-                                                                // Confirm logout function
-                                                                function confirmLogout() {
-                                                                    if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                                                                        // Add your logout logic here
-                                                                        window.location.href = '${pageContext.request.contextPath}/logout';
-                                                                    }
-                                                                }
+                                                                            if (filterType === 'Available' || filterType === 'Rented') {
+                                                                                document.getElementById('statusFilter').value = filterType;
+                                                                                document.getElementById('publicStatusFilter').value = 'public';
+                                                                            } else if (filterType === 'hidden') {
+                                                                                document.getElementById('statusFilter').value = '';
+                                                                                document.getElementById('publicStatusFilter').value = 'hidden';
+                                                                            }
+
+                                                                            // Apply filters
+                                                                            filterProperties();
+                                                                            filterByPublicStatus();
+                                                                        }
+
+                                                                        // Confirm logout function
+                                                                        function confirmLogout() {
+                                                                            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                                                                                // Add your logout logic here
+                                                                                window.location.href = '${pageContext.request.contextPath}/logout';
+                                                                            }
+                                                                        }
         </script>
         <script src="${pageContext.request.contextPath}/view/landlord/asset/js/fontAwesome.js"></script>
     </body>

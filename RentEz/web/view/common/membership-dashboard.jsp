@@ -164,9 +164,10 @@
 
                         <div class='w-24 h-24 mx-auto rounded-full mb-8 flex items-center justify-center shadow-xl
                              <c:choose>
+                                 <c:when test='${tier.priorityLevel == 1}'>bg-gradient-to-br from-yellow-400 to-orange-500</c:when>
                                  <c:when test='${tier.priorityLevel == 2}'>bg-gradient-to-br from-indigo-600 to-blue-500</c:when>
-                                 <c:when test='${tier.priorityLevel == 3}'>bg-gradient-to-br from-yellow-400 to-orange-400</c:when>
-                                 <c:otherwise>bg-gradient-to-br from-teal-500 to-green-500</c:otherwise>
+                                 <c:when test='${tier.priorityLevel == 3}'>bg-gradient-to-br from-teal-500 to-green-500</c:when>
+                                 <c:otherwise>bg-gradient-to-br from-gray-400 to-gray-600</c:otherwise>
                              </c:choose>'>
                             <i class='fas fa-crown text-white text-4xl'></i>
                         </div>
@@ -177,9 +178,10 @@
                         <div class='text-center mb-8 py-4 px-6 rounded-2xl bg-gray-50'>
                             <p class='text-4xl font-extrabold 
                                <c:choose>
-                                   <c:when test='${tier.priorityLevel == 1}'>text-indigo-600</c:when>
-                                   <c:when test='${tier.priorityLevel == 2}'>text-orange-500</c:when>
-                                   <c:otherwise>text-teal-600</c:otherwise>
+                                   <c:when test='${tier.priorityLevel == 1}'>text-orange-500</c:when>
+                                   <c:when test='${tier.priorityLevel == 2}'>text-indigo-600</c:when>
+                                   <c:when test='${tier.priorityLevel == 3}'>text-teal-600</c:when>
+                                   <c:otherwise>text-gray-600</c:otherwise>
                                </c:choose>'>
                                 <fmt:formatNumber value='${tier.price}' type='currency' currencySymbol='₫' groupingUsed='true'/>
                             </p>
@@ -191,20 +193,28 @@
                                 <li class="flex items-start">
                                     <span class="
                                           <c:choose>
-                                              <c:when test='${tier.priorityLevel == 1}'>text-indigo-600</c:when>
-                                              <c:when test='${tier.priorityLevel == 2}'>text-orange-500</c:when>
-                                              <c:otherwise>text-teal-600</c:otherwise>
+                                              <c:when test='${tier.priorityLevel == 1}'>text-orange-500</c:when>
+                                              <c:when test='${tier.priorityLevel == 2}'>text-indigo-600</c:when>
+                                              <c:when test='${tier.priorityLevel == 3}'>text-teal-600</c:when>
+                                              <c:otherwise>text-gray-600</c:otherwise>
                                           </c:choose> mr-3 mt-1">
                                         <i class='fas fa-check-circle text-lg'></i>
                                     </span>
-                                    <span>Ưu tiên mức <b>${tier.priorityLevel}</b></span>
+                                    <span>
+                                        <c:choose>
+                                            <c:when test='${tier.priorityLevel == 1}'>🔥 Ưu tiên cao nhất - Hot nhất</c:when>
+                                            <c:when test='${tier.priorityLevel == 2}'>⭐ Ưu tiên trung bình - Mới nhất</c:when>
+                                            <c:when test='${tier.priorityLevel == 3}'>📌 Ưu tiên cơ bản - Thường</c:when>
+                                            <c:otherwise>Ưu tiên mức <b>${tier.priorityLevel}</b></c:otherwise>
+                                        </c:choose>
+                                    </span>
                                 </li>
                                 <c:if test='${tier.priorityLevel <= 2}'>
                                     <li class="flex items-start">
                                         <span class="
                                               <c:choose>
-                                                  <c:when test='${tier.priorityLevel == 1}'>text-indigo-600</c:when>
-                                                  <c:when test='${tier.priorityLevel == 2}'>text-orange-500</c:when>
+                                                  <c:when test='${tier.priorityLevel == 1}'>text-orange-500</c:when>
+                                                  <c:when test='${tier.priorityLevel == 2}'>text-indigo-600</c:when>
                                               </c:choose> mr-3 mt-1">
                                             <i class='fas fa-check-circle text-lg'></i>
                                         </span>
@@ -213,16 +223,50 @@
                                 </c:if>
                                 <c:if test='${tier.priorityLevel == 1}'>
                                     <li class="flex items-start">
-                                        <span class="text-indigo-600 mr-3 mt-1">
+                                        <span class="text-orange-500 mr-3 mt-1">
                                             <i class='fas fa-check-circle text-lg'></i>
                                         </span>
                                         <span>Tất cả tính năng cao cấp</span>
                                     </li>
                                     <li class="flex items-start">
-                                        <span class="text-indigo-600 mr-3 mt-1">
+                                        <span class="text-orange-500 mr-3 mt-1">
                                             <i class='fas fa-check-circle text-lg'></i>
                                         </span>
                                         <span>Không giới hạn đăng tin</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-orange-500 mr-3 mt-1">
+                                            <i class='fas fa-check-circle text-lg'></i>
+                                        </span>
+                                        <span>Đặc quyền Diamond VIP</span>
+                                    </li>
+                                </c:if>
+                                <c:if test='${tier.priorityLevel == 2}'>
+                                    <li class="flex items-start">
+                                        <span class="text-indigo-600 mr-3 mt-1">
+                                            <i class='fas fa-check-circle text-lg'></i>
+                                        </span>
+                                        <span>Tính năng nâng cao</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-indigo-600 mr-3 mt-1">
+                                            <i class='fas fa-check-circle text-lg'></i>
+                                        </span>
+                                        <span>Đăng tin ưu tiên</span>
+                                    </li>
+                                </c:if>
+                                <c:if test='${tier.priorityLevel == 3}'>
+                                    <li class="flex items-start">
+                                        <span class="text-teal-600 mr-3 mt-1">
+                                            <i class='fas fa-check-circle text-lg'></i>
+                                        </span>
+                                        <span>Tính năng cơ bản</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-teal-600 mr-3 mt-1">
+                                            <i class='fas fa-check-circle text-lg'></i>
+                                        </span>
+                                        <span>Đăng tin thường</span>
                                     </li>
                                 </c:if>
                             </ul>

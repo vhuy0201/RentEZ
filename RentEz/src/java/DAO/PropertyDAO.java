@@ -630,10 +630,11 @@ public class PropertyDAO {
      */
     public boolean softDeleteProperty(int propertyId) {
         Connection conn = DBConnection.getConnection();
-        String sql = "UPDATE Property SET PublicStatus = 0 WHERE PropertyID = ?";
+        String sql = "UPDATE Property SET PublicStatus = 0,AvailabilityStatus = ? WHERE PropertyID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, propertyId);
+            pstmt.setString(1, "Hidden");
+            pstmt.setInt(2, propertyId);
             int rows = pstmt.executeUpdate();
             conn.close();
             return rows > 0;
