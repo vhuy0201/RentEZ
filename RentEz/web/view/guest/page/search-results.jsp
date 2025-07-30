@@ -122,6 +122,87 @@
                     font-size: 14px;
                 }
             }
+            
+            /* Priority Level Badges */
+            .property-item__priority-badge {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                color: white;
+                z-index: 10;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .property-item__priority-badge.priority-hot {
+                background: linear-gradient(135deg, #ff6b35, #f7931e);
+                animation: pulse-hot 2s infinite;
+            }
+            
+            .property-item__priority-badge.priority-new {
+                background: linear-gradient(135deg, #4facfe, #00f2fe);
+                animation: pulse-new 2s infinite;
+            }
+            
+            /* Pulse animations for priority badges */
+            @keyframes pulse-hot {
+                0%, 100% {
+                    transform: scale(1);
+                    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+                }
+                50% {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 16px rgba(255, 107, 53, 0.6);
+                }
+            }
+            
+            @keyframes pulse-new {
+                0%, 100% {
+                    transform: scale(1);
+                    box-shadow: 0 2px 8px rgba(79, 172, 254, 0.4);
+                }
+                50% {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 16px rgba(79, 172, 254, 0.6);
+                }
+            }
+            
+            /* Make sure property item thumb has relative positioning for absolute badges */
+            .property-item__thumb {
+                position: relative;
+            }
+            
+            /* Adjust existing badge positioning to avoid overlap */
+            .property-item__badge {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                z-index: 10;
+            }
+            
+            /* Responsive adjustments for priority badges */
+            @media (max-width: 768px) {
+                .property-item__priority-badge {
+                    font-size: 10px;
+                    padding: 3px 8px;
+                    top: 10px;
+                    left: 10px;
+                }
+                
+                .property-item__badge {
+                    top: 10px;
+                    right: 10px;
+                    font-size: 11px;
+                }
+            }
         </style>
     </head>
     <body class="">
@@ -215,6 +296,18 @@
                                                             alt="${property.title}"
                                                             class="cover-img" /></a
                                                     ><span class="property-item__badge">Cho thuê</span>
+                                                    
+                                                    <!-- Priority Level Badges -->
+                                                    <c:if test="${property.priorityLevel == 1}">
+                                                        <span class="property-item__priority-badge priority-hot">
+                                                            <i class="fas fa-fire"></i> Hot nhất
+                                                        </span>
+                                                    </c:if>
+                                                    <c:if test="${property.priorityLevel == 2}">
+                                                        <span class="property-item__priority-badge priority-new">
+                                                            <i class="fas fa-star"></i> Mới nhất
+                                                        </span>
+                                                    </c:if>
                                                 </div>
                                                 <div class="property-item__content">
                                                     <h6 class="property-item__price">

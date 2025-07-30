@@ -217,8 +217,8 @@ public class PropertyDAO {
         // Thêm điều kiện chỉ lấy các bài đăng đã được duyệt
         sqlBuilder.append(" AND p.PublicStatus = 1");
         
-        // Sắp xếp theo mức độ ưu tiên và giá
-        sqlBuilder.append(" ORDER BY p.PriorityLevel DESC, p.Price ASC");
+        // Sắp xếp theo mức độ ưu tiên (1 là ưu tiên nhất, 2, 3...) và giá
+        sqlBuilder.append(" ORDER BY p.PriorityLevel ASC, p.Price ASC");
         
         try {
             PreparedStatement pstmt = conn.prepareStatement(sqlBuilder.toString());
