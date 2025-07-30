@@ -707,15 +707,11 @@ public class BookingDAO {
      */
     public boolean rejectContract(int bookingId, String reason) {
         Connection conn = DBConnection.getConnection();
-        String sql = "UPDATE Booking SET Status = 'Rejected' WHERE BookingID = ?";
+        String sql = "UPDATE Booking SET Status = 'Cancelled' WHERE BookingID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, bookingId);
-            int rows = pstmt.executeUpdate();
-            
-            // Optionally, you can store the rejection reason in a separate table or add a column for it
-            // For now, we'll just update the status
-            
+            int rows = pstmt.executeUpdate();            
             conn.close();
             return rows > 0;
         } catch (Exception e) {

@@ -225,7 +225,7 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="form-group">    <label for="name" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="name" class="form-label label-with-icon">
                                                     <i class="fas fa-user"></i>Họ và tên
                                                 </label>
                                                 <input type="text" class="form-control" id="name" name="name" value="${sessionScope.user.name}" required>
@@ -233,7 +233,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-group">   <label for="email" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="email" class="form-label label-with-icon">
                                                     <i class="fas fa-envelope"></i>Địa chỉ email
                                                 </label>
                                                 <input type="email" class="form-control" id="email" name="email" value="${sessionScope.user.email}" readonly>
@@ -242,7 +242,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-group">    <label for="phone" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="phone" class="form-label label-with-icon">
                                                     <i class="fas fa-phone"></i>Số điện thoại
                                                 </label>
                                                 <input type="tel" class="form-control" id="phone" name="phone" value="${sessionScope.user.phone}" required>
@@ -250,7 +250,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-group">   <label for="address" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="address" class="form-label label-with-icon">
                                                     <i class="fas fa-map-marker-alt"></i>Địa chỉ
                                                 </label>
                                                 <textarea class="form-control" id="address" name="address" rows="3" required>${sessionScope.user.address}</textarea>
@@ -279,7 +279,7 @@
                                 <form action="${pageContext.request.contextPath}/profile" method="post" id="changePasswordForm">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="form-group">  <label for="currentPassword" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="currentPassword" class="form-label label-with-icon">
                                                     <i class="fas fa-lock"></i>Mật khẩu hiện tại
                                                 </label>
                                                 <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
@@ -287,7 +287,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-group">   <label for="newPassword" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="newPassword" class="form-label label-with-icon">
                                                     <i class="fas fa-key"></i>Mật khẩu mới
                                                 </label>
                                                 <input type="password" class="form-control" id="newPassword" name="newPassword" required>
@@ -304,7 +304,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-group"> <label for="confirmPassword" class="form-label label-with-icon">
+                                            <div class="form-group">                                            <label for="confirmPassword" class="form-label label-with-icon">
                                                     <i class="fas fa-check-double"></i>Xác nhận mật khẩu mới
                                                 </label>
                                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>

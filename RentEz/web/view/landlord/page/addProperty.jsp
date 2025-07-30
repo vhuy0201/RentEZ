@@ -477,8 +477,8 @@
                             <div class="dashboard-section-title">Đăng tin mới</div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <span class="text-muted">Xin chào, <strong class="text-dark">${sessionScope.user.name}</strong></span>
-                            <a href="${pageContext.request.contextPath}/payments" class="btn btn-main">
+                            <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
+                            <a href="#" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>
                         </div>
@@ -669,11 +669,23 @@
                                     <div class="mb-3">
                                         <label for="priorityLevel" class="form-label">Mức độ ưu tiên</label>
                                         <select id="priorityLevel" name="priorityLevel" class="form-select">
-                                            <option value="1">Thường</option>
-                                            <option value="2">Ưu tiên</option>
-                                            <option value="3">Cao cấp</option>
+                                            <c:choose>
+                                                <c:when test="${empty currentTier}">
+                                                    <!-- Người dùng chưa có tier hoặc không có tier active -->
+                                                    <option value="1" selected>Thường (Miễn phí)</option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- Người dùng có tier -->
+                                                    <option value="3" selected>Thường</option>
+                                                    <c:if test="${currentTier.tierName eq 'Gold' or currentTier.tierName eq 'Diamond' or currentTier.priorityLevel <= 2}">
+                                                        <option value="2">Ưu tiên</option>
+                                                    </c:if>
+                                                    <c:if test="${currentTier.tierName eq 'Diamond' or currentTier.priorityLevel <= 1}">
+                                                        <option value="1">Cao cấp</option>
+                                                    </c:if>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </select>
-                                        <small class="text-muted">Tin đăng có mức độ ưu tiên cao sẽ được hiển thị nổi bật hơn</small>
                                     </div>
                                 </div>
 

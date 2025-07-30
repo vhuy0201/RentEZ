@@ -127,51 +127,6 @@
 
                     <!-- Second Row - Revenue Stats -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                        <!-- Doanh thu tháng -->
-                        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-emerald-100">Doanh thu tháng</p>
-                                    <p class="text-2xl font-bold">
-                                        <fmt:formatNumber value="${monthlyRevenue}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
-                                    </p>
-                                </div>
-                                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-calendar-alt text-2xl"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Doanh thu quý -->
-                        <div class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-teal-100">Doanh thu quý</p>
-                                    <p class="text-2xl font-bold">
-                                        <fmt:formatNumber value="${quarterlyRevenue}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
-                                    </p>
-                                </div>
-                                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-chart-bar text-2xl"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Doanh thu năm -->
-                        <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-6 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-indigo-100">Doanh thu năm</p>
-                                    <p class="text-2xl font-bold">
-                                        <fmt:formatNumber value="${yearlyRevenue}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
-                                    </p>
-                                </div>
-                                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
-                                    <i class="fas fa-chart-line text-2xl"></i>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Tổng doanh thu -->
                         <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-xl p-6 text-white">
                             <div class="flex items-center justify-between">
@@ -212,13 +167,6 @@
                         </div>
                     </div>
 
-                    <!-- Biểu đồ người thuê mới -->
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Số lượng người thuê mới theo tháng</h4>
-                        <div class="h-80">
-                            <canvas id="newRentersChart"></canvas>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Recent Activities and Support -->

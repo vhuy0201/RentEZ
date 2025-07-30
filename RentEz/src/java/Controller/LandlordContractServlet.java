@@ -203,7 +203,7 @@ public class LandlordContractServlet extends HttpServlet {
                 // Insert bill record
                 boolean billCreated = billDAO.insert(contractBill);
 
-                String notifMessage = "Hợp đồng thuê nhà của bạn đã được duyệt, bạn đã có thể bắt đầu sử dụng ngôi nhà";
+                String notifMessage = "Hợp đồng thuê nhà của bạn đã được duyệt!! Hãy thanh toán phí dịch vụ để bắt đầu sử dụng ngôi nhà";
 
                 Notification notification = new Notification();
                 notification.setUserId(booking.getRenterId());

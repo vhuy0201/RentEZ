@@ -355,9 +355,9 @@
                                                                     <i class="bi bi-building mr-1"></i>
                                                                     Xem bất động sản
                                                                 </a>
-                                                                
+
                                                                 <!-- Check contract expiration and show appropriate buttons -->
-                                                                <c:set var="now" value="<%= new java.util.Date() %>" />
+                                                                <c:set var="now" value="<%= new java.util.Date()%>" />
                                                                 <c:choose>
                                                                     <c:when test="${booking.endDate < now && (booking.status == 'Confirmed' || booking.status == 'Active')}">
                                                                         <!-- Contract has expired -->
@@ -366,7 +366,7 @@
                                                                             Hợp đồng đã hết hạn
                                                                         </span>
                                                                         <button onclick="openRenewModal('${booking.bookingId}', '${booking.property.title}', '${booking.monthlyRent}')"
-                                                                           class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">
+                                                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">
                                                                             <i class="bi bi-arrow-repeat mr-1"></i>
                                                                             Gia hạn hợp đồng
                                                                         </button>
@@ -378,7 +378,7 @@
                                                                             Hợp đồng đang hiệu lực
                                                                         </span>
                                                                         <button onclick="openCancelModal('${booking.bookingId}', '${booking.property.title}')"
-                                                                           class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
+                                                                                class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
                                                                             <i class="bi bi-x-circle mr-1"></i>
                                                                             Hủy hợp đồng
                                                                         </button>
@@ -389,11 +389,13 @@
                                                                             <i class="bi bi-clock mr-1"></i>
                                                                             Đang chờ xử lý
                                                                         </span>
-                                                                        <button onclick="openCancelModal('${booking.bookingId}', '${booking.property.title}')"
-                                                                           class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
-                                                                            <i class="bi bi-x-circle mr-1"></i>
-                                                                            Hủy đặt thuê
-                                                                        </button>
+                                                                        <c:if test="${sessionScope.user.role == 'Renter'}">
+                                                                            <button onclick="openCancelModal('${booking.bookingId}', '${booking.property.title}')"
+                                                                                    class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
+                                                                                <i class="bi bi-x-circle mr-1"></i>
+                                                                                Hủy đặt thuê
+                                                                            </button>
+                                                                        </c:if>
                                                                     </c:when>
                                                                     <c:when test="${booking.status == 'Cancelled'}">
                                                                         <!-- Cancelled contract -->
@@ -518,18 +520,19 @@
                                                                     <i class="bi bi-building mr-1"></i>
                                                                     Xem bất động sản
                                                                 </a>
-                                                                
+
                                                                 <!-- Pending contract buttons -->
                                                                 <span class="px-3 py-2 bg-yellow-100 text-yellow-800 text-sm rounded-lg border border-yellow-200">
                                                                     <i class="bi bi-clock mr-1"></i>
                                                                     Đang chờ xử lý
                                                                 </span>
-                                                                <button onclick="openCancelModal('${booking.bookingId}', '${booking.property.title}')"
-                                                                   class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
-                                                                    <i class="bi bi-x-circle mr-1"></i>
-                                                                    Hủy đặt thuê
-                                                                </button>
-
+                                                                <c:if test="${sessionScope.user.role == 'Renter'}">
+                                                                    <button onclick="openCancelModal('${booking.bookingId}', '${booking.property.title}')"
+                                                                            class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
+                                                                        <i class="bi bi-x-circle mr-1"></i>
+                                                                        Hủy đặt thuê
+                                                                    </button>
+                                                                </c:if>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -638,9 +641,7 @@
                                                                     <i class="bi bi-building mr-1"></i>
                                                                     Xem bất động sản
                                                                 </a>
-                                                                
-                                                                <!-- Check contract expiration and show appropriate buttons -->
-                                                                <c:set var="now" value="<%= new java.util.Date() %>" />
+                                                                <!-- Check contract expiration and show appropriate buttons -->                                                                <c:set var="now" value="<%= new java.util.Date()%>" />
                                                                 <c:choose>
                                                                     <c:when test="${booking.endDate < now}">
                                                                         <!-- Contract has expired -->
@@ -649,7 +650,7 @@
                                                                             Hợp đồng đã hết hạn
                                                                         </span>
                                                                         <button onclick="openRenewModal('${booking.bookingId}', '${booking.property.title}', '${booking.monthlyRent}')"
-                                                                           class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">
+                                                                                class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors">
                                                                             <i class="bi bi-arrow-repeat mr-1"></i>
                                                                             Gia hạn hợp đồng
                                                                         </button>
@@ -661,7 +662,7 @@
                                                                             Hợp đồng đang hiệu lực
                                                                         </span>
                                                                         <button onclick="openCancelModal('${booking.bookingId}', '${booking.property.title}')"
-                                                                           class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
+                                                                                class="px-4 py-2 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition-colors">
                                                                             <i class="bi bi-x-circle mr-1"></i>
                                                                             Hủy hợp đồng
                                                                         </button>
@@ -775,7 +776,7 @@
                                                                     <i class="bi bi-building mr-1"></i>
                                                                     Xem bất động sản
                                                                 </a>
-                                                                
+
                                                                 <!-- Completed contract status -->
                                                                 <span class="px-3 py-2 bg-blue-100 text-blue-800 text-sm rounded-lg border border-blue-200">
                                                                     <i class="bi bi-check-square mr-1"></i>
@@ -889,7 +890,7 @@
                                                                     <i class="bi bi-building mr-1"></i>
                                                                     Xem bất động sản
                                                                 </a>
-                                                                
+
                                                                 <!-- Cancelled contract status -->
                                                                 <span class="px-3 py-2 bg-gray-100 text-gray-800 text-sm rounded-lg border border-gray-200">
                                                                     <i class="bi bi-x-circle mr-1"></i>
@@ -912,116 +913,116 @@
 
         <!-- Modal Gia hạn hợp đồng -->
         <div id="renewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-          <div class="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4">
-            <div class="flex justify-between items-center border-b border-gray-200 px-6 py-4">
-              <h5 class="text-xl font-semibold text-gray-800 flex items-center">
-                <i class="bi bi-arrow-repeat mr-2 text-blue-600"></i> Gia hạn hợp đồng
-              </h5>
-              <button type="button" class="text-gray-500 hover:text-gray-700 text-2xl focus:outline-none" onclick="closeRenewModal()">&times;</button>
+            <div class="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4">
+                <div class="flex justify-between items-center border-b border-gray-200 px-6 py-4">
+                    <h5 class="text-xl font-semibold text-gray-800 flex items-center">
+                        <i class="bi bi-arrow-repeat mr-2 text-blue-600"></i> Gia hạn hợp đồng
+                    </h5>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 text-2xl focus:outline-none" onclick="closeRenewModal()">&times;</button>
+                </div>
+
+                <!-- Property info section -->
+                <div class="px-6 py-4 bg-blue-50 border-b">
+                    <div class="flex items-center">
+                        <i class="bi bi-info-circle text-blue-600 mr-2"></i>
+                        <div>
+                            <h6 class="font-medium text-blue-800">Thông tin bất động sản</h6>
+                            <p class="text-blue-700" id="renewPropertyTitle">Tên bất động sản</p>
+                            <p class="text-blue-700 text-sm">Giá thuê: <span id="renewMonthlyRent" class="font-semibold">0 ₫</span>/tháng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="renewForm" method="POST">
+                    <input type="hidden" name="action" value="renew" />
+                    <input type="hidden" name="bookingId" id="renewBookingId" />
+
+                    <div class="px-6 py-4 space-y-4">
+                        <div>
+                            <label for="newEndDate" class="block font-semibold mb-2 text-gray-700">
+                                Ngày kết thúc mới <span class="text-red-500">*</span>
+                            </label>
+                            <input type="date" id="newEndDate" name="newEndDate" required 
+                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                            <p class="text-sm text-gray-500 mt-1">Chọn ngày kết thúc mới cho hợp đồng</p>
+                        </div>
+
+                        <div>
+                            <label for="renewalTerms" class="block font-semibold mb-2 text-gray-700">
+                                Điều khoản gia hạn <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="renewalTerms" name="renewalTerms" rows="4" required 
+                                      placeholder="Nhập điều khoản và ghi chú cho việc gia hạn hợp đồng..."
+                                      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-lg">
+                        <button type="button" onclick="closeRenewModal()"
+                                class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
+                            Hủy
+                        </button>
+                        <button type="submit"
+                                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                            <i class="bi bi-arrow-repeat mr-2"></i>
+                            Xác nhận gia hạn
+                        </button>
+                    </div>
+                </form>
             </div>
-            
-            <!-- Property info section -->
-            <div class="px-6 py-4 bg-blue-50 border-b">
-              <div class="flex items-center">
-                <i class="bi bi-info-circle text-blue-600 mr-2"></i>
-                <div>
-                  <h6 class="font-medium text-blue-800">Thông tin bất động sản</h6>
-                  <p class="text-blue-700" id="renewPropertyTitle">Tên bất động sản</p>
-                  <p class="text-blue-700 text-sm">Giá thuê: <span id="renewMonthlyRent" class="font-semibold">0 ₫</span>/tháng</p>
-                </div>
-              </div>
-            </div>
-            
-            <form id="renewForm" method="POST">
-              <input type="hidden" name="action" value="renew" />
-              <input type="hidden" name="bookingId" id="renewBookingId" />
-              
-              <div class="px-6 py-4 space-y-4">
-                <div>
-                  <label for="newEndDate" class="block font-semibold mb-2 text-gray-700">
-                    Ngày kết thúc mới <span class="text-red-500">*</span>
-                  </label>
-                  <input type="date" id="newEndDate" name="newEndDate" required 
-                         class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                  <p class="text-sm text-gray-500 mt-1">Chọn ngày kết thúc mới cho hợp đồng</p>
-                </div>
-                
-                <div>
-                  <label for="renewalTerms" class="block font-semibold mb-2 text-gray-700">
-                    Điều khoản gia hạn <span class="text-red-500">*</span>
-                  </label>
-                  <textarea id="renewalTerms" name="renewalTerms" rows="4" required 
-                            placeholder="Nhập điều khoản và ghi chú cho việc gia hạn hợp đồng..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                </div>
-              </div>
-              
-              <div class="flex justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-lg">
-                <button type="button" onclick="closeRenewModal()"
-                        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
-                  Hủy
-                </button>
-                <button type="submit"
-                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
-                  <i class="bi bi-arrow-repeat mr-2"></i>
-                  Xác nhận gia hạn
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
 
         <!-- Modal Hủy hợp đồng -->
         <div id="cancelModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-          <div class="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4">
-            <div class="flex justify-between items-center border-b border-gray-200 px-6 py-4">
-              <h5 class="text-xl font-semibold text-gray-800 flex items-center">
-                <i class="bi bi-exclamation-triangle mr-2 text-red-600"></i> Hủy hợp đồng
-              </h5>
-              <button type="button" class="text-gray-500 hover:text-gray-700 text-2xl focus:outline-none" onclick="closeCancelModal()">&times;</button>
-            </div>
-            
-            <!-- Warning section -->
-            <div class="px-6 py-4 bg-red-50 border-b">
-              <div class="flex items-center">
-                <i class="bi bi-exclamation-triangle text-red-600 mr-2"></i>
-                <div>
-                  <h6 class="font-medium text-red-800">Xác nhận hủy hợp đồng</h6>
-                  <p class="text-red-700">Bất động sản: <span id="cancelPropertyTitle" class="font-semibold">Tên bất động sản</span></p>
-                  <p class="text-red-700 text-sm mt-1">⚠️ Hành động này không thể hoàn tác</p>
+            <div class="bg-white rounded-lg shadow-lg max-w-lg w-full mx-4">
+                <div class="flex justify-between items-center border-b border-gray-200 px-6 py-4">
+                    <h5 class="text-xl font-semibold text-gray-800 flex items-center">
+                        <i class="bi bi-exclamation-triangle mr-2 text-red-600"></i> Hủy hợp đồng
+                    </h5>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 text-2xl focus:outline-none" onclick="closeCancelModal()">&times;</button>
                 </div>
-              </div>
-            </div>
-            
-            <form id="cancelForm" method="POST">
-              <input type="hidden" name="action" value="cancel" />
-              <input type="hidden" name="bookingId" id="cancelBookingId" />
-              
-              <div class="px-6 py-4 space-y-4">
-                <div>
-                  <label for="cancellationReason" class="block font-semibold mb-2 text-gray-700">
-                    Lý do hủy hợp đồng <span class="text-red-500">*</span>
-                  </label>
-                  <textarea id="cancellationReason" name="cancellationReason" rows="4" required 
-                            placeholder="Vui lòng nhập lý do hủy hợp đồng..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
-                  <p class="text-sm text-gray-500 mt-1">Lý do hủy sẽ được ghi lại trong hệ thống và thông báo cho bên kia</p>
+
+                <!-- Warning section -->
+                <div class="px-6 py-4 bg-red-50 border-b">
+                    <div class="flex items-center">
+                        <i class="bi bi-exclamation-triangle text-red-600 mr-2"></i>
+                        <div>
+                            <h6 class="font-medium text-red-800">Xác nhận hủy hợp đồng</h6>
+                            <p class="text-red-700">Bất động sản: <span id="cancelPropertyTitle" class="font-semibold">Tên bất động sản</span></p>
+                            <p class="text-red-700 text-sm mt-1">⚠️ Hành động này không thể hoàn tác</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              
-              <div class="flex justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-lg">
-                <button type="button" onclick="closeCancelModal()"
-                        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
-                  Không hủy
-                </button>
-                <button type="submit"
-                        class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors">
-                  <i class="bi bi-x-circle mr-2"></i>
-                  Xác nhận hủy
-                </button>
-              </div>
-            </form>
-          </div>
+
+                <form id="cancelForm" method="POST">
+                    <input type="hidden" name="action" value="cancel" />
+                    <input type="hidden" name="bookingId" id="cancelBookingId" />
+
+                    <div class="px-6 py-4 space-y-4">
+                        <div>
+                            <label for="cancellationReason" class="block font-semibold mb-2 text-gray-700">
+                                Lý do hủy hợp đồng <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="cancellationReason" name="cancellationReason" rows="4" required 
+                                      placeholder="Vui lòng nhập lý do hủy hợp đồng..."
+                                      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"></textarea>
+                            <p class="text-sm text-gray-500 mt-1">Lý do hủy sẽ được ghi lại trong hệ thống và thông báo cho bên kia</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 px-6 py-4 bg-gray-50 rounded-b-lg">
+                        <button type="button" onclick="closeCancelModal()"
+                                class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors">
+                            Không hủy
+                        </button>
+                        <button type="submit"
+                                class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors">
+                            <i class="bi bi-x-circle mr-2"></i>
+                            Xác nhận hủy
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <script>
@@ -1041,7 +1042,7 @@
                 // Add active class to selected button
                 document.getElementById('tab-' + tabName).classList.add('active');
             }
-            
+
             // Initialize page
             document.addEventListener('DOMContentLoaded', function () {
                 // Show 'all' tab by default
@@ -1073,15 +1074,15 @@
                     currency: 'VND'
                 }).format(monthlyRent);
                 document.getElementById('renewForm').action = '${pageContext.request.contextPath}/contract-management';
-                
+
                 // Set minimum date to tomorrow
                 const tomorrow = new Date();
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 document.getElementById('newEndDate').min = tomorrow.toISOString().split('T')[0];
-                
+
                 document.getElementById('renewModal').classList.remove('hidden');
             }
-            
+
             function closeRenewModal() {
                 document.getElementById('renewModal').classList.add('hidden');
                 document.getElementById('renewForm').reset();
@@ -1094,17 +1095,17 @@
                 document.getElementById('cancelForm').action = '${pageContext.request.contextPath}/contract-management';
                 document.getElementById('cancelModal').classList.remove('hidden');
             }
-            
+
             function closeCancelModal() {
                 document.getElementById('cancelModal').classList.add('hidden');
                 document.getElementById('cancelForm').reset();
             }
 
             // Close modals when clicking outside
-            window.onclick = function(event) {
+            window.onclick = function (event) {
                 const renewModal = document.getElementById('renewModal');
                 const cancelModal = document.getElementById('cancelModal');
-                
+
                 if (event.target === renewModal) {
                     closeRenewModal();
                 }

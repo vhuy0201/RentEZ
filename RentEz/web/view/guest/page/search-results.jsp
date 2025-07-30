@@ -1523,13 +1523,13 @@
                 @supports not selector(:has(*)) {
                     :where(.join *) {
                         border-radius: inherit;
-/*                    }
+                    }
                 }
                 @supports selector(:has(*)) {
                     :where(.join *:has(.join-item)) {
                         border-radius: inherit;
                     }
-                }*/
+                }
                 .link {
                     cursor: pointer;
                     text-decoration-line: underline;

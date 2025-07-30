@@ -93,7 +93,7 @@
                                         <a href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
                                             <c:choose>
                                                 <c:when test="${not empty property.avatar}">
-                                                    <img src="${pageContext.request.contextPath}/${property.avatar}" 
+                                                    <img src="${property.avatar}" 
                                                          alt="${property.title}" 
                                                          class="w-full h-48 object-cover rounded-t-lg" />
                                                 </c:when>

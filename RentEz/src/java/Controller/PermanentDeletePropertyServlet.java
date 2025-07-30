@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.PropertyDAO;
+import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import java.io.IOException;
  */
 @WebServlet("/permanentDeleteProperty")
 public class PermanentDeletePropertyServlet extends HttpServlet {
+
     private PropertyDAO propertyDAO;
 
     @Override
@@ -25,21 +27,19 @@ public class PermanentDeletePropertyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = request.getSession();
-            String userIdStr = (String) session.getAttribute("userId");
-            
-            if (userIdStr == null) {
+            HttpSession session = request.getSession(false);
+            User user = (User) session.getAttribute("user");
+
+            if (user == null) {
                 session.setAttribute("errorMessage", "Bạn cần đăng nhập để thực hiện chức năng này.");
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
-
-            int userId = Integer.parseInt(userIdStr);
             String propertyIdStr = request.getParameter("propertyId");
 
             if (propertyIdStr == null || propertyIdStr.trim().isEmpty()) {
                 session.setAttribute("errorMessage", "ID bất động sản không hợp lệ.");
-                response.sendRedirect(request.getContextPath() + "/viewProperty");
+                response.sendRedirect(request.getContextPath() + "/viewProperties");
                 return;
             }
 
@@ -50,7 +50,7 @@ public class PermanentDeletePropertyServlet extends HttpServlet {
             boolean isHidden = !propertyDAO.isPropertyPublic(propertyId);
             if (!isHidden) {
                 session.setAttribute("errorMessage", "Chỉ có thể xóa vĩnh viễn những tin đăng đã bị ẩn. Vui lòng ẩn tin đăng trước khi xóa vĩnh viễn.");
-                response.sendRedirect(request.getContextPath() + "/viewProperty");
+                response.sendRedirect(request.getContextPath() + "/viewProperties");
                 return;
             }
 
@@ -71,7 +71,7 @@ public class PermanentDeletePropertyServlet extends HttpServlet {
             session.setAttribute("errorMessage", "Có lỗi xảy ra: " + e.getMessage());
         }
 
-        response.sendRedirect(request.getContextPath() + "/viewProperty");
+        response.sendRedirect(request.getContextPath() + "/viewProperties");
     }
 
     @Override

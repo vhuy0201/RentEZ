@@ -53,7 +53,7 @@
         <nav class="header-inner flx-between">
             <div class="logo">
                 <a class="link" href="${pageContext.request.contextPath}/">
-                    <img src="${pageContext.request.contextPath}/view/guest/asset/img/logo7.png" alt="Logo" />
+                    <img src="${pageContext.request.contextPath}/view/guest/asset/img/logo-DHG6Mbuc.png" alt="Logo" />
                 </a>
             </div>
             <div class="header-menu d-lg-block d-none">

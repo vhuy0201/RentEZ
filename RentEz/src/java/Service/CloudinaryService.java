@@ -39,23 +39,23 @@ public class CloudinaryService {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("cloudinary.properties")) {
             if (input != null) {
                 properties.load(input);
-                cloudName = properties.getProperty("cloudinary.cloud_name", "dkhphbo1k");
-                apiKey = properties.getProperty("cloudinary.api_key", "882391754787486");
-                apiSecret = properties.getProperty("cloudinary.api_secret", "88L_ZHsmfz2ZuBXTZX0U8GITgfc");
+                cloudName = properties.getProperty("cloudinary.cloud_name", "dvin2frvx");
+                apiKey = properties.getProperty("cloudinary.api_key", "796333426989413");
+                apiSecret = properties.getProperty("cloudinary.api_secret", "jQLcIPBGfQfjLIjH6Bw2dLlMnUo");
                 enabled = Boolean.parseBoolean(properties.getProperty("cloudinary.enabled", "true"));
             } else {
                 // Default values if properties file not found
-                cloudName = "dkhphbo1k";
-                apiKey = "882391754787486";
-                apiSecret = "88L_ZHsmfz2ZuBXTZX0U8GITgfc";
+                cloudName = "dvin2frvx";
+                apiKey = "796333426989413";
+                apiSecret = "jQLcIPBGfQfjLIjH6Bw2dLlMnUo";
                 enabled = true;
             }
         } catch (IOException e) {
             System.err.println("Error loading Cloudinary configuration: " + e.getMessage());
             // Use default values
-            cloudName = "dkhphbo1k";
-            apiKey = "882391754787486";
-            apiSecret = "88L_ZHsmfz2ZuBXTZX0U8GITgfc";
+            cloudName = "dvin2frvx";
+            apiKey = "796333426989413";
+            apiSecret = "jQLcIPBGfQfjLIjH6Bw2dLlMnUo";
             enabled = true;
         }
         boolean isConfigured = isConfigured();
@@ -210,8 +210,8 @@ public class CloudinaryService {
      */
     public boolean isConfigured() {
         return enabled 
-            && cloudName.equals("dkhphbo1k") 
-            && apiKey.equals("882391754787486") 
-            && apiSecret.equals("88L_ZHsmfz2ZuBXTZX0U8GITgfc");
+            && cloudName.equals("dvin2frvx") 
+            && apiKey.equals("796333426989413") 
+            && apiSecret.equals("jQLcIPBGfQfjLIjH6Bw2dLlMnUo");
     }
 }

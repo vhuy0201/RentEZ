@@ -245,7 +245,7 @@
                                     
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex items-center gap-2">
-                                            <a href="${pageContext.request.contextPath}/admin/posts?action=view&id=${property.propertyId}" 
+                                            <a href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}" 
                                                class="text-blue-600 hover:text-blue-900 transition-colors">
                                                 <i class="fas fa-eye"></i>
                                             </a>

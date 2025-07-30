@@ -968,10 +968,16 @@
                                                                     Đã thuê
                                                                 </span>
                                                             </c:when>
-                                                            <c:when test="${property.publicStatus eq false}">
+                                                            <c:when test="${property.publicStatus eq false && property.availabilityStatus ne 'Deleted'}">
                                                                 <span class="property-status status-pending">
                                                                     <i class="fas fa-clock"></i>
                                                                     Đang chờ duyệt
+                                                                </span>
+                                                            </c:when>
+                                                            <c:when test="${property.availabilityStatus eq 'Deleted'}">
+                                                                <span class="property-status status-pending">
+                                                                    <i class="fas fa-clock"></i>
+                                                                    Đã xoá
                                                                 </span>
                                                             </c:when>
                                                             <c:otherwise>
@@ -1002,12 +1008,12 @@
                                                                         <i class="fas fa-eye-slash"></i>
                                                                     </a>
                                                                 </c:when>
-                                                                <c:otherwise>
+                                                                <c:when test="${property.publicStatus eq false && property.availabilityStatus ne 'Deleted'}">
                                                                     
                                                                     <a href="#" onclick="confirmPermanentDelete(${property.propertyId})" class="btn-action btn-permanent-delete" title="Xóa vĩnh viễn">
                                                                         <i class="fas fa-trash-alt"></i>
                                                                     </a>
-                                                                </c:otherwise>
+                                                                </c:when>
                                                             </c:choose>
                                                         </div>
                                                     </td>

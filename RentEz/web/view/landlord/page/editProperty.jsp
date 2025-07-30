@@ -573,7 +573,7 @@
                     <div class="d-flex flex-column h-100">
                         <div class="text-center user-info">
                             <div class="account-avatar mx-auto mb-3">T</div>
-                            <div class="fw-bold fs-5 mb-2">${sessionScope.user.name}</div>
+                            <div class="fw-bold fs-5 mb-2">Dũng Trần</div>
                             <div class="user-points">
                                 <i class="fas fa-star me-2"></i>0 điểm
                             </div>
@@ -639,7 +639,7 @@
                             <div class="dashboard-section-title">Chỉnh sửa tin đăng</div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <span class="text-muted">Xin chào, <strong class="text-dark">${sessionScope.user.name}</strong></span>
+                            <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
                             <a href="#" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>
@@ -820,54 +820,8 @@
                                             <input type="number" id="numberOfBathrooms" name="numberOfBathrooms" min="0" class="form-control" value="${property.numberOfBathrooms}" required>
                                         </div>
 
-                                        <div class="col-md-3 mb-3">
-                                            <label for="floors" class="form-label">Số tầng</label>
-                                            <input type="number" id="floors" name="floors" min="1" class="form-control">
-                                        </div>
-
-                                        <div class="col-md-3 mb-3">
-                                            <label for="yearBuilt" class="form-label">Năm xây dựng</label>
-                                            <input type="number" id="yearBuilt" name="yearBuilt" min="1900" max="2030" class="form-control">
-                                        </div>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <label class="form-label">Tiện ích</label>
-                                        <div class="amenities-container">
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity1" name="amenities" value="parking" class="amenity-checkbox">
-                                                <label for="amenity1">Bãi đỗ xe</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity2" name="amenities" value="pool" class="amenity-checkbox">
-                                                <label for="amenity2">Hồ bơi</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity3" name="amenities" value="gym" class="amenity-checkbox">
-                                                <label for="amenity3">Phòng tập gym</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity4" name="amenities" value="security" class="amenity-checkbox">
-                                                <label for="amenity4">An ninh 24/7</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity5" name="amenities" value="elevator" class="amenity-checkbox">
-                                                <label for="amenity5">Thang máy</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity6" name="amenities" value="aircon" class="amenity-checkbox">
-                                                <label for="amenity6">Điều hòa</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity7" name="amenities" value="furnished" class="amenity-checkbox">
-                                                <label for="amenity7">Nội thất đầy đủ</label>
-                                            </div>
-                                            <div class="amenity-item">
-                                                <input type="checkbox" id="amenity8" name="amenities" value="balcony" class="amenity-checkbox">
-                                                <label for="amenity8">Ban công</label>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <div class="mb-3">
                                         <label for="priorityLevel" class="form-label">Mức độ ưu tiên</label>

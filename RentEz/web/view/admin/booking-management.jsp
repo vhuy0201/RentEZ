@@ -117,17 +117,6 @@
                             <i class="fas fa-times-circle text-3xl text-red-200"></i>
                         </div>
                     </div>
-                    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-green-100">Tổng doanh thu</p>
-                                <p class="text-2xl font-bold">
-                                    <fmt:formatNumber value="${totalBookingValue}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
-                                </p>
-                            </div>
-                            <i class="fas fa-chart-line text-3xl text-green-200"></i>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Bookings Table -->

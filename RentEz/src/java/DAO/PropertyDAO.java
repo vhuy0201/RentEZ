@@ -709,9 +709,10 @@ public class PropertyDAO {
             pstmt2.executeUpdate();
             
             // Delete the property itself
-            String deletePropertySQL = "DELETE FROM Property WHERE PropertyID = ?";
+            String deletePropertySQL = "UPDATE Property SET AvailabilityStatus = ? WHERE PropertyID = ?";
             PreparedStatement pstmt3 = conn.prepareStatement(deletePropertySQL);
-            pstmt3.setInt(1, propertyId);
+            pstmt3.setString(1, "Deleted");
+            pstmt3.setInt(2, propertyId);
             int rows = pstmt3.executeUpdate();
             
             // Commit transaction

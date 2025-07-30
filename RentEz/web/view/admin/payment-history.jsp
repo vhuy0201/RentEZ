@@ -76,7 +76,7 @@
                                 <option value="Completed">Thành công</option>
                                 <option value="Pending">Đang xử lý</option>
                                 <option value="Failed">Thất bại</option>
-                                <option value="Paid">Đã hoàn tiền</option>
+                                <option value="Paid">Đã thanh toán</option>
                             </select>
                         </div>
                         

@@ -8,11 +8,15 @@ import DAO.WalletDAO;
 import DAO.PaymentDAO;
 import DAO.PropertyImageDAO;
 import DAO.WalletTransferDao;
+import DAO.UserTierDAO;
+import DAO.TierDAO;
 import Model.Booking;
 import Model.Location;
 import Model.Property;
 import Model.PropertyType;
 import Model.User;
+import Model.UserTier;
+import Model.Tier;
 import Model.Wallet;
 import Model.Payment;
 import Model.WalletTransfer;
@@ -43,9 +47,15 @@ public class AddPropertyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
+        User currentUser = (User) session.getAttribute("user");
 
         // Load property types from database
         loadPropertyTypes(request);
+
+        // Load current user's tier information
+        if (currentUser != null) {
+            loadUserTierInfo(request, currentUser);
+        }
 
         request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
     }
@@ -55,17 +65,43 @@ public class AddPropertyServlet extends HttpServlet {
      */
     private void loadPropertyTypes(HttpServletRequest request) {
         PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
-        List<PropertyType> propertyTypes = propertyTypeDAO.getAllActive();
+        List<PropertyType> propertyTypes = propertyTypeDAO.getAllActive(); // Chỉ lấy các loại đang hoạt động
         request.setAttribute("propertyTypes", propertyTypes);
+    }
+
+    /**
+     * Helper method to load current user's tier information
+     */
+    private void loadUserTierInfo(HttpServletRequest request, User currentUser) {
+        try {
+            UserTierDAO userTierDAO = new UserTierDAO();
+            TierDAO tierDAO = new TierDAO();
+
+            // Get current user's tier
+            UserTier currentUserTier = userTierDAO.getCurrentUserTier(currentUser.getUserId());
+            Tier currentTier = null;
+
+            if (currentUserTier != null) {
+                currentTier = tierDAO.getById(currentUserTier.getTierId());
+            }
+
+            // Set attributes for JSP
+            request.setAttribute("currentUserTier", currentUserTier);
+            request.setAttribute("currentTier", currentTier);
+
+        } catch (Exception e) {
+            System.err.println("Error loading user tier info: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Get session to retrieve LandlordID
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         try {
-            // Get session to retrieve LandlordID
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
 
             // Get parameters from the form
             String title = request.getParameter("title");
@@ -92,6 +128,7 @@ public class AddPropertyServlet extends HttpServlet {
             if (avatarPath == null) {
                 request.setAttribute("error", "Failed to upload property avatar image. Please try again.");
                 loadPropertyTypes(request);
+                loadUserTierInfo(request, user);
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                 return;
             }
@@ -108,6 +145,7 @@ public class AddPropertyServlet extends HttpServlet {
             if (locationId == -1) {
                 request.setAttribute("error", "Failed to save location. Please try again.");
                 loadPropertyTypes(request); // Load property types for the form
+                loadUserTierInfo(request, user);
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                 return;
             }
@@ -136,6 +174,7 @@ public class AddPropertyServlet extends HttpServlet {
             if (propertyId == -1) {
                 request.setAttribute("error", "Failed to add property. Please try again.");
                 loadPropertyTypes(request); // Load property types for the form
+                loadUserTierInfo(request, user);
                 request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                 return;
             }
@@ -190,6 +229,7 @@ public class AddPropertyServlet extends HttpServlet {
                 if (!bookingSuccess) {
                     request.setAttribute("error", "Property added, but failed to create associated booking. Please try again.");
                     loadPropertyTypes(request); // Load property types for the form
+                    loadUserTierInfo(request, user);
                     request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
                     return;
                 }
@@ -198,7 +238,11 @@ public class AddPropertyServlet extends HttpServlet {
                 try {
                     boolean feeProcessed = processSystemFee(booking.getTotalPrice(), propertyId, user);
                     if (!feeProcessed) {
-                        System.out.println("Warning: Failed to process system fee for property " + propertyId);
+                        request.setAttribute("error", "You do not have enough money to pay 10% service");
+                        loadPropertyTypes(request); // Load property types for the form
+                        loadUserTierInfo(request, user);
+                        request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
+                        return;
                     }
                 } catch (Exception e) {
                     System.out.println("Warning: Exception during system fee processing: " + e.getMessage());
@@ -209,10 +253,12 @@ public class AddPropertyServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid input format. Please check your inputs.");
             loadPropertyTypes(request); // Load property types for the form
+            loadUserTierInfo(request, user);
             request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("error", "An unexpected error occurred. Please try again.");
             loadPropertyTypes(request); // Load property types for the form
+            loadUserTierInfo(request, user);
             request.getRequestDispatcher("/view/landlord/page/addProperty.jsp").forward(request, response);
         }
     }
@@ -289,6 +335,7 @@ public class AddPropertyServlet extends HttpServlet {
      * price and transfers to system account (userId 3)
      */
     private boolean processSystemFee(double totalPrice, int propertyId, User landlord) {
+
         try {
             double systemFeeAmount = totalPrice * 0.10; // 10% phí hệ thống
             int systemUserId = 3; // ID của hệ thống
@@ -296,7 +343,7 @@ public class AddPropertyServlet extends HttpServlet {
             // Lấy wallet của hệ thống
             WalletDAO walletDAO = new WalletDAO();
             Wallet systemWallet = walletDAO.getWalletByUserId(systemUserId);
-
+            Wallet landlordWallet = walletDAO.getWalletByUserId(landlord.getUserId());
             // Tạo wallet cho hệ thống nếu chưa có
             if (systemWallet == null) {
                 systemWallet = new Wallet();
@@ -306,8 +353,14 @@ public class AddPropertyServlet extends HttpServlet {
                 walletDAO.create(systemWallet);
             } else {
                 // Cập nhật số dư hệ thống
-                double newBalance = systemWallet.getBalance() + systemFeeAmount;
-                walletDAO.updateBalance(systemUserId, newBalance);
+                double newBalanceLandlord = landlordWallet.getBalance() - systemFeeAmount;
+                if (newBalanceLandlord < 0) {
+                    return false;
+                } else {
+                    walletDAO.updateBalance(systemUserId, newBalanceLandlord);
+                    double newBalanceSystem = systemWallet.getBalance() + systemFeeAmount;
+                    walletDAO.updateBalance(systemUserId, newBalanceSystem);
+                }
             }
 
             // Tạo bản ghi WalletTransfer

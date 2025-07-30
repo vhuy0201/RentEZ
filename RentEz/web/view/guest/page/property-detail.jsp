@@ -592,6 +592,9 @@
                                                             <div class="col-md-6">
                                                                 <label class="form-label fw-bold">Ngày bắt đầu thuê:</label>
                                                                 <input type="date" class="form-control form-control-lg" id="startDate" name="startDate" required>
+                                                                <div class="form-text text-muted">
+                                                                    <i class="fas fa-info-circle me-1"></i>Không thể chọn ngày trong quá khứ
+                                                                </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label class="form-label fw-bold">Số tháng thuê:</label>
@@ -699,7 +702,7 @@
                                                                 <canvas id="signatureCanvas" width="500" height="150" 
                                                                         style="border: 2px dashed #ddd; cursor: crosshair; max-width: 100%; height: auto;"></canvas>
                                                                 <div class="mt-2">
-                                                                    <button type="button" class="btn btn-outline-secondary btn-sm me-2" onclick="clearSignature()">
+                                                                    <button type="button" id="clearSignatureBtn" class="btn btn-outline-secondary btn-sm me-2" onclick="clearSignature()">
                                                                         <i class="fas fa-eraser me-1"></i>Xóa chữ ký
                                                                     </button>
                                                                     <small class="text-muted">Sử dụng chuột hoặc ngón tay để ký tên</small>
@@ -796,6 +799,17 @@
 
             .signature-container.has-signature::after {
                 display: none;
+            }
+
+            /* Date input validation styles */
+            .form-control[type="date"]:invalid {
+                border-color: #dc3545;
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+            }
+
+            .form-control[type="date"]:focus {
+                border-color: #fd7e14;
+                box-shadow: 0 0 0 0.2rem rgba(253, 126, 20, 0.25);
             }
 
             /* Responsive canvas */
@@ -927,10 +941,20 @@
 
                                                                                             startDateInput.min = todayStr;
 
-                                                                                            // Add event listeners for date and month changes
-                                                                                            startDateInput.addEventListener('change', calculateEndDate);
-
-                                                                                            const monthsSelect = document.getElementById('rentalMonths');
+                                                                            // Add event listeners for date and month changes
+                                                                            startDateInput.addEventListener('change', function() {
+                                                                                const selectedDate = new Date(this.value);
+                                                                                const today = new Date();
+                                                                                today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
+                                                                                
+                                                                                if (selectedDate < today) {
+                                                                                    alert('Không thể chọn ngày trong quá khứ. Vui lòng chọn ngày từ hôm nay trở đi.');
+                                                                                    this.value = '';
+                                                                                    return;
+                                                                                }
+                                                                                
+                                                                                calculateEndDate();
+                                                                            });                                                                                            const monthsSelect = document.getElementById('rentalMonths');
                                                                                             if (monthsSelect) {
                                                                                                 monthsSelect.addEventListener('change', calculateEndDate);
                                                                                             }
@@ -941,6 +965,17 @@
                                                                                             rentalBookingModal.addEventListener('shown.bs.modal', function () {
                                                                                                 setCurrentDate();
                                                                                                 calculateTotalPrice();
+
+                                                                                                // Set minimum date for start date input
+                                                                                                const startDateInput = document.getElementById('startDate');
+                                                                                                if (startDateInput) {
+                                                                                                    const today = new Date();
+                                                                                                    const yyyy = today.getFullYear();
+                                                                                                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                                                                                                    const dd = String(today.getDate()).padStart(2, '0');
+                                                                                                    const todayStr = `${yyyy}-${mm}-${dd}`;
+                                                                                                    startDateInput.min = todayStr;
+                                                                                                }
 
                                                                                                 // Format display amounts
                                                                                                 const monthlyRent = parseFloat(monthlyRentInput.value) || 0;
@@ -997,6 +1032,18 @@
                                                                                             signatureCanvas.addEventListener('touchstart', handleTouch);
                                                                                             signatureCanvas.addEventListener('touchmove', handleTouch);
                                                                                             signatureCanvas.addEventListener('touchend', stopDrawing);
+                                                                                            
+                                                                                            // Also attach clear signature event listener as backup
+                                                                                            const clearBtn = document.getElementById('clearSignatureBtn');
+                                                                                            if (clearBtn) {
+                                                                                                clearBtn.addEventListener('click', function(e) {
+                                                                                                    e.preventDefault();
+                                                                                                    e.stopPropagation();
+                                                                                                    window.clearSignature();
+                                                                                                });
+                                                                                            }
+                                                                                            
+                                                                                            console.log('Signature canvas initialized');
                                                                                         }
 
                                                                                         function startDrawing(e) {
@@ -1036,11 +1083,18 @@
 
                                                                                                 // Save signature data
                                                                                                 const signatureData = signatureCanvas.toDataURL();
-                                                                                                document.getElementById('signatureData').value = signatureData;
+                                                                                                const signatureDataInput = document.getElementById('signatureData');
+                                                                                                if (signatureDataInput) {
+                                                                                                    signatureDataInput.value = signatureData;
+                                                                                                }
 
                                                                                                 // Add visual feedback
                                                                                                 const container = document.querySelector('.signature-container');
-                                                                                                container.classList.add('has-signature');
+                                                                                                if (container) {
+                                                                                                    container.classList.add('has-signature');
+                                                                                                }
+                                                                                                
+                                                                                                console.log('Signature saved');
                                                                                             }
                                                                                         }
 
@@ -1055,17 +1109,40 @@
                                                                                             signatureCanvas.dispatchEvent(mouseEvent);
                                                                                         }
 
-                                                                                        function clearSignature() {
-                                                                                            if (signatureCtx) {
-                                                                                                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
-                                                                                                document.getElementById('signatureData').value = '';
+                                                                                        // Make clearSignature available globally
+                                                                                        window.clearSignature = function() {
+                                                                                            console.log('clearSignature called');
+                                                                                            
+                                                                                            // Get canvas and context fresh each time
+                                                                                            const canvas = document.getElementById('signatureCanvas');
+                                                                                            const signatureDataInput = document.getElementById('signatureData');
+                                                                                            
+                                                                                            if (canvas) {
+                                                                                                const ctx = canvas.getContext('2d');
+                                                                                                if (ctx) {
+                                                                                                    // Clear the canvas
+                                                                                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                                                                                }
+                                                                                                
+                                                                                                // Clear the signature data
+                                                                                                if (signatureDataInput) {
+                                                                                                    signatureDataInput.value = '';
+                                                                                                }
 
                                                                                                 // Remove visual feedback
                                                                                                 const container = document.querySelector('.signature-container');
-                                                                                                container.classList.remove('has-signature');
-                                                                                                signatureCanvas.classList.remove('active');
+                                                                                                if (container) {
+                                                                                                    container.classList.remove('has-signature');
+                                                                                                }
+                                                                                                canvas.classList.remove('active');
+                                                                                                
+                                                                                                console.log('Signature cleared successfully');
+                                                                                            } else {
+                                                                                                console.error('Signature canvas not found');
                                                                                             }
-                                                                                        }                                                                // Also calculate on page load
+                                                                                        };
+
+                                                                                        // Also calculate on page load
                                                                                         calculateTotalPrice();
 
                                                                                         // Rental form validation and submission
@@ -1078,8 +1155,22 @@
                                                                                             rentalForm.addEventListener('submit', function (event) {
                                                                                                 let isValid = true;
 
-                                                                                                // Validate required fields
+                                                                                                // Validate start date is not in the past
                                                                                                 const startDate = startDateInput.value;
+                                                                                                if (startDate) {
+                                                                                                    const selectedDate = new Date(startDate);
+                                                                                                    const today = new Date();
+                                                                                                    today.setHours(0, 0, 0, 0);
+                                                                                                    
+                                                                                                    if (selectedDate < today) {
+                                                                                                        event.preventDefault();
+                                                                                                        alert('Ngày bắt đầu thuê không thể là ngày trong quá khứ. Vui lòng chọn ngày từ hôm nay trở đi.');
+                                                                                                        isValid = false;
+                                                                                                        return;
+                                                                                                    }
+                                                                                                }
+
+                                                                                                // Validate required fields
                                                                                                 const monthsSelect = document.getElementById('rentalMonths');
                                                                                                 const months = monthsSelect ? monthsSelect.value : '';
                                                                                                 const depositAmount = depositAmountInput.value;
@@ -1088,7 +1179,7 @@
 
                                                                                                 if (!startDate || !months || !depositAmount || depositAmount <= 0) {
                                                                                                     event.preventDefault();
-                                                                                                    showToast('Vui lòng điền đầy đủ thông tin bắt buộc');
+                                                                                                    showToast('Vui lòng điền đầy đủ thông tin bắt buộc (ngày bắt đầu thuê, số tháng thuê, tiền đặt cọc)');
                                                                                                     isValid = false;
                                                                                                 }
 
@@ -1161,14 +1252,14 @@
                                                                                             const iconClass = isSuccess ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
 
                                                                                             const toastContent = `
-                        <div class="toast show ${toastClass}" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast show ` + toastClass +`" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header">
-                                <i class="${iconClass} me-2"></i>
+                                <i class="` + iconClass +` me-2"></i>
                                 <strong class="me-auto">Thông báo</strong>
                                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>
                             <div class="toast-body">
-            ${message}
+            ` + message +`
                             </div>
                         </div>
                     `;
