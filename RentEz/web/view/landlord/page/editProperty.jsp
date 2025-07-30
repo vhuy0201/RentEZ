@@ -573,7 +573,7 @@
                     <div class="d-flex flex-column h-100">
                         <div class="text-center user-info">
                             <div class="account-avatar mx-auto mb-3">T</div>
-                            <div class="fw-bold fs-5 mb-2">Dũng Trần</div>
+                            <div class="fw-bold fs-5 mb-2">${sessionScope.user.name}</div>
                             <div class="user-points">
                                 <i class="fas fa-star me-2"></i>0 điểm
                             </div>
@@ -639,7 +639,7 @@
                             <div class="dashboard-section-title">Chỉnh sửa tin đăng</div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
+                            <span class="text-muted">Xin chào, <strong class="text-dark">${sessionScope.user.name}</strong></span>
                             <a href="#" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>

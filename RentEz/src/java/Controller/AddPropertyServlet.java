@@ -55,7 +55,7 @@ public class AddPropertyServlet extends HttpServlet {
      */
     private void loadPropertyTypes(HttpServletRequest request) {
         PropertyTypeDAO propertyTypeDAO = new PropertyTypeDAO();
-        List<PropertyType> propertyTypes = propertyTypeDAO.getAllActive(); // Chỉ lấy các loại đang hoạt động
+        List<PropertyType> propertyTypes = propertyTypeDAO.getAllActive();
         request.setAttribute("propertyTypes", propertyTypes);
     }
 

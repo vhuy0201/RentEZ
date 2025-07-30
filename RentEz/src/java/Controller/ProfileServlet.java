@@ -158,7 +158,7 @@ public class ProfileServlet extends HttpServlet {
                 // Upload new avatar to Cloudinary
                 String cloudinaryUrl = cloudinaryService.uploadAvatarImage(filePart.getInputStream(), originalFileName);
                 
-                // Update user avatar with Cloudinary URL
+                
                 user.setAvatar(cloudinaryUrl);
                 
             } catch (Exception e) {

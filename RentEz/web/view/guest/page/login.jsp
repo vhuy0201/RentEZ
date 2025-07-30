@@ -172,7 +172,8 @@
           <div class="container">
             <div class="row justify-content-center">
               <div class="col-md-6">
-                <div class="login-box">                  <h2 class="login-box__title">Đăng nhập vào <span class="text-gradient">RentEz</span></h2>
+                <div class="login-box">
+                    <h2 class="login-box__title">Đăng nhập vào <span class="text-gradient">RentEz</span></h2>
                   
                   <c:if test="${not empty error}">
                     <div class="alert alert-danger" role="alert">

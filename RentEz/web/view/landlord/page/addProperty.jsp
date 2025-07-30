@@ -477,8 +477,8 @@
                             <div class="dashboard-section-title">Đăng tin mới</div>
                         </div>
                         <div class="d-flex align-items-center gap-3">
-                            <span class="text-muted">Xin chào, <strong class="text-dark">Dũng Trần</strong></span>
-                            <a href="#" class="btn btn-main">
+                            <span class="text-muted">Xin chào, <strong class="text-dark">${sessionScope.user.name}</strong></span>
+                            <a href="${pageContext.request.contextPath}/payments" class="btn btn-main">
                                 <i class="fas fa-plus me-2"></i>Nạp tiền
                             </a>
                         </div>

@@ -141,17 +141,17 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-2 col-sm-6 col-xs-6">
-                                                                <div class="select-has-icon icon-black">                                
-                                                                    <select
-                                                                        class="select common-input"
-                                                                        name="location"
-                                                                        >
-                                                                        <option value="" disabled="">Khu vực</option>
-                                                                        <c:forEach items="${allCities}" var="city">
-                                                                            <option value="${city}">${city}</option>
-                                                                        </c:forEach>
-                                                                    </select>
-                                                                </div>
+                                                            <div class="select-has-icon icon-black">                                
+                                                                <select
+                                                                    class="select common-input"
+                                                                    name="location"
+                                                                    >
+                                                                    <option value="" disabled="">Khu vực</option>
+                                                                    <c:forEach items="${allCities}" var="city">
+                                                                        <option value="${city}">${city}</option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                         <div class="col-lg-2 col-sm-6 col-xs-6">
                                                             <input
@@ -343,20 +343,20 @@
                                                     <a class="simple-btn" href="${pageContext.request.contextPath}/property-detail?id=${property.propertyId}">
                                                         Xem chi tiết<span class="icon-right"><i class="fas fa-arrow-right"></i></span>
                                                     </a>
-                                                    
+
                                                     <!-- Favorite button -->
                                                     <c:choose>
                                                         <c:when test="${sessionScope.user != null}">
                                                             <c:choose>
                                                                 <c:when test="${userFavorites.contains(property.propertyId)}">                                                                    <button type="button" onclick="toggleFavoriteHomepage('${property.propertyId}', false)" 
-                                                                            class="btn btn-outline-danger btn-sm favorite-btn" 
-                                                                            style="border-radius: 20px;">
+                                                                        class="btn btn-outline-danger btn-sm favorite-btn" 
+                                                                        style="border-radius: 20px;">
                                                                         <i class="fas fa-heart"></i>
                                                                     </button>
                                                                 </c:when>
                                                                 <c:otherwise>                                                                    <button type="button" onclick="toggleFavoriteHomepage('${property.propertyId}', true)" 
-                                                                            class="btn btn-outline-secondary btn-sm favorite-btn" 
-                                                                            style="border-radius: 20px;">
+                                                                        class="btn btn-outline-secondary btn-sm favorite-btn" 
+                                                                        style="border-radius: 20px;">
                                                                         <i class="far fa-heart"></i>
                                                                     </button>
                                                                 </c:otherwise>
@@ -950,50 +950,50 @@
             </div>
         </div>        <!-- Bootstrap Bundle Js -->
         <script src="${pageContext.request.contextPath}/view/guest/asset/js/boostrap.bundle.min.js"></script>
-        
-        <script>
-            // Favorite functionality for homepage
-            function toggleFavoriteHomepage(propertyId, isAdd) {
-                const favoriteBtn = event.target.closest('.favorite-btn');
-                const originalHtml = favoriteBtn.innerHTML;
-                
-                // Show loading state
-                favoriteBtn.disabled = true;
-                favoriteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '${pageContext.request.contextPath}/favorite-action';
-                
-                const actionInput = document.createElement('input');
-                actionInput.type = 'hidden';
-                actionInput.name = 'action';
-                actionInput.value = isAdd ? 'add' : 'remove';
-                
-                const propertyInput = document.createElement('input');
-                propertyInput.type = 'hidden';
-                propertyInput.name = 'propertyId';
-                propertyInput.value = propertyId;
-                
-                const redirectInput = document.createElement('input');
-                redirectInput.type = 'hidden';
-                redirectInput.name = 'redirectUrl';
-                redirectInput.value = window.location.href;
-                
-                form.appendChild(actionInput);
-                form.appendChild(propertyInput);
-                form.appendChild(redirectInput);
-                
-                document.body.appendChild(form);
-                form.submit();
-            }
 
-            function redirectToLoginHomepage() {
-                if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
-                    window.location.href = '${pageContext.request.contextPath}/login?redirect=' + 
-                                         encodeURIComponent(window.location.href);
-                }
-            }
+        <script>
+                                                                // Favorite functionality for homepage
+                                                                function toggleFavoriteHomepage(propertyId, isAdd) {
+                                                                    const favoriteBtn = event.target.closest('.favorite-btn');
+                                                                    const originalHtml = favoriteBtn.innerHTML;
+
+                                                                    // Show loading state
+                                                                    favoriteBtn.disabled = true;
+                                                                    favoriteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                                                                    const form = document.createElement('form');
+                                                                    form.method = 'POST';
+                                                                    form.action = '${pageContext.request.contextPath}/favorite-action';
+
+                                                                    const actionInput = document.createElement('input');
+                                                                    actionInput.type = 'hidden';
+                                                                    actionInput.name = 'action';
+                                                                    actionInput.value = isAdd ? 'add' : 'remove';
+
+                                                                    const propertyInput = document.createElement('input');
+                                                                    propertyInput.type = 'hidden';
+                                                                    propertyInput.name = 'propertyId';
+                                                                    propertyInput.value = propertyId;
+
+                                                                    const redirectInput = document.createElement('input');
+                                                                    redirectInput.type = 'hidden';
+                                                                    redirectInput.name = 'redirectUrl';
+                                                                    redirectInput.value = window.location.href;
+
+                                                                    form.appendChild(actionInput);
+                                                                    form.appendChild(propertyInput);
+                                                                    form.appendChild(redirectInput);
+
+                                                                    document.body.appendChild(form);
+                                                                    form.submit();
+                                                                }
+
+                                                                function redirectToLoginHomepage() {
+                                                                    if (confirm('Bạn cần đăng nhập để sử dụng tính năng yêu thích. Chuyển đến trang đăng nhập?')) {
+                                                                        window.location.href = '${pageContext.request.contextPath}/login?redirect=' +
+                                                                                encodeURIComponent(window.location.href);
+                                                                    }
+                                                                }
         </script>
     </body>
     <ddict-div style="visibility: visible !important"
@@ -1833,16 +1833,30 @@
                     border-start-end-radius: inherit;
                     border-end-end-radius: inherit;
                 }
-                @supports not selector(has(*)) {
-                    :where(.join *) {
-                        border-radius: inherit;
-                    }
+                /*                @supports not selector(has(*)) {
+                                    :where(.join *) {
+                                        border-radius: inherit;
+                                    }
+                                }*/
+                /* fallback cho mọi trình duyệt */
+                :where(.join *) {
+                    border-radius: inherit;
                 }
+
+                /* đoạn nâng cao — chỉ dùng nếu NetBeans không biên dịch hoặc bạn chạy frontend riêng */
+                /*
                 @supports selector(:has(*)) {
                     :where(.join *:has(.join-item)) {
                         border-radius: inherit;
                     }
                 }
+                */
+
+/*                @supports selector(:has(*)) {
+                    :where(.join *:has(.join-item)) {
+                        border-radius: inherit;
+                    }
+                }*/
                 .tooltip {
                     position: relative;
                     display: inline-block;
